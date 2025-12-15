@@ -2,6 +2,7 @@ import React, { useState, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AuthProvider } from './contexts/authContext';
 import { AdminAuthProvider, useAdminAuth } from './contexts/adminAuthContext';
+import { useAuth } from './hooks/useAuth';
 import { Toaster } from 'sonner';
 import { Header } from "@/components/Header";
 import { useThemeStore } from '@/store/themeStore';
@@ -63,7 +64,7 @@ const Settings = React.lazy(() => import("@/pages/admin/Settings"));
 
   // 后台管理系统认证守卫
   const AdminAuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { isAuthenticated, user } = useAdminAuth();
+    const { isAuthenticated, user } = useAuth();
     
     // 如果未登录，重定向到登录页
     if (!isAuthenticated) {
@@ -71,7 +72,7 @@ const Settings = React.lazy(() => import("@/pages/admin/Settings"));
       return <Navigate to="/login?redirect=/admin" replace />;
     }
     
-    // 确保只有管理员可以访问后台，再次验证用户对象是否存在
+    // 确保只有登录用户可以访问后台，再次验证用户对象是否存在
     if (!user) {
       return <Navigate to="/login?redirect=/admin" replace />;
     }
