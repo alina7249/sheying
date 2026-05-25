@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { useThemeStore } from '../store/themeStore';
 
 interface BannerSlide {
   id: string;
@@ -16,7 +15,7 @@ interface BannerSlide {
 export const Banner: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef<HTMLDivElement>(null);
-  const { theme } = useThemeStore();
+  const theme = 'dark';
   
   // 轮播图数据
   const slides: BannerSlide[] = [

@@ -1,13 +1,19 @@
-import { useContext } from 'react';
-import { AdminAuthContext } from '../contexts/adminAuthContext';
+import { useAuthStore } from '../store/authStore';
 
-// 自定义Hook，用于访问管理员认证状态和方法
 export const useAdminAuth = () => {
-  const context = useContext(AdminAuthContext);
-  
-  if (!context) {
-    throw new Error('useAdminAuth must be used within an AdminAuthProvider');
-  }
-  
-  return context;
+  const {
+    isAdminAuthenticated,
+    adminUser,
+    userRole,
+    adminLogin,
+    adminLogout
+  } = useAuthStore();
+
+  return {
+    isAuthenticated: isAdminAuthenticated,
+    user: adminUser,
+    userRole,
+    login: adminLogin,
+    logout: adminLogout
+  };
 };

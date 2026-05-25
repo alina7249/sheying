@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { toast } from 'sonner';
 
@@ -354,7 +354,7 @@ const getPieChartData = () => {
 };
 
 const ProfileBenefits: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [currentMonth, setCurrentMonth] = useState(11); // 当前是11月
   const [showChatModal, setShowChatModal] = useState(false);

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 import { GroupCard } from '../components/common/GroupCard';
 
@@ -30,7 +30,7 @@ interface Group {
 }
 
 const GroupsList: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [groups, setGroups] = useState<Group[]>([]);
   const [showCreateGroupForm, setShowCreateGroupForm] = useState(false);
   const [groupName, setGroupName] = useState("");

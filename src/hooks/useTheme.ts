@@ -1,30 +1,12 @@
-import { useState, useEffect } from 'react';
-
-type Theme = 'light' | 'dark';
+import { useAuthStore } from '../store/authStore';
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme) {
-      return savedTheme;
-    }
-    // 默认使用深色主题
-    return 'dark';
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
+  const { theme, toggleTheme, setTheme } = useAuthStore();
 
   return {
     theme,
     toggleTheme,
+    setTheme,
     isDark: theme === 'dark'
   };
-} 
+}

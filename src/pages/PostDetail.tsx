@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 import { CommentSection } from '../components/CommentSection';
 import { ShareButton } from '../components/common/ShareButton';
@@ -202,7 +202,7 @@ const generateRelatedPosts = (currentId: string): Post[] => {
 
  const PostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuth();
   const [post, setPost] = useState<Post | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
   const [isLiked, setIsLiked] = useState(false);

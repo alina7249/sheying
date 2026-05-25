@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 import { Empty } from '../components/Empty';
 
@@ -36,7 +36,7 @@ interface OperationHistory {
 }
 
 const BatchManagePhotos: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   
   // 基本状态管理
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>(() => {

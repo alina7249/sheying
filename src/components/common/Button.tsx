@@ -1,5 +1,5 @@
 import React from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   loading = false
 }) => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   
   // Base styles
   const baseStyles = "font-medium rounded-lg transition-colors flex items-center justify-center";

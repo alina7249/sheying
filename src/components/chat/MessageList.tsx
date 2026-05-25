@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 import { useChatStore, Message } from '../../store/chatStore';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -58,7 +58,7 @@ const parseMarkdown = (text: string): string => {
 };
 
 export const MessageList: React.FC = () => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { currentChatId, chatHistories, toggleMessageFavorite, isTyping } = useChatStore();
   

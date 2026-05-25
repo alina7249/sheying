@@ -1,10 +1,10 @@
 // EventsAndContests.tsx - 活动与赛事主页面
 // 整合线下活动和摄影赛事，采用与资源模块类似的标签切换格式
 
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 import { EventCard } from '../components/EventCard';
 
@@ -194,7 +194,7 @@ const popularTags = [
 ];
 
 const EventsAndContests: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [activeTab, setActiveTab] = useState<'events' | 'contests'>('events');
   const [selectedEventType, setSelectedEventType] = useState('全部');
   const [selectedEventCategory, setSelectedEventCategory] = useState('全部');

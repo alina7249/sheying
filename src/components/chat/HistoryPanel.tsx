@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 import { useChatStore } from '../../store/chatStore';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
 export const HistoryPanel: React.FC = () => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   const { 
     chatHistories, 
     currentChatId, 

@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 import Captcha from './Captcha';
-import { AuthContext } from '../../contexts/authContext';
-import { useContext } from 'react';
 
-// 定义表单数据类型
 interface RegisterFormData {
   username: string;
   phone: string;
@@ -18,16 +15,13 @@ interface RegisterFormData {
 }
 
 const RegisterForm: React.FC = () => {
-  const { register: authRegister } = useContext(AuthContext);
-  const { theme } = useThemeStore();
+  const { register: authRegister, theme } = useAuthStore();
   const navigate = useNavigate();
   
-  // 表单状态
   const [captchaValue, setCaptchaValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
-  // React Hook Form配置
   const {
     register,
     handleSubmit,
@@ -44,19 +38,16 @@ const RegisterForm: React.FC = () => {
     }
   });
   
-  // 监听密码变化，用于确认密码的验证
   const password = watch('password');
   
-  // 处理表单提交
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      // 验证验证码
       if (captchaValue.length !== 6) {
         toast.warning('请输入6位验证码');
         return;
       }
       
-      const success = await authRegister(data.username, data.phone, data.password);
+      const success = await authRegister(data.username, data.password, data.confirmPassword, data.username);
       
       if (success) {
         toast.success('注册成功，请登录！');
@@ -70,9 +61,7 @@ const RegisterForm: React.FC = () => {
     }
   };
   
-  // 用户名验证函数
   const validateUsername = (value: string) => {
-    // 4-16位字母数字组合
     const usernameRegex = /^[a-zA-Z0-9]{4,16}$/;
     if (!value) return '请输入用户名';
     if (!usernameRegex.test(value)) 
@@ -80,9 +69,7 @@ const RegisterForm: React.FC = () => {
     return true;
   };
   
-  // 手机号验证函数
   const validatePhone = (value: string) => {
-    // 中国大陆手机号格式
     const phoneRegex = /^1[3-9]\d{9}$/;
     if (!value) return '请输入手机号码';
     if (!phoneRegex.test(value)) 
@@ -90,9 +77,7 @@ const RegisterForm: React.FC = () => {
     return true;
   };
   
-  // 密码强度验证函数
   const validatePassword = (value: string) => {
-    // 必须8位，包含大小写字母和特殊符号
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8}$/;
     if (!value) return '请输入密码';
     if (value.length !== 8) return '密码必须是8个字符';
@@ -101,19 +86,16 @@ const RegisterForm: React.FC = () => {
     return true;
   };
   
-  // 确认密码验证函数
   const validateConfirmPassword = (value: string) => {
     if (!value) return '请确认密码';
     if (value !== password) return '两次输入的密码不一致';
     return true;
   };
   
-  // 切换密码显示/隐藏
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
   
-  // 切换确认密码显示/隐藏
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
@@ -261,7 +243,6 @@ const RegisterForm: React.FC = () => {
           <div className="flex items-center h-5">
             <input
               id="terms"
-              name="terms"
               type="checkbox"
               {...register('terms', { required: '请阅读并同意服务条款和隐私政策' })}
               className="h-4 w-4 text-[#38B2AC] focus:ring-[#38B2AC] border-[#4A5568] rounded bg-[#1E2A3A]"

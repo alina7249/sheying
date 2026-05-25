@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { useThemeStore } from '../store/themeStore';
+import { useAuthStore } from '../store/authStore';
 import { HistoryPanel } from '../components/chat/HistoryPanel';
 import { ChatInterface } from '../components/chat/ChatInterface';
 import { useChatStore } from '../store/chatStore';
 import { motion } from 'framer-motion';
 
 export default function AIChat() {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   const { isHistoryPanelOpen, toggleHistoryPanel, createNewChat } = useChatStore();
   
   // 初始化时创建一个默认对话

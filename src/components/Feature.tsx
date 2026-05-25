@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useThemeStore } from '../store/themeStore';
 
 interface FeatureItem {
   id: string;
@@ -13,7 +12,7 @@ interface FeatureItem {
 }
 
 export const Feature: React.FC = () => {
-  const { theme } = useThemeStore();
+  const theme = 'dark';
   
   // 功能入口区数据
   const features: FeatureItem[] = [

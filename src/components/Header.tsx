@@ -1,28 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useAuth } from "../hooks/useAuth";
-import { useThemeStore } from "../store/themeStore";
+import { useAuthStore } from "../store/authStore";
 import { ProfileDropdown } from "./ProfileDropdown";
 
 export const Header: React.FC = () => {
     const {
         isAuthenticated,
         user,
-        logout
-    } = useAuth();
+        logout,
+        theme,
+        toggleTheme
+    } = useAuthStore();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
-
-    const {
-        theme,
-        toggleTheme
-    } = useThemeStore();
-
-    const navigate = useNavigate();
 
     const mockUserData = {
         username: "@光影捕手",
@@ -42,11 +36,8 @@ export const Header: React.FC = () => {
         name: "作品库",
         path: "/"
     }, {
-        name: "器材区",
-        path: "/equipment-database"
-    }, {
-        name: "器材交易平台",
-        path: "/equipment-trade"
+        name: "器材中心",
+        path: "/equipment"
     }, {
         name: "课程",
         path: "/online-courses"
@@ -294,8 +285,7 @@ export const Header: React.FC = () => {
                 progress={mockUserData.progress}
                 progressMax={mockUserData.progressMax}
                 stats={mockUserData.stats}
-                avatarSrc={userAvatar}
-                theme={theme} />
+                avatarSrc={userAvatar} />
         </header>
     );
 };

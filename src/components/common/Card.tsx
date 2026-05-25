@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 
 interface CardProps {
   children: ReactNode;
@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({
   hoverEffect = true,
   onClick 
 }) => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   
   // 基础卡片样式
   const baseStyles = "rounded-xl overflow-hidden shadow-sm";

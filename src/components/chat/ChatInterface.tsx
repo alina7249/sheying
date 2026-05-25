@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 import { MessageList } from './MessageList';
 import { InputArea } from './InputArea';
 import { useChatStore } from '../../store/chatStore';
 import { motion } from 'framer-motion';
 
 export const ChatInterface: React.FC = () => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   const { currentChatId, createNewChat, isTyping } = useChatStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const messageListRef = useRef<HTMLDivElement>(null);

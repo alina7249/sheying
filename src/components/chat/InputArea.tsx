@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 import { useChatStore, AIRole } from '../../store/chatStore';
 import { toast } from 'sonner';
 
 export const InputArea: React.FC = () => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   const { 
     currentChatId, 
     addMessage, 

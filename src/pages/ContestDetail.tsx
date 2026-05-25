@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useContext } from 'react';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 import { CommentSection } from '../components/CommentSection';
 
@@ -145,7 +144,7 @@ const mockContests = [
 
 const ContestDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [contest, setContest] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 

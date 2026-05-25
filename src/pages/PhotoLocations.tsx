@@ -3,10 +3,10 @@
 // 2. 位置列表卡片：使用framer-motion的whileHover属性，实现卡片向上平移(y: -5)
 // 3. 位置列表项：使用Tailwind的hover伪类，悬停时边框变化
 
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { ShareButton } from '../components/common/ShareButton';
 import { toast } from 'sonner';
@@ -53,7 +53,7 @@ interface NewLocationForm {
 }
 
 const PhotoLocations: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('全部');

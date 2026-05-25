@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { AuthContext } from "../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 import { toast } from "sonner";
 
 interface Comment {
@@ -100,7 +100,7 @@ export const CommentSection: React.FC<CommentSectionProps> = (
     const {
         isAuthenticated,
         user
-    } = useContext(AuthContext);
+    } = useAuth();
 
     const [commentText, setCommentText] = useState("");
     const [replyText, setReplyText] = useState("");

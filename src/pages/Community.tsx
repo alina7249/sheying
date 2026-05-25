@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { AuthContext } from "../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 import { ShareButton } from "../components/common/ShareButton";
 
 import {
@@ -698,7 +698,7 @@ export const Poll: React.FC<PollProps> = (
 ) => {
     const {
         isAuthenticated
-    } = useContext(AuthContext);
+    } = useAuth();
 
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [voted, setVoted] = useState<boolean>(false);
@@ -852,7 +852,7 @@ export const GroupCard: React.FC<GroupCardProps> = (
 ) => {
     const {
         isAuthenticated
-    } = useContext(AuthContext);
+    } = useAuth();
 
     const handleJoinLeave = () => {
         if (!isAuthenticated) {

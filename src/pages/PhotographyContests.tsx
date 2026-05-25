@@ -4,10 +4,10 @@
 // 3. 标签按钮：当鼠标悬停时，标签的颜色会发生变化，增强视觉反馈
 // 4. 即将截止日期提醒：当鼠标悬停时，整个提醒项会向右平移5个像素，产生一种被选中的动效
 
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 
 // 模拟赛事数据
@@ -184,7 +184,7 @@ const popularTags = [
 ];
 
 const PhotographyContests: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   
   const [selectedType, setSelectedType] = useState('全部');

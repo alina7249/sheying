@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AuthContext } from "../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { toast } from "sonner";
 import { useEffect } from "react";
@@ -373,7 +373,7 @@ const Resources: React.FC = () => {
     const {
         isAuthenticated,
         user
-    } = useContext(AuthContext);
+    } = useAuth();
 
     const [activeTab, setActiveTab] = useState<"browse" | "post">("browse");
     const [selectedType, setSelectedType] = useState("all");

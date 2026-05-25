@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { toast } from 'sonner';
 import { mockCameras, mockLenses, mockAccessories } from '../lib/equipmentData';
 
@@ -21,7 +21,7 @@ interface Equipment {
 }
 
 const EquipmentLibrary: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [selectedType, setSelectedType] = useState('all'); // all, camera, lens, tripod, flash, other
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');

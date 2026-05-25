@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../contexts/authContext';
+import { useAuth } from '../../contexts/authContext';
 import { toast } from 'sonner';
 
 // 定义类型
@@ -9,23 +9,18 @@ interface GroupMember {
   id: string;
   name: string;
   avatar: string;
-  role: "owner" | "admin" | "member";
-  joinDate: string;
 }
 
 interface Group {
   id: string;
   name: string;
   description: string;
-  coverImage: string;
-  avatar: string;
-  members: GroupMember[];
+  members: number;
   posts: number;
-  createdAt: string;
-  isPublic: boolean;
+  avatar: string;
+  coverImage: string;
   joined: boolean;
-  tags: string[];
-  ownerId?: string;
+  tags?: string[];
 }
 
 interface GroupCardProps {
@@ -36,7 +31,7 @@ interface GroupCardProps {
   canDelete?: boolean;
 }
 
-export const GroupCard: React.FC<GroupCardProps> = (
+const GroupCard: React.FC<GroupCardProps> = (
   {
     group,
     onJoin,
@@ -45,7 +40,7 @@ export const GroupCard: React.FC<GroupCardProps> = (
     canDelete = false
   }
 ) => {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuth();
 
   const handleJoinLeave = () => {
     if (!isAuthenticated) {
@@ -58,112 +53,119 @@ export const GroupCard: React.FC<GroupCardProps> = (
         if (onLeave) {
           onLeave(group.id);
         }
-        toast.success(`已退出"${group.name}"小组`);
       }
     } else {
       if (onJoin) {
         onJoin(group.id);
       }
-      toast.success(`已加入"${group.name}"小组`);
     }
   };
 
   const handleDelete = () => {
-    if (onDelete) {
-      onDelete(group.id);
+    if (window.confirm(`确定要删除"${group.name}"小组吗？此操作不可撤销。`)) {
+      if (onDelete) {
+        onDelete(group.id);
+      }
     }
   };
 
   return (
     <motion.div
-      whileHover={{
-        y: -5,
-        boxShadow: "0 8px 24px rgba(74,95,139,0.3)",
-        transition: { duration: 0.3 }
-      }}
-      style={{
-        transformStyle: "preserve-3d",
-        backgroundColor: "transparent"
-      }}
-      className="bg-[#2D3748] border border-[#4A5F8B] rounded-lg overflow-hidden shadow-sm"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="bg-[#2D3748] rounded-xl overflow-hidden border border-[#4A5F8B] hover:shadow-lg transition-shadow"
     >
-      {/* 小组封面 */}
+      {/* 封面图 */}
       <div className="relative h-32">
-        <Link to={`/group/${group.id}`} className="block w-full h-full">
-          <img
-            src={group.coverImage}
-            alt={`${group.name} cover`}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute top-3 left-3">
-            <div
-              className="w-16 h-16 rounded-full border-2 border-[#2D3748] overflow-hidden shadow-md"
-            >
-              <img
-                src={group.avatar}
-                alt={group.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
+        <img
+          src={group.coverImage}
+          alt={`${group.name} cover`}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        
+        {/* 小组头像 */}
+        <div className="absolute bottom-0 left-4 transform translate-y-1/2">
+          <div className="w-16 h-16 rounded-full border-4 border-[#2D3748] overflow-hidden">
+            <img
+              src={group.avatar}
+              alt={group.name}
+              className="w-full h-full object-cover"
+            />
           </div>
-          {!group.isPublic && (
-            <div className="absolute top-3 right-3 px-2 py-1 bg-[#1E2532]/80 text-white text-xs rounded-full backdrop-blur-sm">
-              <i className="fa-solid fa-lock mr-1"></i>私密
-            </div>
-          )}
-          {canDelete && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleDelete();
-              }}
-              className="absolute top-3 right-3 px-2 py-1 bg-[#F56565]/80 text-white text-xs rounded-full backdrop-blur-sm"
-              title="删除小组"
-            >
-              <i className="fa-solid fa-trash mr-1"></i>删除
-            </button>
-          )}
-        </Link>
+        </div>
       </div>
 
-      {/* 小组信息 */}
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-[#F5F7FA] mb-1">
-          <Link to={`/group/${group.id}`} className="hover:text-[#4A5F8B] transition-colors">
-            {group.name}
-          </Link>
-        </h3>
-        <p className="text-sm text-[#B8C6D8] mb-3 line-clamp-2">{group.description}</p>
-        <div className="flex justify-between items-center mb-3">
-          <div className="flex items-center">
-            <span className="text-sm text-[#B8C6D8]">
-              {group.members.length}成员
+      {/* 内容区域 */}
+      <div className="p-4 pt-6">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-lg font-semibold text-white">
+            <Link to={`/groups/${group.id}`} className="hover:text-[#63B3ED] transition-colors">
+              {group.name}
+            </Link>
+          </h3>
+          {canDelete && (
+            <button
+              onClick={handleDelete}
+              className="p-1.5 rounded-lg hover:bg-red-500/20 text-red-400 transition-colors"
+              title="删除小组"
+            >
+              <i className="fa-solid fa-trash-can text-sm" />
+            </button>
+          )}
+        </div>
+
+        <p className="text-[#B8C6D8] text-sm mb-3 line-clamp-2">
+          {group.description}
+        </p>
+
+        {/* 标签 */}
+        {group.tags && group.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {group.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 bg-[#4A5F8B]/30 text-[#B8C6D8] text-xs rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+            {group.tags.length > 3 && (
+              <span className="px-2 py-0.5 bg-[#4A5F8B]/30 text-[#B8C6D8] text-xs rounded-full">
+                +{group.tags.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* 统计信息和操作按钮 */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4 text-sm">
+            <span className="text-[#B8C6D8]">
+              <i className="fa-solid fa-users mr-1" />
+              {group.members}
             </span>
-            <span className="mx-2 text-[#6B7C93]">•</span>
-            <span className="text-sm text-[#B8C6D8]">
-              {group.posts}帖子
+            <span className="text-[#B8C6D8]">
+              <i className="fa-solid fa-message-circle mr-1" />
+              {group.posts}
             </span>
           </div>
-          <span className="text-xs text-[#6B7C93]">创建于 {new Date(group.createdAt).toLocaleDateString()}
-          </span>
+
+          <button
+            onClick={handleJoinLeave}
+            className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              group.joined
+                ? 'bg-[#4A5F8B]/30 text-[#B8C6D8] hover:bg-[#4A5F8B]/50'
+                : 'bg-[#63B3ED] text-white hover:bg-[#4A9DE6]'
+            }`}
+          >
+            {group.joined ? '退出' : '加入'}
+          </button>
         </div>
-        <div className="flex flex-wrap gap-1 mb-3">
-          {group.tags.map((tag, index) => (
-            <span key={index} className="px-2 py-1 bg-[#1E2532] text-[#B8C6D8] rounded-full text-xs border border-[#4A5F8B]">#{tag}</span>
-          ))}
-        </div>
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={handleJoinLeave}
-          className={`w-full py-2 rounded-lg font-medium transition-colors ${
-            group.joined ? "bg-[#F56565] text-white hover:bg-[#E53E3E]" : "bg-[#4A5F8B] text-[#F5F7FA] hover:bg-[#6B7C93]"
-          }`}
-        >
-          {group.joined ? "退出小组" : "加入小组"}
-        </motion.button>
       </div>
     </motion.div>
   );
 };
+
+export default GroupCard;

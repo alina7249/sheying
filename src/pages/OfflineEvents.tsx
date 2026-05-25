@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useContext } from 'react';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 
 // 模拟活动数据
 const mockEvents = [
@@ -158,7 +157,7 @@ const popularTags = [
 ];
 
 const OfflineEvents: React.FC = () => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   
   // 检查是否是用户个人活动页面
   const isUserPersonalEvents = window.location.pathname.includes('/profile-center/events');

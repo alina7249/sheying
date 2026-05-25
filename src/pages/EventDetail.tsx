@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useContext } from 'react';
-import { AuthContext } from '../contexts/authContext';
-  import { toast } from 'sonner';
-  import { CommentSection } from '../components/CommentSection';
+import { useAuth } from '../contexts/authContext';
+import { toast } from 'sonner';
+import { CommentSection } from '../components/CommentSection';
 
 // 模拟活动数据
 const mockEvents = [
@@ -143,7 +142,7 @@ const mockEvents = [
 
 const EventDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 

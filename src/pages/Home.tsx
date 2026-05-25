@@ -1,11 +1,9 @@
-import React, { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AuthContext } from "../contexts/authContext";
 import { PhotographyCard } from "../components/PhotographyCard";
 import { Banner } from "../components/Banner";
 import { Feature } from "../components/Feature";
-import { useThemeStore } from "../store/themeStore";
 
 // 摄影作品数据
 const photographyPosts = [{
@@ -20,6 +18,7 @@ const photographyPosts = [{
     },
     likes: 342,
     comments: 42,
+    collections: 28,
     tags: ["极简主义", "黑白", "建筑", "徕卡"],
     date: "2023-10-25"
 }, {
@@ -34,6 +33,7 @@ const photographyPosts = [{
     },
     likes: 412,
     comments: 56,
+    collections: 35,
     tags: ["人像", "胶片", "复古", "自然光"],
     date: "2023-10-24"
 }, {
@@ -48,6 +48,7 @@ const photographyPosts = [{
     },
     likes: 389,
     comments: 49,
+    collections: 31,
     tags: ["暗调", "氛围", "情绪", "人像"],
     date: "2023-10-23"
 }, {
@@ -62,6 +63,7 @@ const photographyPosts = [{
     },
     likes: 276,
     comments: 32,
+    collections: 22,
     tags: ["静物", "极简", "中画幅", "富士"],
     date: "2023-10-22"
 }, {
@@ -76,6 +78,7 @@ const photographyPosts = [{
     },
     likes: 321,
     comments: 41,
+    collections: 25,
     tags: ["城市", "几何", "手机摄影", "极简"],
     date: "2023-10-21"
 }, {
@@ -90,6 +93,7 @@ const photographyPosts = [{
     },
     likes: 398,
     comments: 52,
+    collections: 33,
     tags: ["黑白", "纪实", "人文", "街头"],
     date: "2023-10-20"
 }];
@@ -181,18 +185,14 @@ const inspirationItems = [{
 }];
 
 export default function Home() {
-    const { isAuthenticated, user } = useContext(AuthContext);
-    const { theme } = useThemeStore();
     const [selectedCategory, setSelectedCategory] = useState("all");
     const filteredPosts = selectedCategory === "all" ? photographyPosts : photographyPosts.filter(post => post.tags.includes(selectedCategory));
 
+    const theme = 'dark';
+    
     // 根据主题获取背景和文本颜色类
     const getBgClass = () => {
       return theme === 'dark' ? 'bg-[#1E2532]' : 'bg-white';
-    };
-
-    const getTextClass = (isPrimary: boolean) => {
-      return isPrimary ? (theme === 'dark' ? 'text-[#F5F7FA]' : 'text-[#1E2532]') : (theme === 'dark' ? 'text-[#B8C6D8]' : 'text-[#6B7C93]');
     };
 
     return (

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { mockCameras, mockLenses, mockAccessories } from "../lib/equipmentData";
 import { toast } from "sonner";
-import { AuthContext } from "../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 import { useTheme } from "../hooks/useTheme";
 
 // 联系卖家模态框组件
@@ -16,7 +16,7 @@ const ContactSellerModal: React.FC<{
   onClose,
   seller
 }) => {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const { theme } = useTheme();
   
   // 表单状态

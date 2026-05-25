@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AuthContext } from "../contexts/authContext";
-  import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-  import { toast } from "sonner";
-  import { CommentSection } from '../components/CommentSection';
+import { useAuth } from "../contexts/authContext";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { toast } from "sonner";
+import { CommentSection } from '../components/CommentSection';
 
 interface Project {
     id: string;
@@ -231,7 +231,7 @@ const ProjectDetail: React.FC = () => {
     const {
         isAuthenticated,
         user
-    } = useContext(AuthContext);
+    } = useAuth();
 
     const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);

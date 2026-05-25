@@ -1,11 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { CommentSection } from '../components/CommentSection';
 import { ShareButton } from '../components/common/ShareButton';
 import { useLikeAndBookmark } from '../hooks/useLikeAndBookmark';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 
 // 模拟摄影作品数据 - 银河氛围摄影平台，增加EXIF信息和版权信息
 const mockPhotoPost = {
@@ -60,7 +60,7 @@ const mockPhotoPost = {
 
 const PhotoDetail: React.FC = () => {
   const { id } = useParams();
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuth();
   
   // 使用自定义 hook 管理点赞和收藏状态
   const { 

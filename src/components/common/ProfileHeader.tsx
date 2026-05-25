@@ -1,5 +1,5 @@
 import React from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 
 interface ProfileHeaderProps {
   username: string;
@@ -45,7 +45,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   onFollow,
   isFollowing = false
 }) => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   
   // 根据主题获取样式类
   const getBgClass = () => {

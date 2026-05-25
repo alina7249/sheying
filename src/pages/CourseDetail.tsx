@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { CommentSection } from '../components/CommentSection';
 import { toast } from 'sonner';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
@@ -239,7 +239,7 @@ const mockStudyGroups: StudyGroup[] = [
 
 const CourseDetail: React.FC = () => {
   const { id } = useParams();
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user } = useAuth();
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [showNotes, setShowNotes] = useState(false);
   const [newNote, setNewNote] = useState('');

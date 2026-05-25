@@ -1,13 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 import { Empty } from '../components/Empty';
-import { PhotographyCard } from '../components/PhotographyCard';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { toast } from 'sonner';
 
-// 模拟用户数据 - 艺术风摄影平台
+// 模拟用户数据
 const mockUser = {
   id: 'user-123',
   username: '@光影捕手',
@@ -22,88 +21,176 @@ const mockUser = {
   level: '新锐摄影师',
   levelNum: 3,
   progress: 120,
-  progressMax: 200
+  progressMax: 200,
+  tags: '风光/人像双题材创作者',
+  memberStatus: '银河会员·年卡',
+  memberDaysLeft: 128
 };
 
 // 模拟作品数据
 const mockPhotographyPosts = [
   {
     id: "1",
-    title: "黑白光影",
-    description: "Leica Q2 Monochrom | 光圈: f/2.8 | 快门: 1/125s | ISO: 800\n极简主义黑白摄影，通过光影对比展现建筑的几何美感。",
-    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=black%20and%20white%20architecture%20geometric%20composition&sign=7f2b53dd226ab1ffb3f3eae704bada52",
+    title: "晨曦中的山峦",
+    description: "捕捉清晨第一缕阳光洒在山峦上的壮丽景色，使用长曝光展现云海的流动感。",
+    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=morning%20sunrise%20mountain%20landscape%20mist%20china&sign=a50c8d6084b10f76978cc2afb1ca29a9",
     author: {
-      id: "1",
-      name: "极简摄影师林风",
-      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=minimalist%20photographer%20male%20serious&sign=fded36172bb86afa4dc326776156459c"
+      id: "user-123",
+      name: "@光影捕手",
+      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
     },
-    likes: 342,
-    comments: 42,
-    tags: ["极简主义", "黑白", "建筑", "徕卡"],
-    date: "2023-10-25"
+    likes: 324,
+    comments: 45,
+    tags: ["风光", "日出", "云海", "自然"],
+    date: "2023-10-25",
+    views: 1256,
+    format: "RAW",
+    visibility: "公开",
+    copyrightType: "独家授权"
   },
   {
     id: "2",
-    title: "胶片质感人像",
-    description: "Canon AE-1 + 50mm f/1.4 | 光圈: f/2.0 | 快门: 1/125s | ISO: 400\n使用复古胶片相机拍摄的人像作品，自然柔和的色调与颗粒感。",
-    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=film%20photography%20portrait%20natural%20light%20soft%20colors&sign=c33fc387d9611cfbf5948eab73b3426b",
+    title: "城市剪影",
+    description: "从高处俯瞰城市天际线，记录夕阳下城市建筑的剪影效果。",
+    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=city%20skyline%20silhouette%20sunset%20urban%20architecture%20modern&sign=8de72287cf83cda70c057b89bfc1d186",
     author: {
-      id: "2",
-      name: "胶片摄影师安娜",
-      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=film%20photographer%20female%20vintage%20style&sign=5ec915debce76b46483be485e236cee2"
+      id: "user-123",
+      name: "@光影捕手",
+      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
     },
-    likes: 412,
-    comments: 56,
-    tags: ["人像", "胶片", "复古", "自然光"],
-    date: "2023-10-24"
+    likes: 289,
+    comments: 37,
+    tags: ["城市", "建筑", "剪影", "夕阳"],
+    date: "2023-10-22",
+    views: 987,
+    format: "JPG",
+    visibility: "公开",
+    copyrightType: "非独家"
   },
   {
     id: "3",
-    title: "暗调氛围",
-    description: "Sony A7R IV + 35mm f/1.4 GM | 光圈: f/2.8 | 快门: 1/60s | ISO: 1600\n营造神秘而富有故事感的暗调氛围人像，强调光影层次与情绪表达。",
-    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=moody%20portrait%20low%20key%20dramatic%20lighting&sign=667d5b0612922acbe1a4e0355faeb800",
+    title: "海浪与礁石",
+    description: "长时间曝光拍摄海浪拍打礁石的场景，展现水的丝绸质感。",
+    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=ocean%20waves%20crashing%20on%20rocks%20long%20exposure%20seascape&sign=e3c4cd3840caaaedc19f43f96183a958",
     author: {
-      id: "3",
-      name: "情绪摄影师李明",
-      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=moody%20photographer%20male%20creative&sign=b74f18a9e01693163824506fbbcc8c47"
+      id: "user-123",
+      name: "@光影捕手",
+      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
     },
-    likes: 389,
-    comments: 49,
-    tags: ["暗调", "氛围", "情绪", "人像"],
-    date: "2023-10-23"
+    likes: 412,
+    comments: 53,
+    tags: ["海景", "慢门", "自然", "礁石"],
+    date: "2023-10-18",
+    views: 1452,
+    format: "RAW",
+    visibility: "仅好友可见",
+    copyrightType: "独家授权"
   },
   {
     id: "4",
-    title: "极简静物",
-    description: "Fujifilm GFX 100S + 120mm f/4 Macro | 光圈: f/5.6 | 快门: 1/125s | ISO: 200\n通过简洁的构图和柔和的光线，展现日常物品的质感与美感。",
-    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=minimalist%20still%20life%20composition%20natural%20light&sign=d50543b56e3575f63623ea5055f2f854",
+    title: "森林晨雾",
+    description: "在山间森林中捕捉晨雾弥漫的神秘氛围，阳光透过树叶形成丁达尔效应。",
+    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=forest%20morning%20mist%20sunlight%20rays%20trees%20mystical&sign=0d866462637658cb7796789831e1cc68",
     author: {
-      id: "4",
-      name: "静物摄影师王静",
-      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=still%20life%20photographer%20female%20detail-oriented&sign=3bfd67c585c96ccf90c0560aadfc6c75"
+      id: "user-123",
+      name: "@光影捕手",
+      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
     },
-    likes: 276,
-    comments: 32,
-    tags: ["静物", "极简", "中画幅", "富士"],
-    date: "2023-10-22"
+    likes: 387,
+    comments: 49,
+    tags: ["森林", "晨雾", "丁达尔效应", "自然"],
+    date: "2023-10-15",
+    views: 1328,
+    format: "JPG",
+    visibility: "公开",
+    copyrightType: "非独家"
+  },
+  {
+    id: "5",
+    title: "湖畔日落",
+    description: "平静的湖面倒映着绚丽的晚霞，形成对称的美感。",
+    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=lake%20sunset%20reflection%20mountains%20evening%20colorful%20sky&sign=c039f18a4bf074634422a50690ffb6c",
+    author: {
+      id: "user-123",
+      name: "@光影捕手",
+      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
+    },
+    likes: 456,
+    comments: 61,
+    tags: ["湖泊", "日落", "倒影", "晚霞"],
+    date: "2023-10-12",
+    views: 1689,
+    format: "RAW",
+    visibility: "公开",
+    copyrightType: "独家授权"
+  },
+  {
+    id: "6",
+    title: "星空下的古堡",
+    description: "在远离城市光污染的地方，拍摄星空下的古堡遗迹，展现历史与自然的交融。",
+    image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=castle%20ruins%20under%20starry%20sky%20milky%20way%20night%20long%20exposure&sign=4f691b61d53a7e9b6b0869b95858dbb2",
+    author: {
+      id: "user-123",
+      name: "@光影捕手",
+      avatar: "https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
+    },
+    likes: 523,
+    comments: 78,
+    tags: ["星空", "夜景", "古堡", "银河"],
+    date: "2023-10-08",
+    views: 1976,
+    format: "RAW",
+    visibility: "私密",
+    copyrightType: "独家授权"
   }
 ];
 
-// 模拟创作数据趋势
-const trendData = [
-  { month: '8月', posts: 2, likes: 56, collections: 12, comments: 8 },
-  { month: '9月', posts: 4, likes: 89, collections: 23, comments: 15 },
-  { month: '10月', posts: 6, likes: 91, collections: 13, comments: 22 },
+// 月度浏览数据
+const monthlyViewsData = [
+  { date: "10/1", views: 150, likes: 25 },
+  { date: "10/5", views: 250, likes: 45 },
+  { date: "10/10", views: 210, likes: 38 },
+  { date: "10/15", views: 240, likes: 44 },
+  { date: "10/20", views: 190, likes: 35 },
+  { date: "10/25", views: 220, likes: 40 },
+];
+
+// 最近活动
+const recentActivities = [
+  { id: 1, text: "3天前发布作品《城市剪影》，获赞23次", type: "post" },
+  { id: 2, text: "1周前获得新粉丝5人", type: "follower" },
+  { id: 3, text: "2周前完成新手任务《发布第一张作品》", type: "task" },
+  { id: 4, text: "3周前作品《森林晨雾》被推荐到首页", type: "featured" },
+];
+
+// 最近器材
+const recentEquipment = [
+  { id: 1, name: "索尼 A7R IV", type: "camera" },
+  { id: 2, name: "佳能 EF 24-70mm f/2.8L", type: "lens" },
+  { id: 3, name: "DJI Mavic 3", type: "drone" },
 ];
 
 const Profile: React.FC = () => {
-  const { id } = useParams();
-  const { isAuthenticated, user } = useContext(AuthContext);
-  const [activeTab, setActiveTab] = useState<'posts' | 'collections' | 'likes'>('posts');
+  const { isAuthenticated, user } = useAuth();
+  const [activeTab, setActiveTab] = useState<'posts' | 'collections' | 'likes' | 'stats'>('posts');
+  const [sortBy, setSortBy] = useState("latest");
+  const [selectedTag, setSelectedTag] = useState("全部");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [visibilityFilter, setVisibilityFilter] = useState("all");
+  const [formatFilter, setFormatFilter] = useState("all");
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [newPostDescription, setNewPostDescription] = useState("");
+  const [newPostTags, setNewPostTags] = useState("");
+  const [newPostVisibility, setNewPostVisibility] = useState("公开");
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
-   // 初始化模拟用户数据
-  const [profileUser, setProfileUser] = useState({
+  // 初始化模拟用户数据
+  const [profileUser] = useState({
     id: 'user-123',
     username: '@光影捕手',
     email: 'user@example.com',
@@ -113,7 +200,7 @@ const Profile: React.FC = () => {
     followers: 123,
     following: 45,
     posts: 28,
-    likes: 236
+    likes: mockPhotographyPosts.reduce((sum, post) => sum + post.likes, 0)
   });
   
   // 检查是否是当前用户自己的主页
@@ -122,17 +209,71 @@ const Profile: React.FC = () => {
   // 关注状态
   const [isFollowing, setIsFollowing] = useState(false);
   
-  // 模拟作品数据
-  const userPosts = mockPhotographyPosts;
+  // 获取所有标签
+  const getAllTags = () => {
+    const tags = ["全部"];
+    mockPhotographyPosts.forEach(post => {
+      post.tags.forEach(tag => {
+        if (!tags.includes(tag)) {
+          tags.push(tag);
+        }
+      });
+    });
+    return tags;
+  };
   
-  // 获取收藏作品
-  const userCollections = mockPhotographyPosts.slice(0, 2);
+  // 筛选作品
+  const getFilteredPosts = () => {
+    let posts = [...mockPhotographyPosts];
+    
+    if (selectedTag !== "全部") {
+      posts = posts.filter(post => post.tags.includes(selectedTag));
+    }
+    
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      posts = posts.filter(
+        post => post.title.toLowerCase().includes(term) || 
+                post.description.toLowerCase().includes(term) || 
+                post.tags.some(tag => tag.toLowerCase().includes(term))
+      );
+    }
+    
+    if (visibilityFilter !== "all") {
+      posts = posts.filter(post => {
+        if (visibilityFilter === "public") return post.visibility === "公开";
+        if (visibilityFilter === "friends") return post.visibility === "仅好友可见";
+        if (visibilityFilter === "private") return post.visibility === "私密";
+        return true;
+      });
+    }
+    
+    if (formatFilter !== "all") {
+      posts = posts.filter(post => {
+        if (formatFilter === "raw") return post.format === "RAW";
+        if (formatFilter === "jpg") return post.format === "JPG";
+        return true;
+      });
+    }
+    
+    if (sortBy === "latest") {
+      posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    } else if (sortBy === "popular") {
+      posts.sort((a, b) => b.likes - a.likes);
+    } else if (sortBy === "views") {
+      posts.sort((a, b) => b.views - a.views);
+    }
+    
+    return posts;
+  };
   
-  // 获取点赞作品
-  const userLikes = mockPhotographyPosts.slice(1, 3);
+  const filteredPosts = getFilteredPosts();
+  const allTags = getAllTags();
   
   // 根据当前激活的标签显示对应的内容
-  const displayPosts = activeTab === 'posts' ? userPosts : activeTab === 'collections' ? userCollections : userLikes;
+  const displayPosts = activeTab === 'posts' ? filteredPosts : 
+                      activeTab === 'collections' ? mockPhotographyPosts.slice(0, 2) : 
+                      mockPhotographyPosts.slice(1, 3);
   
   // 格式化日期为相对时间
   const formatRelativeTime = (dateString: string) => {
@@ -140,91 +281,63 @@ const Profile: React.FC = () => {
     const now = new Date();
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
     
-    if (diffInSeconds < 60) {
-      return "刚刚";
-    } else if (diffInSeconds < 3600) {
-      const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes}分钟前`;
-    } else if (diffInSeconds < 86400) {
-      const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours}小时前`;
-    } else if (diffInSeconds < 604800) {
-      const days = Math.floor(diffInSeconds / 86400);
-      return `${days}天前`;
-    } else {
-      return date.toLocaleDateString('zh-CN');
+    if (diffInSeconds < 60) return "刚刚";
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}分钟前`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}小时前`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}天前`;
+    return date.toLocaleDateString('zh-CN');
+  };
+  
+  // 处理上传
+  const handleUpload = () => {
+    setShowUploadModal(true);
+  };
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+      setUploadProgress(0);
     }
   };
   
-  // 渲染用户作品集数据
-  const renderUserPosts = () => {
-    // 如果没有登录，显示提示
-    if (!isAuthenticated) {
-      return (
-        <div className="text-center py-8">
-          <p className="text-[#B8C6D8]">请先登录以查看更多内容</p>
-          <button 
-            onClick={() => navigate('/login')}
-            className="inline-block mt-4 px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg hover:bg-[#6B7C93] transition-colors"
-          >
-            立即登录
-          </button>
-        </div>
-      );
+  const handleSubmitUpload = () => {
+    if (!selectedFile || !newPostTitle.trim()) {
+      toast.warning("请选择图片并填写标题");
+      return;
     }
     
-     // 如果登录了但没有作品，显示空状态
-    if (displayPosts.length === 0) {
-      return (
-        <Empty 
-          type="empty"
-          size="md"
-          text={activeTab === 'posts' ? '暂无作品' : activeTab === 'collections' ? '暂无收藏' : '暂无点赞'}
-          helperText={activeTab === 'posts' 
-            ? '上传你的第一张作品，开始创作之旅吧！' 
-            : activeTab === 'collections'
-              ? '收藏喜欢的作品，建立你的灵感库'
-              : '为喜欢的作品点赞，支持创作者'}
-          icon="fa-image"
-          actionText={activeTab === 'posts' ? '上传作品' : undefined}
-          onActionClick={() => activeTab === 'posts' ? navigate('/profile-center/works') : undefined}
-          backgroundColor="bg-[#2D3748]"
-          textColor="text-[#F5F7FA]"
-        />
-      );
-    }
+    setUploading(true);
+    let progress = 0;
     
-    // 正常显示作品网格
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayPosts.map((post) => (
-          <PhotographyCard key={post.id} post={post} />
-        ))}
-      </div>
-    );
+    const interval = setInterval(() => {
+      progress += 10;
+      setUploadProgress(progress);
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          toast.success("作品上传成功");
+          setSelectedFile(null);
+          setNewPostTitle("");
+          setNewPostDescription("");
+          setNewPostTags("");
+          setNewPostVisibility("公开");
+          setUploading(false);
+          setShowUploadModal(false);
+        }, 500);
+      }
+    }, 200);
   };
   
-  // 加载时的骨架屏（模拟）
-  const renderSkeleton = () => {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3, 4, 5, 6].map((item) => (
-          <div key={item} className="bg-[#2D3748] rounded-lg overflow-hidden animate-pulse">
-            <div className="h-48 bg-[#4A5F8B]"></div>
-            <div className="p-4">
-              <div className="h-4 bg-[#4A5F8B] rounded w-3/4 mb-3"></div>
-              <div className="h-4 bg-[#4A5F8B] rounded w-full mb-2"></div>
-              <div className="h-4 bg-[#4A5F8B] rounded w-full mb-4"></div>
-              <div className="h-4 bg-[#4A5F8B] rounded w-1/2"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+  const handleCancelUpload = () => {
+    setShowUploadModal(false);
+    setSelectedFile(null);
+    setNewPostTitle("");
+    setNewPostDescription("");
+    setNewPostTags("");
+    setNewPostVisibility("公开");
+    setUploadProgress(0);
   };
-  
-  // 判断是否显示骨架屏（这里简单模拟）
-  const showSkeleton = false;
   
   // 检查用户是否登录，如果没有登录，显示登录提示
   if (!isAuthenticated) {
@@ -299,7 +412,7 @@ const Profile: React.FC = () => {
                     </h1>
                     <div className="ml-3 flex flex-wrap gap-2">
                       <span className="px-2 py-0.5 text-xs bg-[#4A5F8B]/20 text-[#B8C6D8] rounded">
-                        {mockUser.level}
+                        {mockUser.tags}
                       </span>
                     </div>
                   </div>
@@ -337,16 +450,16 @@ const Profile: React.FC = () => {
                   {isCurrentUser && (
                     <>
                       <button
-                        onClick={() => navigate('/profile-center/settings')}
+                        onClick={() => navigate('/profile/settings')}
                         className="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] border border-[#4A5F8B] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors"
                       >
                         <i className="fa-solid fa-pen-to-square mr-2 text-[#F5F7FA]"></i> 编辑资料
                       </button>
                       <button
-                        onClick={() => navigate('/profile-center')}
+                        onClick={() => navigate('/profile/settings')}
                         className="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] border border-[#4A5F8B] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors"
                       >
-                        <i className="fa-solid fa-user-cog mr-2 text-[#F5F7FA]"></i> 进入个人中心
+                        <i className="fa-solid fa-cog mr-2 text-[#F5F7FA]"></i> 设置
                       </button>
                     </>
                   )}
@@ -431,14 +544,11 @@ const Profile: React.FC = () => {
           </div>
         </div>
         
-        {/* 内容标签页 */}
+        {/* 内容标签页 - 整合个人中心功能 */}
         <div className="bg-[#2D3748] rounded-xl shadow-sm border border-[#4A5F8B] mb-8">
           <div className="flex border-b border-[#4A5F8B]">
             <button
-              onClick={() => {
-                setActiveTab('posts');
-                navigate(`/profile/${profileUser.id}`);
-              }}
+              onClick={() => setActiveTab('posts')}
               className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
                 activeTab === 'posts'
                   ? 'text-[#F5F7FA] border-b-2 border-[#4A5F8B]'
@@ -448,10 +558,7 @@ const Profile: React.FC = () => {
               作品 ({profileUser.posts})
             </button>
             <button
-              onClick={() => {
-                setActiveTab('collections');
-                navigate(`/profile/${profileUser.id}/collections`);
-              }}
+              onClick={() => setActiveTab('collections')}
               className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
                 activeTab === 'collections'
                   ? 'text-[#F5F7FA] border-b-2 border-[#4A5F8B]'
@@ -461,10 +568,7 @@ const Profile: React.FC = () => {
               收藏 (48)
             </button>
             <button
-              onClick={() => {
-                setActiveTab('likes');
-                navigate(`/profile/${profileUser.id}/likes`);
-              }}
+              onClick={() => setActiveTab('likes')}
               className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
                 activeTab === 'likes'
                   ? 'text-[#F5F7FA] border-b-2 border-[#4A5F8B]'
@@ -473,47 +577,493 @@ const Profile: React.FC = () => {
             >
               点赞 ({profileUser.likes})
             </button>
+            <button
+              onClick={() => setActiveTab('stats')}
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+                activeTab === 'stats'
+                  ? 'text-[#F5F7FA] border-b-2 border-[#4A5F8B]'
+                  : 'text-[#B8C6D8]/70 hover:text-[#F5F7FA]'
+              }`}
+            >
+              数据统计
+            </button>
           </div>
           
-          {/* 创作数据趋势图 */}
-          {activeTab === 'posts' && isCurrentUser && (
-            <div className="p-6 border-b border-[#4A5F8B]">
-              <h2 className="text-xl font-bold text-[#F5F7FA] mb-4">创作数据</h2>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={trendData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#4A5F8B" />
-                    <XAxis dataKey="month" stroke="#B8C6D8" />
-                    <YAxis stroke="#B8C6D8" />
-                    <Tooltip contentStyle={{ backgroundColor: '#2D3748', borderColor: '#4A5F8B', color: '#F5F7FA' }} />
-                    <Legend />
-                    <Line type="monotone" dataKey="posts" stroke="#4A5F8B" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} name="作品数" />
-                    <Line type="monotone" dataKey="likes" stroke="#B8C6D8" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} name="获赞数" />
-                    <Line type="monotone" dataKey="collections" stroke="#6B7C93" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} name="收藏数" />
-                  </LineChart>
-                </ResponsiveContainer>
+          {/* 数据统计页面 */}
+          {activeTab === 'stats' && (
+            <div className="p-6">
+              {/* 创作数据趋势图 */}
+              <div className="bg-[#1E2532] rounded-xl p-6 shadow-sm border border-[#4A5F8B] mb-8">
+                <h2 className="text-xl font-bold text-[#F5F7FA] mb-4">创作数据</h2>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={monthlyViewsData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#4A5F8B" />
+                      <XAxis dataKey="date" stroke="#B8C6D8" />
+                      <YAxis stroke="#B8C6D8" />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#2D3748', borderColor: '#4A5F8B', color: '#F5F7FA' }}
+                        content={({ active, payload, label }) => {
+                          if (active && payload && payload.length) {
+                            const viewsData = payload.find(item => item.dataKey === "views");
+                            const likesData = payload.find(item => item.dataKey === "likes");
+                            return (
+                              <div className="bg-[#2D3748] border border-[#4A5F8B] p-3 rounded-lg">
+                                <p className="text-[#B8C6D8] font-medium mb-2">{`${label}数据`}</p>
+                                {viewsData && <p className="text-[#B8C6D8] mb-1">浏览量: {viewsData.value}</p>}
+                                {likesData && <p className="text-[#B8C6D8]">点赞量: {likesData.value}</p>}
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Legend />
+                      <Line type="monotone" dataKey="views" stroke="#4A5F8B" strokeWidth={2} dot={false} name="浏览量" />
+                      <Line type="monotone" dataKey="likes" stroke="#6B7C93" strokeWidth={2} dot={false} name="点赞量" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              
+              {/* 最近活动 */}
+              <div className="bg-[#1E2532] rounded-xl p-6 shadow-sm border border-[#4A5F8B] mb-8">
+                <h2 className="text-xl font-bold text-[#F5F7FA] mb-4">最近活动</h2>
+                <div className="space-y-3">
+                  {recentActivities.map(activity => (
+                    <div key={activity.id} className="flex items-start space-x-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        activity.type === "post" ? "bg-blue-500/20 text-blue-400" :
+                        activity.type === "follower" ? "bg-green-500/20 text-green-400" :
+                        activity.type === "task" ? "bg-yellow-500/20 text-yellow-400" :
+                        "bg-purple-500/20 text-purple-400"
+                      }`}>
+                        {activity.type === "post" && <i className="fa-solid fa-image"></i>}
+                        {activity.type === "follower" && <i className="fa-solid fa-user-plus"></i>}
+                        {activity.type === "task" && <i className="fa-solid fa-check-circle"></i>}
+                        {activity.type === "featured" && <i className="fa-solid fa-star"></i>}
+                      </div>
+                      <p className="text-sm text-[#B8C6D8]">{activity.text}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
           
-          {/* 内容区域 */}
-          <div className="p-6">
-            {showSkeleton ? renderSkeleton() : renderUserPosts()}
-            
-            {/* 加载更多按钮 */}
-            {displayPosts.length > 0 && (
-              <div className="mt-10 text-center">
-                <button
-                  onClick={() => navigate('/login')}
-                  className="inline-flex items-center px-6 py-3 bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] rounded-lg font-medium transition-colors"
-                >
-                  登录查看更多内容
+          {/* 作品展示页面 */}
+          {(activeTab === 'posts' || activeTab === 'collections' || activeTab === 'likes') && (
+            <div className="p-6">
+              {/* 筛选和搜索 */}
+              {activeTab === 'posts' && isCurrentUser && (
+                <>
+                  <div className="bg-[#1E2532] rounded-xl p-6 shadow-sm border border-[#4A5F8B] mb-8">
+                    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          placeholder="搜索作品标题或描述..."
+                          value={searchTerm}
+                          onChange={e => setSearchTerm(e.target.value)}
+                          className="w-full px-4 py-3 pl-12 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]"
+                        />
+                        <i className="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B8C6D8]"></i>
+                      </div>
+                      <div className="flex space-x-4">
+                        <select
+                          value={visibilityFilter}
+                          onChange={e => setVisibilityFilter(e.target.value)}
+                          className="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer"
+                        >
+                          <option value="all">全部可见性</option>
+                          <option value="public">公开</option>
+                          <option value="friends">仅好友可见</option>
+                          <option value="private">私密</option>
+                        </select>
+                        <select
+                          value={formatFilter}
+                          onChange={e => setFormatFilter(e.target.value)}
+                          className="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer"
+                        >
+                          <option value="all">全部格式</option>
+                          <option value="raw">RAW</option>
+                          <option value="jpg">JPG</option>
+                        </select>
+                        <select
+                          value={sortBy}
+                          onChange={e => setSortBy(e.target.value)}
+                          className="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer"
+                        >
+                          <option value="latest">最新发布</option>
+                          <option value="popular">最受欢迎</option>
+                          <option value="views">最多浏览</option>
+                        </select>
+                      </div>
+                    </div>
+                    
+                    {/* 标签筛选 */}
+                    <div className="mt-4">
+                      <h4 className="text-sm font-medium text-[#B8C6D8] mb-2">按标签筛选</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {allTags.map(tag => (
+                          <button
+                            key={tag}
+                            onClick={() => setSelectedTag(tag)}
+                            className={`px-3 py-1 rounded-full text-sm ${
+                              selectedTag === tag 
+                                ? "bg-[#4A5F8B] text-[#F5F7FA]" 
+                                : "bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B]"
+                            } transition-colors`}
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 上传按钮 */}
+                  <div className="mb-8 text-center">
+                    <button
+                      onClick={handleUpload}
+                      className="px-6 py-3 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors inline-flex items-center"
+                    >
+                      <i className="fa-solid fa-plus mr-2"></i>添加新作品（支持RAW/JPG/视频）
+                    </button>
+                  </div>
+                </>
+              )}
+              
+              {/* 作品列表 */}
+              {displayPosts.length === 0 ? (
+                <Empty 
+                  type="empty"
+                  size="md"
+                  text={activeTab === 'posts' ? '暂无作品' : activeTab === 'collections' ? '暂无收藏' : '暂无点赞'}
+                  helperText={activeTab === 'posts' 
+                    ? '上传你的第一张作品，开始创作之旅吧！' 
+                    : activeTab === 'collections'
+                      ? '收藏喜欢的作品，建立你的灵感库'
+                      : '为喜欢的作品点赞，支持创作者'}
+                  icon="fa-image"
+                  actionText={activeTab === 'posts' && isCurrentUser ? '上传作品' : undefined}
+                  onActionClick={() => activeTab === 'posts' && isCurrentUser ? handleUpload() : undefined}
+                  backgroundColor="bg-[#2D3748]"
+                  textColor="text-[#F5F7FA]"
+                />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {displayPosts.map((post) => (
+                    <motion.div
+                      key={post.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] transition-all shadow-sm"
+                    >
+                      <div className="relative">
+                        <img src={post.image} alt={post.title} className="w-full h-48 object-cover" />
+                        <div className={`absolute top-3 left-3 px-2 py-1 rounded text-xs ${
+                          post.copyrightType === "独家授权" ? "bg-[#4A5F8B] text-[#F5F7FA]" : "bg-[#6B7C93] text-[#F5F7FA]"
+                        }`}>
+                          {post.copyrightType}
+                        </div>
+                        <div className="absolute top-3 right-3 flex space-x-2">
+                          <span className="px-2 py-1 bg-[#2D3748]/80 text-[#B8C6D8] text-xs rounded">
+                            {post.format}
+                          </span>
+                          <span className="px-2 py-1 bg-[#2D3748]/80 text-[#B8C6D8] text-xs rounded">
+                            {post.visibility}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="text-base font-bold text-[#F5F7FA] mb-2">{post.title}</h3>
+                        <p className="text-sm text-[#B8C6D8] mb-3 line-clamp-2">{post.description}</p>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {post.tags.map((tag, index) => (
+                            <span key={index} className="px-2 py-1 bg-[#4A5F8B] text-[#F5F7FA] text-xs rounded">#{tag}</span>
+                          ))}
+                        </div>
+                        <div className="flex items-center justify-between mb-4 text-sm text-[#B8C6D8]">
+                          <div className="flex items-center space-x-4">
+                            <span className="flex items-center">
+                              <i className="fa-solid fa-heart mr-1"></i>{post.likes}
+                            </span>
+                            <span className="flex items-center">
+                              <i className="fa-solid fa-comment mr-1"></i>{post.comments}
+                            </span>
+                            <span className="flex items-center">
+                              <i className="fa-solid fa-eye mr-1"></i>{post.views}
+                            </span>
+                          </div>
+                          <span>{formatRelativeTime(post.date)}</span>
+                        </div>
+                        {isCurrentUser && (
+                          <div className="flex justify-between space-x-2">
+                            <Link
+                              to={`/photo/${post.id}`}
+                              className="flex-1 py-2 text-center bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors text-sm border border-[#4A5F8B]"
+                            >
+                              查看详情
+                            </Link>
+                            <button className="px-3 py-2 text-center bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:border-[#4A5F8B] hover:text-[#F5F7FA] transition-colors text-sm border border-[#4A5F8B]">
+                              <i className="fa-solid fa-edit"></i>
+                            </button>
+                            <button className="px-3 py-2 text-center bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:border-[#4A5F8B] hover:text-[#F5F7FA] transition-colors text-sm border border-[#4A5F8B]">
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                            <button className="px-3 py-2 text-center bg-gradient-to-r from-[#4A5F8B] to-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:from-[#6B7C93] hover:to-[#4A5F8B] transition-colors text-sm border border-[#4A5F8B]">
+                              <i className="fa-solid fa-copyright"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+              
+              {/* 加载更多按钮 */}
+              {displayPosts.length > 0 && (
+                <div className="mt-10 text-center">
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="inline-flex items-center px-6 py-3 bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] rounded-lg font-medium transition-colors"
+                  >
+                    加载更多
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        
+        {/* 个人中心快捷入口 */}
+        {isCurrentUser && (
+          <div className="bg-[#2D3748] rounded-xl p-6 shadow-sm border border-[#4A5F8B] mb-8">
+            <h2 className="text-lg font-bold text-[#F5F7FA] mb-6">个人中心</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* 我的器材库 */}
+              <div className="bg-[#1E2532] rounded-lg p-5 border border-[#4A5F8B]">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-medium text-[#F5F7FA] flex items-center">
+                    <i className="fa-solid fa-video text-[#4A5F8B] mr-2"></i>我的器材库
+                  </h3>
+                </div>
+                <p className="text-xs text-[#B8C6D8]/70 mb-4">最近浏览：索尼 A7R IV</p>
+                <div className="space-y-3 mb-4">
+                  {recentEquipment.map(equipment => (
+                    <div key={equipment.id} className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="w-8 h-8 rounded-full bg-[#4A5F8B]/20 flex items-center justify-center text-[#4A5F8B] mr-3">
+                          <i className={`fa-solid ${
+                            equipment.type === "camera" ? "fa-camera" : 
+                            equipment.type === "lens" ? "fa-camera-retro" : "fa-drone"
+                          }`}></i>
+                        </div>
+                        <span className="text-sm text-[#B8C6D8]">{equipment.name}</span>
+                      </div>
+                      <i className="fa-solid fa-chevron-right text-xs text-[#4A5F8B]"></i>
+                    </div>
+                  ))}
+                </div>
+                <button className="w-full py-2 text-center bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors text-sm">
+                  <i className="fa-solid fa-plus mr-1"></i>添加器材
                 </button>
               </div>
-            )}
+              
+              {/* 会员中心 */}
+              <div className="bg-[#1E2532] rounded-lg p-5 border border-[#4A5F8B]">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-medium text-[#F5F7FA] flex items-center">
+                    <i className="fa-solid fa-crown text-[#4A5F8B] mr-2"></i>会员中心
+                  </h3>
+                </div>
+                <p className="text-xs text-[#B8C6D8]/70 mb-4">您当前是 {mockUser.memberStatus}</p>
+                <div className="bg-[#2D3748] p-3 rounded-lg mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-[#B8C6D8]">会员有效期</span>
+                    <span className="text-xs text-[#4A5F8B]">剩余 {mockUser.memberDaysLeft}天</span>
+                  </div>
+                  <div className="w-full h-2 bg-[#1E2532] rounded-full overflow-hidden">
+                    <div className="h-full bg-[#4A5F8B]" style={{ width: `${mockUser.memberDaysLeft / 365 * 100}%` }}></div>
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <button className="flex-1 py-2 text-center bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors text-sm">
+                    续费
+                  </button>
+                  <button className="flex-1 py-2 text-center bg-gradient-to-r from-[#4A5F8B] to-[#6B7C93] text-[#F5F7FA] rounded-lg font-medium hover:from-[#6B7C93] hover:to-[#4A5F8B] transition-colors text-sm">
+                    升级
+                  </button>
+                </div>
+              </div>
+              
+              {/* 快速工具 */}
+              <div className="bg-[#1E2532] rounded-lg p-5 border border-[#4A5F8B]">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-base font-medium text-[#F5F7FA] flex items-center">
+                    <i className="fa-solid fa-toolbox text-[#4A5F8B] mr-2"></i>快速工具
+                  </h3>
+                </div>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <button className="flex flex-col items-center justify-center p-3 bg-[#2D3748] rounded-lg hover:bg-[#4A5F8B] transition-colors">
+                    <i className="fa-solid fa-palette text-xl text-[#B8C6D8] mb-2"></i>
+                    <span className="text-sm text-[#B8C6D8]">后期工具</span>
+                  </button>
+                  <button className="flex flex-col items-center justify-center p-3 bg-[#2D3748] rounded-lg hover:bg-[#4A5F8B] transition-colors">
+                    <i className="fa-solid fa-map-marker-alt text-xl text-[#B8C6D8] mb-2"></i>
+                    <span className="text-sm text-[#B8C6D8]">拍摄地点</span>
+                  </button>
+                  <button className="flex flex-col items-center justify-center p-3 bg-[#2D3748] rounded-lg hover:bg-[#4A5F8B] transition-colors">
+                    <i className="fa-solid fa-flag text-xl text-[#B8C6D8] mb-2"></i>
+                    <span className="text-sm text-[#B8C6D8]">摄影活动</span>
+                  </button>
+                  <button className="flex flex-col items-center justify-center p-3 bg-[#2D3748] rounded-lg hover:bg-[#4A5F8B] transition-colors">
+                    <i className="fa-solid fa-bell text-xl text-[#B8C6D8] mb-2"></i>
+                    <span className="text-sm text-[#B8C6D8]">我的通知</span>
+                  </button>
+                </div>
+                <button onClick={() => navigate('/profile/settings')} className="w-full py-2 text-center bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors text-sm">
+                  <i className="fa-solid fa-cog mr-1"></i>更多设置
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </motion.div>
+      
+      {/* 上传模态框 */}
+      {showUploadModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={handleCancelUpload}
+        >
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.9 }}
+            className="bg-[#2D3748] rounded-xl p-6 w-full max-w-lg border border-[#4A5F8B]"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-[#F5F7FA]">上传新作品</h2>
+              <button onClick={handleCancelUpload} className="text-[#B8C6D8] hover:text-[#F5F7FA]">
+                <i className="fa-solid fa-x"></i>
+              </button>
+            </div>
+            
+            {/* 文件上传区域 */}
+            <div 
+              className={`border-2 border-dashed rounded-lg p-8 text-center mb-6 cursor-pointer transition-colors ${
+                selectedFile ? 'border-[#4A5F8B] bg-[#4A5F8B]/10' : 'border-[#4A5F8B] hover:border-[#6B7C93]'
+              }`}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,.raw"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              {selectedFile ? (
+                <>
+                  <i className="fa-solid fa-check-circle text-green-400 text-4xl mb-2"></i>
+                  <p className="text-[#F5F7FA]">{selectedFile.name}</p>
+                  <p className="text-sm text-[#B8C6D8]">{(selectedFile.size / 1024).toFixed(1)} KB</p>
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-cloud-upload text-[#4A5F8B] text-4xl mb-2"></i>
+                  <p className="text-[#F5F7FA]">点击或拖拽上传图片</p>
+                  <p className="text-sm text-[#B8C6D8]">支持 JPG、PNG、RAW 格式，最大 5MB</p>
+                </>
+              )}
+            </div>
+            
+            {/* 上传进度 */}
+            {uploading && (
+              <div className="mb-6">
+                <div className="flex justify-between items-center text-xs text-[#B8C6D8] mb-1">
+                  <span>上传中...</span>
+                  <span>{uploadProgress}%</span>
+                </div>
+                <div className="w-full h-2 bg-[#1E2532] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#4A5F8B]" style={{ width: `${uploadProgress}%` }}></div>
+                </div>
+              </div>
+            )}
+            
+            {/* 表单字段 */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-[#F5F7FA] mb-1">作品标题</label>
+                <input
+                  type="text"
+                  value={newPostTitle}
+                  onChange={e => setNewPostTitle(e.target.value)}
+                  placeholder="输入作品标题..."
+                  className="w-full px-4 py-3 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#F5F7FA] mb-1">作品描述</label>
+                <textarea
+                  value={newPostDescription}
+                  onChange={e => setNewPostDescription(e.target.value)}
+                  placeholder="描述您的作品..."
+                  rows={3}
+                  className="w-full px-4 py-3 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all resize-none placeholder:text-[#B8C6D8]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#F5F7FA] mb-1">标签</label>
+                <input
+                  type="text"
+                  value={newPostTags}
+                  onChange={e => setNewPostTags(e.target.value)}
+                  placeholder="输入标签，用逗号分隔..."
+                  className="w-full px-4 py-3 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#F5F7FA] mb-1">可见性</label>
+                <select
+                  value={newPostVisibility}
+                  onChange={e => setNewPostVisibility(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer"
+                >
+                  <option value="公开">公开</option>
+                  <option value="仅好友可见">仅好友可见</option>
+                  <option value="私密">私密</option>
+                </select>
+              </div>
+            </div>
+            
+            {/* 操作按钮 */}
+            <div className="flex space-x-4 mt-6">
+              <button
+                onClick={handleCancelUpload}
+                className="flex-1 py-3 bg-[#1E2532] text-[#B8C6D8] border border-[#4A5F8B] rounded-lg font-medium hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleSubmitUpload}
+                disabled={!selectedFile || !newPostTitle.trim()}
+                className="flex-1 py-3 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {uploading ? '上传中...' : '上传作品'}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useThemeStore } from '../../store/themeStore';
+import { useAuthStore } from '../../store/authStore';
 
 interface CaptchaProps {
   onChange: (value: string) => void;
@@ -10,7 +10,7 @@ interface CaptchaProps {
 const Captcha: React.FC<CaptchaProps> = ({ onChange, value = '', className = '' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [captchaText, setCaptchaText] = useState('');
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   
   // 生成随机验证码
   const generateCaptcha = () => {

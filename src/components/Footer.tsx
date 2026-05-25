@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useThemeStore } from '../store/themeStore';
+import { useAuthStore } from '../store/authStore';
 
 const Footer: React.FC = () => {
-  const { theme } = useThemeStore();
+  const { theme } = useAuthStore();
   
   // 根据主题获取样式类
   const getBgClass = () => {

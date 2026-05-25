@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useTheme } from '../hooks/useTheme';
-import { AuthContext } from '../contexts/authContext';
+import { useAuth } from '../contexts/authContext';
 
 interface Answer {
   id: string;
@@ -83,7 +83,7 @@ const formatRelativeTime = (dateString: string) => {
 
 export const EquipmentQuestions: React.FC<EquipmentQuestionsProps> = ({ equipmentId }) => {
   const { theme, toggleTheme } = useTheme();
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useAuth();
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: 'q1',
