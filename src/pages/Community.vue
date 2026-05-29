@@ -6,10 +6,10 @@
           <h1 class="text-2xl font-bold text-white">摄影社区</h1>
           <p class="text-[#6B7C93]">与全球摄影爱好者交流分享</p>
         </div>
-        <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors flex items-center gap-2">
-          <i class="fa-solid fa-plus"></i>
+        <Button @click="handleCreatePost" ariaLabel="发布新帖子">
+          <i class="fa-solid fa-plus mr-2"></i>
           <span>发布帖子</span>
-        </button>
+        </Button>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -19,16 +19,17 @@
               v-for="filter in filters" 
               :key="filter.id"
               @click="activeFilter = filter.id"
-              :class="['px-4 py-2 rounded-lg transition-colors', activeFilter === filter.id ? 'bg-[#4A5F8B] text-white' : 'bg-[#1E2532] text-[#6B7C93] hover:text-white']"
+              :class="['px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F1C2D] active:scale-95', activeFilter === filter.id ? 'bg-[#4A5F8B] text-white shadow-md' : 'bg-[#1E2532] text-[#6B7C93] hover:text-white hover:bg-[#2D3748]']"
+              :aria-pressed="activeFilter === filter.id"
             >
               {{ filter.name }}
             </button>
           </div>
 
-          <div v-for="post in communityPosts" :key="post.id" class="bg-[#1E2532] rounded-xl overflow-hidden">
+          <div v-for="post in communityPosts" :key="post.id" class="bg-[#1E2532] rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg">
             <div class="p-6">
               <div class="flex items-center gap-4 mb-4">
-                <img :src="post.author.avatar" :alt="post.author.name" class="w-10 h-10 rounded-full" />
+                <img :src="post.author.avatar" :alt="post.author.name" class="w-10 h-10 rounded-full border-2 border-transparent hover:border-[#4A5F8B] transition-colors" />
                 <div>
                   <h3 class="font-medium text-white">{{ post.author.name }}</h3>
                   <p class="text-sm text-[#6B7C93]">{{ post.date }}</p>
@@ -45,27 +46,44 @@
                   :key="index"
                   :src="img" 
                   :alt="`${post.title} - ${index + 1}`"
-                  class="w-full h-48 object-cover rounded-lg"
+                  class="w-full h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-[1.02]"
+                  loading="lazy"
                 />
-                <div v-if="post.images.length > 2" class="col-span-1 row-span-2 bg-[#0F1C2D] rounded-lg flex items-center justify-center">
-                  <span class="text-[#6B7C93]">+{{ post.images.length - 2 }}</span>
+                <div v-if="post.images.length > 2" class="col-span-1 row-span-2 bg-[#0F1C2D] rounded-lg flex items-center justify-center cursor-pointer hover:bg-[#1a293d] transition-colors">
+                  <span class="text-[#6B7C93] text-lg font-semibold">+{{ post.images.length - 2 }}</span>
                 </div>
               </div>
 
               <div class="flex items-center gap-6 text-sm text-[#6B7C93]">
-                <button class="flex items-center gap-1 hover:text-white transition-colors">
+                <button 
+                  @click="handlePostAction('like', post.id)"
+                  class="flex items-center gap-1 hover:text-red-400 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
+                  aria-label="点赞"
+                >
                   <i class="fa-solid fa-heart"></i>
                   <span>{{ post.likes }}</span>
                 </button>
-                <button class="flex items-center gap-1 hover:text-white transition-colors">
+                <button 
+                  @click="handlePostAction('comment', post.id)"
+                  class="flex items-center gap-1 hover:text-[#4A5F8B] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
+                  aria-label="评论"
+                >
                   <i class="fa-solid fa-comment"></i>
                   <span>{{ post.comments }}</span>
                 </button>
-                <button class="flex items-center gap-1 hover:text-white transition-colors">
+                <button 
+                  @click="handlePostAction('bookmark', post.id)"
+                  class="flex items-center gap-1 hover:text-yellow-400 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
+                  aria-label="收藏"
+                >
                   <i class="fa-solid fa-bookmark"></i>
                   <span>{{ post.bookmarks }}</span>
                 </button>
-                <button class="flex items-center gap-1 hover:text-white transition-colors">
+                <button 
+                  @click="handlePostAction('share', post.id)"
+                  class="flex items-center gap-1 hover:text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
+                  aria-label="分享"
+                >
                   <i class="fa-solid fa-share"></i>
                   <span>分享</span>
                 </button>
@@ -81,10 +99,11 @@
               <div 
                 v-for="topic in trendingTopics" 
                 :key="topic.id"
-                class="flex items-center gap-3 p-3 bg-[#0F1C2D] rounded-lg hover:bg-[#4A5F8B]/30 transition-colors cursor-pointer"
+                class="flex items-center gap-3 p-3 bg-[#0F1C2D] rounded-lg hover:bg-[#4A5F8B]/30 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532]"
+                tabindex="0"
               >
                 <span class="text-2xl">{{ topic.emoji }}</span>
-                <div>
+                <div class="flex-1">
                   <p class="text-white text-sm">{{ topic.name }}</p>
                   <p class="text-[#6B7C93] text-xs">{{ topic.discussions }} 讨论</p>
                 </div>
@@ -100,14 +119,19 @@
                 :key="user.id"
                 class="flex items-center gap-3"
               >
-                <img :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full" />
+                <img :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full hover:scale-110 transition-transform duration-200" />
                 <div class="flex-1">
                   <p class="text-white text-sm">{{ user.name }}</p>
                   <p class="text-[#6B7C93] text-xs">{{ user.posts }} 帖子</p>
                 </div>
-                <button class="px-3 py-1 border border-[#4A5F8B] text-[#4A5F8B] text-sm rounded hover:bg-[#4A5F8B] hover:text-white transition-colors">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  @click="handleFollowUser(user.id)"
+                  :ariaLabel="`关注 ${user.name}`"
+                >
                   关注
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -115,9 +139,9 @@
           <div class="bg-gradient-to-r from-green-600/20 to-blue-600/20 rounded-xl p-6 border border-green-500/30">
             <h3 class="font-semibold text-white mb-2">加入摄影挑战</h3>
             <p class="text-sm text-[#B8C6D8] mb-4">参与每周摄影挑战，赢取精美奖品</p>
-            <button class="w-full px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+            <Button variant="primary" @click="handleJoinChallenge" ariaLabel="立即参与摄影挑战">
               立即参与
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -127,8 +151,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import Button from '../components/common/Button.vue';
 
 const activeFilter = ref('latest');
+
+// 模拟点击事件处理
+const handlePostAction = (action: string, postId: string) => {
+  console.log(`${action} on post ${postId}`);
+};
+
+const handleFollowUser = (userId: string) => {
+  console.log(`Follow user ${userId}`);
+};
+
+const handleCreatePost = () => {
+  console.log('Create new post');
+};
+
+const handleJoinChallenge = () => {
+  console.log('Join challenge');
+};
 
 const filters = [
   { id: 'latest', name: '最新' },

@@ -135,36 +135,41 @@
           <div class="flex space-x-2 min-w-max">
             <button
               @click="selectedCategory = 'all'"
-              :class="selectedCategory === 'all' ? 'bg-[#4A5F8B] text-[#F5F7FA]' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#4A5F8B]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="selectedCategory === 'all' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
+              :aria-pressed="selectedCategory === 'all'"
             >
               全部
             </button>
             <button
               @click="selectedCategory = '极简主义'"
-              :class="selectedCategory === '极简主义' ? 'bg-[#4A5F8B] text-[#F5F7FA]' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#4A5F8B]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="selectedCategory === '极简主义' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
+              :aria-pressed="selectedCategory === '极简主义'"
             >
               极简主义
             </button>
             <button
               @click="selectedCategory = '黑白'"
-              :class="selectedCategory === '黑白' ? 'bg-[#4A5F8B] text-[#F5F7FA]' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#4A5F8B]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="selectedCategory === '黑白' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
+              :aria-pressed="selectedCategory === '黑白'"
             >
               黑白
             </button>
             <button
               @click="selectedCategory = '胶片'"
-              :class="selectedCategory === '胶片' ? 'bg-[#4A5F8B] text-[#F5F7FA]' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#4A5F8B]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="selectedCategory === '胶片' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
+              :aria-pressed="selectedCategory === '胶片'"
             >
               胶片质感
             </button>
             <button
               @click="selectedCategory = '暗调'"
-              :class="selectedCategory === '暗调' ? 'bg-[#4A5F8B] text-[#F5F7FA]' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#4A5F8B]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="selectedCategory === '暗调' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
+              :aria-pressed="selectedCategory === '暗调'"
             >
               暗调氛围
             </button>
@@ -182,9 +187,9 @@
         </div>
 
         <div class="mt-10 text-center">
-          <button class="px-8 py-3 bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#4A5F8B] rounded-lg font-medium transition-colors load-more-btn">
+          <Button variant="outline" @click="handleLoadMore" ariaLabel="加载更多摄影作品">
             加载更多作品
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -259,6 +264,7 @@ import { ref, computed } from 'vue'
 import Banner from '../components/Banner.vue'
 import Feature from '../components/Feature.vue'
 import PhotographyCard from '../components/PhotographyCard.vue'
+import Button from '../components/common/Button.vue'
 
 const photographyPosts = [{
   id: "1",
@@ -470,6 +476,11 @@ const filteredPosts = computed(() => {
   }
   return photographyPosts.filter(post => post.tags.includes(selectedCategory.value))
 })
+
+const handleLoadMore = () => {
+  // 加载更多功能逻辑
+  console.log('加载更多作品')
+}
 </script>
 
 <style scoped>

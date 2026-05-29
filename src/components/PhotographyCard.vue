@@ -1,8 +1,9 @@
 <template>
   <div
-    class="bg-[#2D3748] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#4A5F8B] h-[500px] flex flex-col hover:-translate-y-1"
+    class="bg-[#2D3748] rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-[#4A5F8B] h-[500px] flex flex-col hover:-translate-y-1"
     @mouseenter="isHovered = true"
-    @mouseleave="isHovered = false">
+    @mouseleave="isHovered = false"
+  >
     <div class="relative flex-shrink-0">
       <router-link :to="`/photo/${post.id}`" class="block">
         <img
@@ -10,6 +11,7 @@
           :alt="post.title"
           class="w-full h-60 object-cover transition-transform duration-300"
           :class="isHovered ? 'scale-105' : 'scale-100'"
+          loading="lazy"
         />
       </router-link>
 
@@ -17,11 +19,11 @@
         <span
           v-for="(tag, index) in post.tags.slice(0, 2)"
           :key="index"
-          class="px-2 py-1 bg-[#4A5F8B] text-[#F5F7FA] text-xs rounded-full border border-[#4A5F8B]"
+          class="px-2 py-1 bg-[#4A5F8B]/90 text-[#F5F7FA] text-xs rounded-full border border-[#4A5F8B]"
         >
           #{{ tag }}
         </span>
-        <span v-if="post.tags.length > 2" class="px-2 py-1 bg-[#4A5F8B] text-[#F5F7FA] text-xs rounded-full border border-[#4A5F8B]">
+        <span v-if="post.tags.length > 2" class="px-2 py-1 bg-[#4A5F8B]/90 text-[#F5F7FA] text-xs rounded-full border border-[#4A5F8B]">
           +{{ post.tags.length - 2 }}
         </span>
       </div>
@@ -33,7 +35,8 @@
           <img
             :src="post.author.avatar"
             :alt="post.author.name"
-            class="w-8 h-8 rounded-full object-cover border border-[#B8C6D8]"
+            class="w-8 h-8 rounded-full object-cover border border-[#B8C6D8] hover:border-[#4A5F8B] transition-colors"
+            loading="lazy"
           />
         </router-link>
         <div>
@@ -61,10 +64,11 @@
         <div class="flex items-center space-x-4">
           <button
             @click="handleLike"
-            :class="['flex items-center space-x-1 text-sm transition-colors', isLiked ? 'text-red-500' : 'text-[#B8C6D8] hover:text-red-500']"
+            :class="['flex items-center space-x-1 text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2D3748] rounded px-2 py-1 active:scale-90', isLiked ? 'text-red-500' : 'text-[#B8C6D8] hover:text-red-400']"
             :aria-label="isLiked ? '取消点赞' : '点赞'"
+            type="button"
           >
-            <i :class="['fa-solid fa-heart', isLiked ? 'scale-110' : 'scale-100']" style="transition: transform 0.3s"></i>
+            <i :class="['fa-solid fa-heart transition-transform duration-300', isLiked ? 'scale-110' : 'scale-100']"></i>
             <span>{{ likeCount }}</span>
           </button>
           <router-link
@@ -78,8 +82,9 @@
 
         <button
           @click="handleBookmark"
-          :class="['text-sm transition-colors', isBookmarked ? 'text-yellow-500' : 'text-[#B8C6D8] hover:text-yellow-500']"
+          :class="['text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#2D3748] rounded px-2 py-1 active:scale-90', isBookmarked ? 'text-yellow-500' : 'text-[#B8C6D8] hover:text-yellow-400']"
           :aria-label="isBookmarked ? '取消收藏' : '收藏'"
+          type="button"
         >
           <i class="fa-solid fa-bookmark"></i>
           <span class="ml-1">{{ collectionCount }}</span>
