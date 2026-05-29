@@ -181,62 +181,62 @@ const products: Product[] = [
   {
     id: 'p1', category: 'camera', name: '索尼A7R5', brand: '索尼', model: 'A7R5', price: 26999, rating: 4.9,
     description: '6100万像素全画幅无反相机，AI智能对焦系统，8K视频录制，专业摄影师首选',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20a7r5%20camera%20product%20on%20white&sign=1e65898af80db8ffbab3f4831adf1087', isFav: false
+    image: 'https://picsum.photos/800/600?random=14', isFav: false
   },
   {
     id: 'p2', category: 'camera', name: '索尼A7 IV', brand: '索尼', model: 'A7 IV', price: 16999, originalPrice: 17999, rating: 4.8,
     description: '3300万像素全画幅无反相机，10张/秒连拍，多种高速传输，可翻转触控屏',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20a7iv%20camera%20product%20on%20white&sign=bb4d53e95cfc74e7ea163c606224e7dd', isFav: true
+    image: 'https://picsum.photos/800/600?random=15', isFav: true
   },
   {
     id: 'p3', category: 'camera', name: '索尼A1', brand: '索尼', model: 'A1', price: 44999, rating: 5.0,
     description: '5010万像素全画幅无反相机，30张/秒连拍，8K30p视频，专业体育和生态摄影',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20a1%20camera%20product%20on%20white&sign=00cbc08ca9a22e6215654b4c3e1c47a8', isFav: false
+    image: 'https://picsum.photos/800/600?random=16', isFav: false
   },
   {
     id: 'p4', category: 'camera', name: '佳能EOS R5', brand: '佳能', model: 'EOS R5', price: 22999, rating: 4.7,
     description: '4500万像素全画幅无反相机，最高8级防抖，8K30p视频录制，专业级表现',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=canon%20eos%20r5%20camera%20product%20on%20white&sign=f9c2a8fd38d06d86a795f46ac0ba3296', isFav: false
+    image: 'https://picsum.photos/800/600?random=17', isFav: false
   },
   {
     id: 'p5', category: 'camera', name: '索尼FX3', brand: '索尼', model: 'FX3', price: 29999, rating: 4.6,
     description: '专业视频拍摄无反相机，全画幅，5轴防抖，专业视频录像，4K120p慢动作',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fx3%20camera%20product%20on%20white&sign=7dcd355ed888a37cf44828b4c4bb650f', isFav: false
+    image: 'https://picsum.photos/800/600?random=18', isFav: false
   },
   {
     id: 'l1', category: 'lens', name: '索尼FE 24-70mm F2.8 GM II', brand: '索尼', model: 'FE 24-70mm F2.8 GM II', price: 13999, originalPrice: 14999, rating: 4.9,
     description: '索尼G大师系列恒定大光圈变焦镜头，画面中心和边缘都具有出色的分辨率',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2024%2070%20mm%20lens%20product%20on%20white&sign=ba2e6116a41c2802edd63c7077872c2c', isFav: true
+    image: 'https://picsum.photos/800/600?random=19', isFav: true
   },
   {
     id: 'l2', category: 'lens', name: '索尼FE 70-200mm F2.8 GM II', brand: '索尼', model: 'FE 70-200mm F2.8 GM II', price: 16999, rating: 4.8,
     description: '新设计的70-200mm f/2.8镜头，更轻更小，画质卓越，快速精准对焦',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2070%20200%20mm%20lens%20product%20on%20white&sign=d2c1ccb7ebebe3d7dae8c7189cbc75b8', isFav: false
+    image: 'https://picsum.photos/800/600?random=20', isFav: false
   },
   {
     id: 'l3', category: 'lens', name: '索尼FE 50mm F1.2 GM', brand: '索尼', model: 'FE 50mm F1.2 GM', price: 12999, rating: 4.7,
     description: '50mm焦距的F1.2大光圈标准定焦，极致虚化，人像摄影的完美选择',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2050%20mm%20f1.2%20lens%20product%20on%20white&sign=8d9064d65b5d53b8ece956d3749f1509', isFav: false
+    image: 'https://picsum.photos/800/600?random=21', isFav: false
   },
   {
     id: 'l4', category: 'lens', name: '索尼FE 16-35mm F2.8 GM II', brand: '索尼', model: 'FE 16-35mm F2.8 GM II', price: 15999, rating: 4.5,
     description: '新款广角变焦G大师镜头，轻巧便携，适合风光与建筑摄影',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2016%2035%20mm%20lens%20product%20on%20white&sign=cbcb4a32cbcb019efe8f1cf36cb8eec5', isFav: false
+    image: 'https://picsum.photos/800/600?random=22', isFav: false
   },
   {
     id: 'a1', category: 'accessory', name: 'DJI RS 3 Pro稳定器', brand: '大疆', model: 'RS 3 Pro', price: 5499, rating: 4.8,
     description: '专业3轴手持稳定器，承重更大，功能更全，轻松实现创意拍摄',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=dji%20rs3%20pro%20gimbal%20product%20on%20white&sign=48560fad2ed4e0cb90f08541fe3a33d0', isFav: false
+    image: 'https://picsum.photos/800/600?random=23', isFav: false
   },
   {
     id: 'a2', category: 'accessory', name: 'GoPro HERO12 Black', brand: 'GoPro', model: 'HERO12 Black', price: 3199, rating: 4.6,
     description: '5.3K高清运动相机，防水设计，HyperSmooth 5.0视频防抖，卓越性能',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=gopro%20hero12%20black%20camera%20product%20on%20white&sign=1bf4fc6bef099d9ed62defc8aff01a6c', isFav: false
+    image: 'https://picsum.photos/800/600?random=24', isFav: false
   },
   {
     id: 'a3', category: 'accessory', name: 'Sony ECM-B1M枪麦', brand: '索尼', model: 'ECM-B1M', price: 2299, rating: 4.4,
     description: '数字音频接口枪形麦克风，多种指向性，清晰录音，适用于视频创作',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20shotgun%20microphone%20product%20on%20white&sign=5978cc8730a99751bc3f74b98c645206', isFav: false
+    image: 'https://picsum.photos/800/600?random=25', isFav: false
   },
 ]
 

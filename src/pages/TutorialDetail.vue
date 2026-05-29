@@ -181,14 +181,14 @@ const mockTutorials: Tutorial[] = [
     duration: '1小时30分钟',
     level: '中级',
     tags: ['人像', '自然光', '光线', '构图'],
-    thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=natural%20light%20portrait%20photography%20tutorial%20banner%20golden%20hour&sign=e08752acd9ef2f34aa6e05203464ca5c',
+    thumbnail: 'https://picsum.photos/1280/720?random=53',
     views: 2580,
     rating: 4.8,
     description: '本课程将全面解析自然光人像摄影的核心技巧，从光线选择到拍摄技巧，帮助您掌握如何在不同自然光条件下拍出专业级人像作品。',
     learningPoints: ['理解不同自然光的特点和应用', '掌握黄金时刻的光线利用', '学会阴影环境的拍摄技巧', '掌握逆光拍摄的要领', '学会引导模特的姿势和表情'],
     instructor: {
       name: '人像摄影师王莹',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=portrait%20photographer%20female%20studio%20professional&sign=517e35b2f45eaaa7833acdb77504fdc6',
+      avatar: 'https://picsum.photos/400/400?random=54',
       title: '时尚人像摄影师'
     },
     sections: [
@@ -210,14 +210,14 @@ const mockTutorials: Tutorial[] = [
     duration: '2小时',
     level: '高级',
     tags: ['商业', '布光', '光影', '专业'],
-    thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=commercial%20photography%20lighting%20guide%20tutorial%20banner%20studio&sign=5413c1eb863f36f40b8459bcc81ea4c8',
+    thumbnail: 'https://picsum.photos/1280/720?random=55',
     views: 1890,
     rating: 4.6,
     description: '从基础的灯光理论到复杂的多灯布光方案，本课程将带您深入了解商业摄影布光的方方面面。',
     learningPoints: ['掌握各类闪光灯的使用方法', '理解灯光的位置和角度对人物的影响', '学会拍摄不同类型的商业产品', '掌握高级多灯布光技巧', '了解灯光配件的作用和使用'],
     instructor: {
       name: '商业摄影师赵阳',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=commercial%20photographer%20male%20studio%20professional&sign=140d3e62a9f0288994c6cdd5e46b3e3a',
+      avatar: 'https://picsum.photos/400/400?random=56',
       title: '商业摄影导师'
     },
     sections: [

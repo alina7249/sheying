@@ -69,11 +69,11 @@ const mockEquipment = {
   name: 'Sony A7M4 二手出售',
   price: 12500,
   condition: '95新',
-  image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=sony%20mirrorless%20camera&sign=abc123',
+  image: 'https://picsum.photos/1280/720?random=125',
   description: '2022年购买，快门数约8000次，无维修史，包装配件齐全',
   seller: {
     name: '摄影爱好者小王',
-    avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar&sign=def456'
+    avatar: 'https://picsum.photos/400/400?random=126'
   }
 };
 

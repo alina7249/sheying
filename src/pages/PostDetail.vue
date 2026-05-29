@@ -228,7 +228,7 @@ const mockPosts: Post[] = [
 - 后期处理时注重细节，保持简洁
 
 希望这些心得对大家有所帮助！欢迎在评论区分享你们的作品和想法。`,
-    author: { id: '1', name: '极简摄影师林风', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=minimalist%20photographer%20male%20serious&sign=fded36172bb86afa4dc326776156459c', level: 8, stats: { posts: 156, likes: 2345, days: 365 } },
+    author: { id: '1', name: '极简摄影师林风', avatar: 'https://picsum.photos/400/400?random=9', level: 8, stats: { posts: 156, likes: 2345, days: 365 } },
     tags: ['极简主义', '构图', '心得', '技巧'], createdAt: '2023-10-25', likes: 125, comments: 34, views: 890, isEssential: true, isSticky: false
   },
   {
@@ -266,7 +266,7 @@ A7R V的外观设计延续了索尼A7系列的经典风格，但在细节上有�
 ## 总结
 
 索尼A7R V是一款非常全面的旗舰相机，特别适合风光、人像和商业摄影。`,
-    author: { id: '2', name: '城市摄影师陈默', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=urban%20photographer%20male%20creative&sign=5df0f9b10a5022623be1cb145264b5a1', level: 6, stats: { posts: 89, likes: 1234, days: 240 } },
+    author: { id: '2', name: '城市摄影师陈默', avatar: 'https://picsum.photos/400/400?random=10', level: 6, stats: { posts: 89, likes: 1234, days: 240 } },
     tags: ['器材评测', '索尼', '全画幅', 'A7R5'], createdAt: '2023-10-24', likes: 230, comments: 56, views: 1250, isEssential: true, isSticky: true
   },
   {
@@ -301,7 +301,7 @@ A7R V的外观设计延续了索尼A7系列的经典风格，但在细节上有�
 - 在不同时段拍摄，利用光线创造不同的效果
 
 希望这些方法能帮助你发现城市中隐藏的几何美感。`,
-    author: { id: '1', name: '极简摄影师林风', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=minimalist%20photographer%20male%20serious&sign=fded36172bb86afa4dc326776156459c', level: 8, stats: { posts: 156, likes: 2345, days: 365 } },
+    author: { id: '1', name: '极简摄影师林风', avatar: 'https://picsum.photos/400/400?random=11', level: 8, stats: { posts: 156, likes: 2345, days: 365 } },
     tags: ['城市摄影', '几何构图', '技巧'], createdAt: '2023-10-23', likes: 98, comments: 23, views: 650, isEssential: false, isSticky: false
   }
 ]

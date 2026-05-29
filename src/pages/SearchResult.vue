@@ -127,28 +127,28 @@ const relatedSearches = ['风光摄影技巧', '佳能镜头推荐', '秋季摄�
 
 const searchResults = [
   {
-    id: 'r1', title: '新疆喀纳斯秋季风光摄影团', type: 'posts', typeLabel: '活动', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=autumn+photography+landscape+kanas&sign=255706c120d9dabbd03392725806ed04',
-    description: '跟随知名摄影师，深入新疆喀纳斯，拍摄秋季绝美风光。', authorName: '@亚历山大张', authorAvatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer+avatar+male&sign=f533ef06c814d83e610c234fcde52f77',
+    id: 'r1', title: '新疆喀纳斯秋季风光摄影团', type: 'posts', typeLabel: '活动', image: 'https://picsum.photos/1280/720?random=184',
+    description: '跟随知名摄影师，深入新疆喀纳斯，拍摄秋季绝美风光。', authorName: '@亚历山大张', authorAvatar: 'https://picsum.photos/400/400?random=185',
     date: '2023-10-15', relevance: 98, link: '/events/1',
   },
   {
-    id: 'r2', title: '晨曦中的山峦', type: 'photos', typeLabel: '作品', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=morning+mountain+landscape+china+mist&sign=b78fb67a23e2e05aaea46218653a5669',
-    description: '捕捉清晨第一缕阳光洒在山峦上的壮丽景色，使用长曝光展现云海的流动感。', authorName: '@光影捕手', authorAvatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer+avatar+professional+male&sign=8b8edfa225ca82d50d285257ebf3e723',
+    id: 'r2', title: '晨曦中的山峦', type: 'photos', typeLabel: '作品', image: 'https://picsum.photos/1280/720?random=186',
+    description: '捕捉清晨第一缕阳光洒在山峦上的壮丽景色，使用长曝光展现云海的流动感。', authorName: '@光影捕手', authorAvatar: 'https://picsum.photos/400/400?random=187',
     date: '2023-10-25', relevance: 85, link: '/photo/1',
   },
   {
-    id: 'r3', title: '佳能EF 70-200mm f/2.8L IS III USM', type: 'equipment', typeLabel: '器材', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=Canon+EF+70-200mm+f/2.8L+lens+professional+photography&sign=47b491a1ef0d92fe1c6e2d79ed4e9913',
-    description: '佳能EF 70-200mm f/2.8L IS III USM 是一款经典的专业级长焦变焦镜头。', authorName: '@摄影器材评测', authorAvatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=camera+lens+review+icon&sign=d93997ce2edd0d1b7142037aaf32e02e',
+    id: 'r3', title: '佳能EF 70-200mm f/2.8L IS III USM', type: 'equipment', typeLabel: '器材', image: 'https://picsum.photos/800/600?random=188',
+    description: '佳能EF 70-200mm f/2.8L IS III USM 是一款经典的专业级长焦变焦镜头。', authorName: '@摄影器材评测', authorAvatar: 'https://picsum.photos/400/400?random=189',
     date: '2023-10-05', relevance: 82, link: '/equipment/1',
   },
   {
-    id: 'r4', title: '@摄影达人小李', type: 'users', typeLabel: '用户', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=photographer+portfolio+cover&sign=a4e60c86c9ffa6e0523e2d858687761c',
-    description: '风光摄影师，擅长拍摄中国西部风光，已有10年拍摄经验。粉丝 5.2K，作品 128。', authorName: '@摄影达人小李', authorAvatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer+avatar+male+travel&sign=63218efbbf656c6c2e66f3f532e6fb84',
+    id: 'r4', title: '@摄影达人小李', type: 'users', typeLabel: '用户', image: 'https://picsum.photos/1280/720?random=190',
+    description: '风光摄影师，擅长拍摄中国西部风光，已有10年拍摄经验。粉丝 5.2K，作品 128。', authorName: '@摄影达人小李', authorAvatar: 'https://picsum.photos/400/400?random=191',
     date: '2023-01-15', relevance: 75, link: '/user/profile-1',
   },
   {
-    id: 'r5', title: '秋季风光摄影全攻略', type: 'posts', typeLabel: '帖子', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=autumn+landscape+photography+tutorial+china&sign=82b5d6839811e8a759689aa3b125daeb',
-    description: '分享秋季风光摄影的拍摄技巧，包括构图、用光、后期处理等。', authorName: '@摄影大师王老师', authorAvatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography+teacher+avatar+male&sign=5e57cf9e59525b586cc1ae2c4f365829',
+    id: 'r5', title: '秋季风光摄影全攻略', type: 'posts', typeLabel: '帖子', image: 'https://picsum.photos/1280/720?random=192',
+    description: '分享秋季风光摄影的拍摄技巧，包括构图、用光、后期处理等。', authorName: '@摄影大师王老师', authorAvatar: 'https://picsum.photos/400/400?random=193',
     date: '2023-10-01', relevance: 68, link: '/community/post/5',
   }
 ];

@@ -198,7 +198,7 @@ const { isAuthenticated, user } = storeToRefs(store)
 const mockContests = [
   {
     id: 'c1', title: '2023年度黑白摄影大赛', type: '官方主办',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=black%20and%20white%20photography%20contest%20banner%20minimalist&sign=5958a9112dbd48d52283b3d3b68c22df',
+    image: 'https://picsum.photos/1280/720?random=66',
     deadline: '2023-12-31', status: '进行中', entries: 1254, worksCount: 3458, participants: 1254,
     prizes: [{ rank: '一等奖', value: '20000元', count: 1 }, { rank: '二等奖', value: '10000元', count: 2 }, { rank: '三等奖', value: '5000元', count: 3 }, { rank: '优秀奖', value: '1000元', count: 10 }],
     description: '展现黑白摄影的独特魅力，通过光影、构图和情感表达，呈现经典而永恒的视觉艺术作品。',
@@ -208,7 +208,7 @@ const mockContests = [
   },
   {
     id: 'c2', title: '索尼Alpha创意摄影挑战赛', type: '合作赛事', organizer: '索尼中国',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=sony%20alpha%20creative%20photography%20challenge%20banner&sign=38f14ccad69f3dbb399991f5317127ce',
+    image: 'https://picsum.photos/1280/720?random=67',
     deadline: '2023-11-15', status: '进行中', entries: 876, worksCount: 2156, participants: 876,
     prizes: [{ rank: '金奖', value: '索尼A7R V相机一台', count: 1 }, { rank: '银奖', value: '索尼FE 24-70mm F2.8 GM镜头', count: 2 }, { rank: '铜奖', value: '索尼ZV-1相机一台', count: 3 }, { rank: '入围奖', value: '索尼相机包一个', count: 20 }],
     description: '使用索尼Alpha系列相机创作，展示你的创意视角和摄影才华。',
@@ -218,7 +218,7 @@ const mockContests = [
   },
   {
     id: 'c3', title: '城市人文纪实摄影大赛', type: '官方主办',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=urban%20documentary%20photography%20contest%20banner%20street%20life&sign=818fdf65887ba3b9c9d321794542006b',
+    image: 'https://picsum.photos/1280/720?random=68',
     deadline: '2023-11-30', status: '进行中', entries: 654, worksCount: 1890, participants: 654,
     prizes: [{ rank: '金奖', value: '15000元', count: 1 }, { rank: '银奖', value: '8000元', count: 2 }, { rank: '铜奖', value: '3000元', count: 3 }, { rank: '人气奖', value: '2000元', count: 1 }],
     description: '记录城市生活的瞬间，展现都市人文风情和社会变迁。',
@@ -228,7 +228,7 @@ const mockContests = [
   },
   {
     id: 'c4', title: '自然生态摄影展', type: '官方主办',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=natural%20ecology%20photography%20exhibition%20banner%20wildlife&sign=c47d5cf3d76049534c98c3f640cbd2f0',
+    image: 'https://picsum.photos/1280/720?random=69',
     deadline: '2023-10-15', status: '已截止', entries: 432, worksCount: 1256, participants: 432,
     prizes: [{ rank: '金奖', value: '12000元', count: 1 }, { rank: '银奖', value: '6000元', count: 2 }, { rank: '铜奖', value: '3000元', count: 3 }, { rank: '优秀奖', value: '1000元', count: 8 }],
     description: '展现大自然的美丽与神奇，记录生态环境和野生动植物的精彩瞬间。',

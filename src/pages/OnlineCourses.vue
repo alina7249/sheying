@@ -65,61 +65,61 @@ const courses = ref([
     id: '1',
     title: '摄影入门：从零开始学摄影',
     description: '适合完全零基础的摄影爱好者，从相机操作开始学起',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=photography%20beginner%20lesson%20camera%20basics&sign=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6',
+    cover: 'https://picsum.photos/1280/720?random=227',
     category: '入门',
     isFree: true,
     price: 0,
-    instructor: { name: '摄影老师小王', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=young%20photography%20teacher&sign=b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7' }
+    instructor: { name: '摄影老师小王', avatar: 'https://picsum.photos/400/400?random=228' }
   },
   {
     id: '2',
     title: '人像摄影技巧与实践',
     description: '深入学习人像摄影的光线运用、构图技巧和模特引导',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=portrait%20photography%20studio%20lighting&sign=c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8',
+    cover: 'https://picsum.photos/1280/720?random=229',
     category: '进阶',
     isFree: false,
     price: 199,
-    instructor: { name: '人像摄影师Lisa', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=female%20photographer%20professional&sign=d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9' }
+    instructor: { name: '人像摄影师Lisa', avatar: 'https://picsum.photos/400/400?random=230' }
   },
   {
     id: '3',
     title: '风光摄影大师班',
     description: '掌握风光摄影的黄金时段、构图法则和后期处理技巧',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=landscape%20photography%20mountains%20golden%20hour&sign=e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0',
+    cover: 'https://picsum.photos/1280/720?random=231',
     category: '专业',
     isFree: false,
     price: 399,
-    instructor: { name: '风光摄影大师', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=professional%20landscape%20photographer&sign=f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1' }
+    instructor: { name: '风光摄影大师', avatar: 'https://picsum.photos/400/400?random=232' }
   },
   {
     id: '4',
     title: '后期修图：Lightroom完全指南',
     description: '系统学习Lightroom的使用，掌握专业后期修图技巧',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=photo%20editing%20lightroom%20software%20interface&sign=a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2',
+    cover: 'https://picsum.photos/1280/720?random=233',
     category: '进阶',
     isFree: false,
     price: 299,
-    instructor: { name: '后期达人阿杰', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photo%20editor%20professional&sign=b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3' }
+    instructor: { name: '后期达人阿杰', avatar: 'https://picsum.photos/400/400?random=234' }
   },
   {
     id: '5',
     title: '街头摄影：捕捉城市瞬间',
     description: '学习街头摄影的观察技巧、构图方法和抓拍技巧',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=street%20photography%20urban%20moment&sign=c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4',
+    cover: 'https://picsum.photos/1280/720?random=235',
     category: '进阶',
     isFree: true,
     price: 0,
-    instructor: { name: '街头摄影师阿强', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=street%20photographer%20portrait&sign=d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5' }
+    instructor: { name: '街头摄影师阿强', avatar: 'https://picsum.photos/400/400?random=236' }
   },
   {
     id: '6',
     title: '商业摄影实战课程',
     description: '从布光到后期，全面掌握商业产品摄影技巧',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=commercial%20product%20photography%20studio&sign=e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6',
+    cover: 'https://picsum.photos/1280/720?random=237',
     category: '专业',
     isFree: false,
     price: 599,
-    instructor: { name: '商业摄影总监', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=commercial%20photographer%20portrait&sign=f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7' }
+    instructor: { name: '商业摄影总监', avatar: 'https://picsum.photos/400/400?random=238' }
   }
 ]);
 </script>

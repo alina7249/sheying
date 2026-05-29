@@ -204,51 +204,51 @@ const equipmentData = {
   cameras: [
     {
       id: 'c1', type: 'camera' as const, name: '索尼A7R5', brand: '索尼', model: 'A7R5',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20a7r5%20camera%20product%20on%20white&sign=1e65898af80db8ffbab3f4831adf1087',
+      image: 'https://picsum.photos/800/600?random=70',
       serialNumber: 'SN001234', purchaseDate: '2023-05-15', feature: '6100万像素'
     },
     {
       id: 'c2', type: 'camera' as const, name: '索尼A7C II', brand: '索尼', model: 'A7C II',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20a7c%20ii%20camera%20product%20on%20white&sign=c618aa5927cb08f9095b8ac7ff98bda1',
+      image: 'https://picsum.photos/800/600?random=71',
       serialNumber: 'SN005678', purchaseDate: '2024-01-20', feature: '3300万像素'
     },
     {
       id: 'c3', type: 'camera' as const, name: '索尼A1', brand: '索尼', model: 'A1',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20a1%20camera%20product%20on%20white&sign=00cbc08ca9a22e6215654b4c3e1c47a8',
+      image: 'https://picsum.photos/800/600?random=72',
       serialNumber: 'SN009012', purchaseDate: '2023-09-10', feature: '5010万像素'
     },
   ],
   lenses: [
     {
       id: 'l1', type: 'lens' as const, name: '索尼FE 24-70mm F2.8 GM', brand: '索尼', model: 'FE 24-70mm F2.8 GM',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2024%2070%20mm%20lens%20product%20on%20white&sign=ba2e6116a41c2802edd63c7077872c2c',
+      image: 'https://picsum.photos/800/600?random=73',
       serialNumber: 'LN029371', purchaseDate: '2023-11-01', focalLength: '24-70mm', aperture: 'f/2.8'
     },
     {
       id: 'l2', type: 'lens' as const, name: '索尼FE 70-200mm F2.8 GM', brand: '索尼', model: 'FE 70-200mm F2.8 GM',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2070%20200%20mm%20lens%20product%20on%20white&sign=d2c1ccb7ebebe3d7dae8c7189cbc75b8',
+      image: 'https://picsum.photos/800/600?random=74',
       serialNumber: 'LN048291', purchaseDate: '2023-06-15', focalLength: '70-200mm', aperture: 'f/2.8'
     },
     {
       id: 'l3', type: 'lens' as const, name: '索尼FE 50mm F1.2 GM', brand: '索尼', model: 'FE 50mm F1.2 GM',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2050%20mm%20f1.2%20lens%20product%20on%20white&sign=8d9064d65b5d53b8ece956d3749f1509',
+      image: 'https://picsum.photos/800/600?random=75',
       serialNumber: 'LN019384', purchaseDate: '2024-02-10', focalLength: '50mm', aperture: 'f/1.2'
     },
     {
       id: 'l4', type: 'lens' as const, name: '索尼FE 16-35mm F2.8 GM', brand: '索尼', model: 'FE 16-35mm F2.8 GM',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=sony%20fe%2016%2035%20mm%20lens%20product%20on%20white&sign=cbcb4a32cbcb019efe8f1cf36cb8eec5',
+      image: 'https://picsum.photos/800/600?random=76',
       serialNumber: 'LN056789', purchaseDate: '2023-07-20', focalLength: '16-35mm', aperture: 'f/2.8'
     },
   ],
   accessories: [
     {
       id: 'a1', type: 'accessory' as const, name: 'DJI RS 3 Pro稳定器', brand: '大疆', model: 'RS 3 Pro',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=dji%20rs3%20pro%20gimbal%20product%20on%20white&sign=48560fad2ed4e0cb90f08541fe3a33d0',
+      image: 'https://picsum.photos/800/600?random=77',
       serialNumber: 'SN082910', purchaseDate: '2023-09-01', accessoryType: '稳定器'
     },
     {
       id: 'a2', type: 'accessory' as const, name: 'GoPro HERO12 Black', brand: 'GoPro', model: 'HERO12 Black',
-      image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=gopro%20hero12%20black%20camera%20product%20on%20white&sign=1bf4fc6bef099d9ed62defc8aff01a6c',
+      image: 'https://picsum.photos/800/600?random=78',
       serialNumber: 'SN074829', purchaseDate: '2023-12-01', accessoryType: '运动相机'
     },
   ],

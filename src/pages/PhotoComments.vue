@@ -120,29 +120,29 @@ const commentRules = [
 const mockComments: Comment[] = [
   {
     id: '1', content: '这张照片的构图非常出色，黄金分割点的运用让画面更加平衡和谐。光线处理也很到位，尤其是前景的明暗对比，让整个画面更有层次感。', rating: 5, date: '2023-10-25 14:30',
-    user: { id: 'u1', name: '@摄影评论家王老师', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20critic%20avatar%20male%20middle%20aged&sign=1f67bb45da7364906e04d49a13285f67', badge: '资深摄影师' },
+    user: { id: 'u1', name: '@摄影评论家王老师', avatar: 'https://picsum.photos/400/400?random=79', badge: '资深摄影师' },
     photoId: '1', likes: 12,
     replies: [
-      { id: 'r1', content: '谢谢王老师的点评，我确实在构图上下了一番功夫。', user: { id: 'u2', name: '@光影捕手', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20male%20young&sign=f533ef06c814d83e610c234fcde52f77' }, date: '2023-10-25 15:00' },
-      { id: 'r2', content: '王老师说得对，这张作品的构图确实很专业。', user: { id: 'u3', name: '@摄影爱好者小明', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20enthusiast%20avatar%20male&sign=acf32af241c038875f2b8b318f170b06' }, date: '2023-10-25 15:30' },
-      { id: 'r3', content: '学习到了构图的技巧，感谢分享。', user: { id: 'u4', name: '@新手摄影小张', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=beginner%20photographer%20avatar%20male%20young&sign=a076fa14f7977e902fe333f899d2603c' }, date: '2023-10-25 16:00' }
+      { id: 'r1', content: '谢谢王老师的点评，我确实在构图上下了一番功夫。', user: { id: 'u2', name: '@光影捕手', avatar: 'https://picsum.photos/400/400?random=80' }, date: '2023-10-25 15:00' },
+      { id: 'r2', content: '王老师说得对，这张作品的构图确实很专业。', user: { id: 'u3', name: '@摄影爱好者小明', avatar: 'https://picsum.photos/400/400?random=81' }, date: '2023-10-25 15:30' },
+      { id: 'r3', content: '学习到了构图的技巧，感谢分享。', user: { id: 'u4', name: '@新手摄影小张', avatar: 'https://picsum.photos/400/400?random=82' }, date: '2023-10-25 16:00' }
     ]
   },
   {
     id: '2', content: '色调处理非常有感觉，尤其是蓝色调的运用，让人感受到清晨的宁静与美好。稍微有点遗憾的是天空部分稍微过曝，可以在后期处理中适当调整。', rating: 4, date: '2023-10-25 11:00',
-    user: { id: 'u5', name: '@色彩分析师大卫', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=color%20analyst%20avatar%20male&sign=012a861bdf93e46338d6226fd6ba43a8', badge: '色彩专家' },
+    user: { id: 'u5', name: '@色彩分析师大卫', avatar: 'https://picsum.photos/400/400?random=83', badge: '色彩专家' },
     photoId: '1', likes: 8,
     replies: [
-      { id: 'r4', content: '感谢大卫的详细分析，天空部分确实需要再调整。', user: { id: 'u2', name: '@光影捕手', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20male%20young&sign=f533ef06c814d83e610c234fcde52f77' }, date: '2023-10-25 11:30' }
+      { id: 'r4', content: '感谢大卫的详细分析，天空部分确实需要再调整。', user: { id: 'u2', name: '@光影捕手', avatar: 'https://picsum.photos/400/400?random=84' }, date: '2023-10-25 11:30' }
     ]
   },
   {
     id: '3', content: '非常喜欢这张作品，尤其是在选择拍摄时间和地点上的用心。清晨的雾气和光线结合，营造出了梦幻般的效果。', rating: 5, date: '2023-10-24 09:00',
-    user: { id: 'u6', name: '@风光摄影爱好者阿强', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=landscape%20photographer%20avatar%20male&sign=079e57e736784c30df4ae39fc13045a2' },
+    user: { id: 'u6', name: '@风光摄影爱好者阿强', avatar: 'https://picsum.photos/400/400?random=85' },
     photoId: '1', likes: 15,
     replies: [
-      { id: 'r5', content: '谢谢阿强的鼓励！', user: { id: 'u2', name: '@光影捕手', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20male%20young&sign=f533ef06c814d83e610c234fcde52f77' }, date: '2023-10-24 09:30' },
-      { id: 'r6', content: '同感，这张照片的雾气和光线处理非常到位。', user: { id: 'u3', name: '@摄影爱好者小明', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20enthusiast%20avatar%20male&sign=acf32af241c038875f2b8b318f170b06' }, date: '2023-10-24 10:00' }
+      { id: 'r5', content: '谢谢阿强的鼓励！', user: { id: 'u2', name: '@光影捕手', avatar: 'https://picsum.photos/400/400?random=86' }, date: '2023-10-24 09:30' },
+      { id: 'r6', content: '同感，这张照片的雾气和光线处理非常到位。', user: { id: 'u3', name: '@摄影爱好者小明', avatar: 'https://picsum.photos/400/400?random=87' }, date: '2023-10-24 10:00' }
     ]
   }
 ];

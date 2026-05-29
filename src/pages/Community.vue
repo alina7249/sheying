@@ -144,13 +144,13 @@ const communityPosts = [
     content: '最近在城市里拍了一些街头摄影作品，尝试了不同的构图和光影效果。想听听大家的意见和建议。',
     category: '摄影作品',
     images: [
-      'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=street%20photography%20urban%20night&sign=f1e2d3c4b5a6f7e8d9c0b1a2e3f4d5c6',
-      'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=street%20photography%20architecture&sign=a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2',
-      'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=street%20photography%20people%20urban&sign=b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3'
+      'https://picsum.photos/1280/720?random=264',
+      'https://picsum.photos/1280/720?random=265',
+      'https://picsum.photos/1280/720?random=266'
     ],
     author: {
       name: '街头摄影师阿杰',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=male%20street%20photographer&sign=c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4'
+      avatar: 'https://picsum.photos/400/400?random=267'
     },
     date: '2小时前',
     likes: 128,
@@ -165,7 +165,7 @@ const communityPosts = [
     images: [],
     author: {
       name: '摄影新手小李',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=young%20male%20photographer&sign=d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5'
+      avatar: 'https://picsum.photos/400/400?random=268'
     },
     date: '5小时前',
     likes: 45,
@@ -178,12 +178,12 @@ const communityPosts = [
     content: '分享这次新疆摄影之旅的一些感悟和作品。新疆真的太美了，每一处都是大片！',
     category: '旅行摄影',
     images: [
-      'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=xinjiang%20landscape%20mountains%20grassland&sign=e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6',
-      'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=xinjiang%20desert%20sunset%20sand&sign=f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7'
+      'https://picsum.photos/1280/720?random=269',
+      'https://picsum.photos/1280/720?random=270'
     ],
     author: {
       name: '风光摄影达人',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=professional%20landscape%20photographer&sign=a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8'
+      avatar: 'https://picsum.photos/400/400?random=271'
     },
     date: '昨天',
     likes: 256,
@@ -200,8 +200,8 @@ const trendingTopics = [
 ];
 
 const activeUsers = [
-  { id: '1', name: '风光摄影大师', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=professional%20photographer%20portrait&sign=b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9', posts: 567 },
-  { id: '2', name: '人像摄影师小雅', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=female%20portrait%20photographer&sign=c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0', posts: 342 },
-  { id: '3', name: '旅行摄影玩家', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=travel%20photographer%20portrait&sign=d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1', posts: 423 }
+  { id: '1', name: '风光摄影大师', avatar: 'https://picsum.photos/400/400?random=272', posts: 567 },
+  { id: '2', name: '人像摄影师小雅', avatar: 'https://picsum.photos/400/400?random=273', posts: 342 },
+  { id: '3', name: '旅行摄影玩家', avatar: 'https://picsum.photos/400/400?random=274', posts: 423 }
 ];
 </script>

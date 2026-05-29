@@ -103,14 +103,14 @@ const selectedDownloadId = ref('');
 const categories = ['全部', '视频教程', '图文教程', '资源下载', '摄影书籍'];
 
 const videoTutorials = [
-  { id: 'vt1', title: '风光摄影基础入门', description: '从零开始学习风光摄影的基本技巧和构图方法', thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=landscape+photography+tutorial+video+thumbnail&sign=4bde90e5e28c797f9f8a21da51b52a9c', duration: '45:20', author: '国家地理摄影师张明', views: '1.2万', level: '初级', tags: ['风光','基础','入门'] },
-  { id: 'vt2', title: '人像摄影用光技巧', description: '掌握人像摄影中光线运用的技巧，拍出自然生动的人像作品', thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=portrait+photography+lighting+tutorial&sign=8b71cc364282b1cfbbe6914f36bd8128', duration: '38:15', author: '人像摄影师李华', views: '8.5k', level: '中级', tags: ['人像','光线','技巧'] },
-  { id: 'vt3', title: '夜景摄影完全指南', description: '学会在低光环境下拍摄出色的夜景照片', thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=night+photography+tutorial+video&sign=5ff7466400ff8fcd75b9f571afc2e09c', duration: '52:30', author: '夜景摄影师王强', views: '6.8k', level: '进阶', tags: ['夜景','低光','技巧'] }
+  { id: 'vt1', title: '风光摄影基础入门', description: '从零开始学习风光摄影的基本技巧和构图方法', thumbnail: 'https://picsum.photos/1280/720?random=151', duration: '45:20', author: '国家地理摄影师张明', views: '1.2万', level: '初级', tags: ['风光','基础','入门'] },
+  { id: 'vt2', title: '人像摄影用光技巧', description: '掌握人像摄影中光线运用的技巧，拍出自然生动的人像作品', thumbnail: 'https://picsum.photos/1280/720?random=152', duration: '38:15', author: '人像摄影师李华', views: '8.5k', level: '中级', tags: ['人像','光线','技巧'] },
+  { id: 'vt3', title: '夜景摄影完全指南', description: '学会在低光环境下拍摄出色的夜景照片', thumbnail: 'https://picsum.photos/1280/720?random=153', duration: '52:30', author: '夜景摄影师王强', views: '6.8k', level: '进阶', tags: ['夜景','低光','技巧'] }
 ];
 
 const articleTutorials = [
-  { id: 'at1', title: 'RAW vs JPEG: 你应该选择哪个？', excerpt: '详细对比RAW和JPEG格式的优缺点，帮助您做出最佳选择', author: '摄影技术编辑小李', date: '2023-10-20', thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=RAW+vs+JPEG+format+comparison+article&sign=b29ed808998630f1fe25bd7b8dcebe92', tags: ['RAW','JPEG','格式'] },
-  { id: 'at2', title: '黄金时间拍摄指南', excerpt: '了解如何在日出和日落时分捕捉最佳光线，拍摄出令人惊叹的照片', author: '风光摄影专家大卫', date: '2023-10-15', thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=golden+hour+photography+guide+sunrise+sunset&sign=3f28a5bd5c4a8112ff4d24d5765eb71f', tags: ['黄金时间','光线','风光'] }
+  { id: 'at1', title: 'RAW vs JPEG: 你应该选择哪个？', excerpt: '详细对比RAW和JPEG格式的优缺点，帮助您做出最佳选择', author: '摄影技术编辑小李', date: '2023-10-20', thumbnail: 'https://picsum.photos/800/600?random=154', tags: ['RAW','JPEG','格式'] },
+  { id: 'at2', title: '黄金时间拍摄指南', excerpt: '了解如何在日出和日落时分捕捉最佳光线，拍摄出令人惊叹的照片', author: '风光摄影专家大卫', date: '2023-10-15', thumbnail: 'https://picsum.photos/800/600?random=155', tags: ['黄金时间','光线','风光'] }
 ];
 
 const resources = [
@@ -119,9 +119,9 @@ const resources = [
 ];
 
 const books = [
-  { id: 'b1', title: '摄影构图学', author: '迈克尔·弗里曼', description: '系统介绍摄影构图的基本原则和技巧，帮助您提升作品的视觉表现力', rating: 4.8, level: '初中级', coverImage: 'https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=photography+composition+book+cover+professional&sign=fea767eb45d7adc7fbf14d6c101df595', tags: ['构图','基础','必读'] },
-  { id: 'b2', title: '美国摄影用光教程', author: '菲尔·亨特', description: '全面讲解摄影用光的原理和方法，从自然光到人工光', rating: 4.7, level: '中高级', coverImage: 'https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=photography+lighting+book+cover+american&sign=39abef78125c4ca03b5832862525d034', tags: ['用光','闪光','影棚'] },
-  { id: 'b3', title: '世界摄影史', author: '内奥米·罗森布拉姆', description: '全面回顾摄影艺术的发展历程，了解不同时期的重要摄影师和作品', rating: 4.9, level: '所有水平', coverImage: 'https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=history+of+photography+book+cover+classic&sign=0eb1e79a78b81df4dc1a3849270d5f53', tags: ['摄影史','艺术','经典'] }
+  { id: 'b1', title: '摄影构图学', author: '迈克尔·弗里曼', description: '系统介绍摄影构图的基本原则和技巧，帮助您提升作品的视觉表现力', rating: 4.8, level: '初中级', coverImage: 'https://picsum.photos/600/800?random=156', tags: ['构图','基础','必读'] },
+  { id: 'b2', title: '美国摄影用光教程', author: '菲尔·亨特', description: '全面讲解摄影用光的原理和方法，从自然光到人工光', rating: 4.7, level: '中高级', coverImage: 'https://picsum.photos/600/800?random=157', tags: ['用光','闪光','影棚'] },
+  { id: 'b3', title: '世界摄影史', author: '内奥米·罗森布拉姆', description: '全面回顾摄影艺术的发展历程，了解不同时期的重要摄影师和作品', rating: 4.9, level: '所有水平', coverImage: 'https://picsum.photos/600/800?random=158', tags: ['摄影史','艺术','经典'] }
 ];
 
 const filteredVideoTutorials = computed(() => {

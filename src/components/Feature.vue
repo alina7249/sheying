@@ -64,7 +64,7 @@ const features: FeatureItem[] = [
     description: '探索最新的艺术摄影作品，感受创作者的独特视角',
     icon: 'fa-images',
     link: '/new-artworks',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=contemporary%20art%20photography%20abstract%20composition&sign=3805149232bf973f6fefafdda0625e1c'
+    image: 'https://picsum.photos/800/600?random=321'
   },
   {
     id: '2',
@@ -72,7 +72,7 @@ const features: FeatureItem[] = [
     description: '专注黑白摄影作品，欣赏光影、线条与质感的艺术表达',
     icon: 'fa-monochrome',
     link: '/black-white',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=black%20and%20white%20photography%20minimalist%20light%20shadow&sign=feb6a8c250dd990bde311e318624c6fc'
+    image: 'https://picsum.photos/800/600?random=322'
   },
   {
     id: '3',
@@ -80,7 +80,7 @@ const features: FeatureItem[] = [
     description: '浏览专业摄影师的商业摄影作品，获取创作灵感',
     icon: 'fa-briefcase',
     link: '/commercial',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=commercial%20photography%20product%20minimalist%20lighting&sign=d16a83dd10d81cdc1f75111914078131'
+    image: 'https://picsum.photos/800/600?random=323'
   }
 ];
 

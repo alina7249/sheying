@@ -154,12 +154,12 @@ const projects: ProjectItem[] = [
     id: 'p1',
     title: '风光摄影大师之路',
     type: '系列教程',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=landscape%20photography%20master%20road%20tutorial%20banner&sign=e85dab2d2d9c4a84815d2c8a95c6ea2b',
+    image: 'https://picsum.photos/1280/720?random=26',
     intro: '从入门到精通，系统学习风光摄影',
     description: '本专题汇集了风光摄影的全方位知识体系，从基础概念到高级技巧，系统地讲解风光摄影的方方面面。',
     author: {
       name: '风光摄影师张明',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=landscape%20photographer%20male%20outdoor%20professional&sign=871dd04c358f08c5214aaf9a36e6bf27',
+      avatar: 'https://picsum.photos/400/400?random=27',
       title: '国家地理摄影师',
       bio: '从业15年，足迹遍布全球30个国家'
     },
@@ -178,12 +178,12 @@ const projects: ProjectItem[] = [
     id: 'p2',
     title: '人像摄影从新手到高手',
     type: '系列教程',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=portrait%20photography%20novice%20to%20expert%20tutorial%20banner&sign=2ae68c4ac40a4b1e35f493fe7a4aaa3c',
+    image: 'https://picsum.photos/1280/720?random=28',
     intro: '从新手到高手，掌握人像摄影精髓',
     description: '从基础的人像摄影概念，到专业的布光技巧、构图要领和后期处理，帮助您成为人像摄影达人。',
     author: {
       name: '人像摄影师王莹',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=portrait%20photographer%20female%20studio%20professional&sign=517e35b2f45eaaa7833acdb77504fdc6',
+      avatar: 'https://picsum.photos/400/400?random=29',
       title: '时尚人像摄影师',
       bio: '为多家时尚杂志拍摄封面和专访人物'
     },
@@ -201,12 +201,12 @@ const projects: ProjectItem[] = [
     id: 'p3',
     title: '城市夜景摄影秘籍',
     type: '专题',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=city%20night%20photography%20secrets%20tutorial%20banner%20neon%20lights&sign=90addae14ef1ccfce0f40aa50c1179b5',
+    image: 'https://picsum.photos/1280/720?random=30',
     intro: '掌握城市夜景摄影的独门秘籍',
     description: '城市夜景充满了无限可能，从车水马龙到霓虹闪耀，带您走进夜色中的光影世界。',
     author: {
       name: '城市摄影师陈默',
-      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=urban%20photographer%20male%20creative&sign=5df0f9b10a5022623be1cb145264b5a1',
+      avatar: 'https://picsum.photos/400/400?random=31',
       title: '城市摄影达人',
       bio: '专注城市摄影10年，作品多次获奖'
     },

@@ -160,11 +160,11 @@ const tabs = ['全部', '活动', '赛事'];
 const allEvents = [
   {
     id: 'e1', title: '2023秋季风光摄影大赛', type: '大赛', category: '风光',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=2023+autumn+landscape+photography+contest+poster&sign=9e8b75c2cc23ad6636398e003bd2ca56',
+    image: 'https://picsum.photos/1280/720?random=88',
     date: '2023-10-25 15:00', location: '线上', participants: 1256, status: 'active',
     deadline: '2023-11-10',
     description: '2023秋季风光摄影大赛正式启动！参赛者需提交3-5张秋季风光摄影作品，题材不限，要求原创。评委由业内知名摄影师组成，评选标准包括创意性、技术性和艺术性。',
-    organizer: { id: 'org1', name: '光影捕手平台', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20platform%20logo&sign=6c9b5a7c93af01db0d8ed1b2be7d3d9d' },
+    organizer: { id: 'org1', name: '光影捕手平台', avatar: 'https://picsum.photos/400/400?random=89' },
     prizes: [
       { name: '一等奖', reward: '¥5000 + 专业摄影器材包 + 平台专属勋章' },
       { name: '二等奖', reward: '¥3000 + 摄影配件套装' },
@@ -177,25 +177,25 @@ const allEvents = [
       { title: '结果公布', date: '2023年12月1日' }
     ],
     judges: [
-      { id: 'j1', name: '张明', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20judge%20male%20senior%20professional&sign=871dd04c358f08c5214aaf9a36e6bf27', title: '国家地理摄影师' },
-      { id: 'j2', name: '李华', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20judge%20male%20street%20experienced&sign=c2d89b9f47e07118aab5b3aef7c5cdf3', title: '纪实摄影师' }
+      { id: 'j1', name: '张明', avatar: 'https://picsum.photos/400/400?random=90', title: '国家地理摄影师' },
+      { id: 'j2', name: '李华', avatar: 'https://picsum.photos/400/400?random=91', title: '纪实摄影师' }
     ],
     tags: ['风光', '大赛', '秋季', '线上', '丰厚奖金']
   },
   {
     id: 'cv2', title: '城市建筑摄影大赛', type: '大赛', category: '建筑',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=urban+architecture+photography+contest+poster&sign=6b457539471f4f2dcdd05aa5ea4bd54a',
+    image: 'https://picsum.photos/1280/720?random=92',
     date: '2023-12-01 - 2023-12-31', location: '线上', participants: 892, status: 'ended',
     description: '城市建筑摄影大赛，捕捉都市建筑的独特魅力。参赛者需提交建筑摄影作品，展现城市的现代建筑风采。',
-    organizer: { id: 'org1', name: '光影捕手平台', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20platform%20logo&sign=6c9b5a7c93af01db0d8ed1b2be7d3d9d' },
+    organizer: { id: 'org1', name: '光影捕手平台', avatar: 'https://picsum.photos/400/400?random=93' },
     tags: ['建筑', '城市', '摄影大赛', '线上']
   },
   {
     id: 'ev1', title: '上海城市摄影线下活动', type: '活动', category: '城市',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=shanghai+city+photography+event+group&sign=c10d47ff72e693e4aae932edd3732d15',
+    image: 'https://picsum.photos/1280/720?random=94',
     date: '2023-11-15', location: '上海·外滩', participants: 45, status: 'active',
     description: '组织摄影爱好者在上海外滩进行城市风光和人像拍摄，资深摄影师带队指导。',
-    organizer: { id: 'org2', name: '上海摄影俱乐部', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=shanghai%20photography%20club%20logo&sign=a9b62d5a9fc171e96fd704dd166d0333' },
+    organizer: { id: 'org2', name: '上海摄影俱乐部', avatar: 'https://picsum.photos/400/400?random=95' },
     tags: ['上海', '城市', '线下', '交流']
   }
 ];

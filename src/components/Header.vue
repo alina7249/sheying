@@ -213,7 +213,7 @@ const navLinks = [
   { name: '活动与赛事', path: '/events-contests' }
 ];
 
-const userAvatar = computed(() => user.value?.avatar || 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional&sign=b0609ecfca466fa5510f7df4adb33529');
+const userAvatar = computed(() => user.value?.avatar || 'https://picsum.photos/400/400?random=124');
 const username = computed(() => user.value?.username || mockUserData.username);
 
 onMounted(() => {

@@ -1063,9 +1063,9 @@ const mockMembershipData = {
       { level: 6, name: "至尊会员", price: "¥199/月", description: "顶级会员特权，专属线下活动，一对一导师指导", icon: "fa-crown", isCurrent: false }
     ],
     exclusiveContent: [
-      { id: 1, title: "风光摄影大师班", description: "由国际获奖摄影师亲自授课，学习专业风光拍摄技巧", image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=professional%20landscape%20photography%20workshop%20banner%20mountain%20scenery&sign=0dafc8a260a28664bd392980e71a805c" },
-      { id: 2, title: "高级后期修图工作流", description: "从RAW到成品的完整修图流程，掌握专业调色技巧", image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=photo%20editing%20workflow%20tutorial%20professional%20studio&sign=7e760f67fc2009a141b2828a5affabf7" },
-      { id: 3, title: "商业摄影实战指南", description: "学习商业摄影的布光、构图和客户沟通技巧", image: "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=commercial%20photography%20studio%20setup%20lighting%20equipment&sign=1af5b7229aaeac89bfdec8f05214b754" }
+      { id: 1, title: "风光摄影大师班", description: "由国际获奖摄影师亲自授课，学习专业风光拍摄技巧", image: "https://picsum.photos/1280/720?random=57" },
+      { id: 2, title: "高级后期修图工作流", description: "从RAW到成品的完整修图流程，掌握专业调色技巧", image: "https://picsum.photos/1280/720?random=58" },
+      { id: 3, title: "商业摄影实战指南", description: "学习商业摄影的布光、构图和客户沟通技巧", image: "https://picsum.photos/1280/720?random=59" }
     ],
     events: [
       { id: 1, title: "会员专属摄影沙龙·上海站", date: "2023-11-15", location: "上海·静安区", type: "线下活动" },
@@ -1114,12 +1114,12 @@ const mockMembershipData = {
       { date: '2023-10-05', action: '邀请好友注册', points: 20 },
     ],
     availableRewards: [
-      { id: 'r1', name: '基础后期预设包', description: '10个专业摄影后期预设', points: 50, image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photo%20preset%20pack%20thumbnail%20photography%20editing&sign=e8c6e47f437ba890910bd7f636a11f1b', available: true },
-      { id: 'r2', name: 'RAW素材下载券', description: '5个高质量RAW素材下载权限', points: 80, image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=raw%20photo%20download%20voucher%20thumbnail&sign=05dbb388d7010c5c0355b7ca1fcf8775', available: true },
-      { id: 'r3', name: '摄影课程折扣券', description: '线上摄影课程8折优惠', points: 100, image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20course%20discount%20voucher%20thumbnail&sign=9ab6fe1c09a5f10cf322494fa9d02fdb', available: true },
-      { id: 'r4', name: '高级会员体验卡', description: '7天高级会员免费体验', points: 150, image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=premium%20membership%20trial%20card%20thumbnail%20gold%20glow&sign=1c989a761cbbc5239aefecefd0fb57bf', available: true },
-      { id: 'r5', name: '专业器材租赁券', description: '专业相机镜头租赁一天免费', points: 200, image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=camera%20equipment%20rental%20voucher%20thumbnail&sign=526fa89bffb356b8ee6de91d54131e4f', available: false },
-      { id: 'r6', name: '线下活动免费券', description: '免费参加一次线下摄影活动', points: 250, image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photography%20event%20free%20ticket%20thumbnail&sign=603c66e6e40f8e7fb5a2c9abab507bff', available: false },
+      { id: 'r1', name: '基础后期预设包', description: '10个专业摄影后期预设', points: 50, image: 'https://picsum.photos/400/400?random=60', available: true },
+      { id: 'r2', name: 'RAW素材下载券', description: '5个高质量RAW素材下载权限', points: 80, image: 'https://picsum.photos/400/400?random=61', available: true },
+      { id: 'r3', name: '摄影课程折扣券', description: '线上摄影课程8折优惠', points: 100, image: 'https://picsum.photos/400/400?random=62', available: true },
+      { id: 'r4', name: '高级会员体验卡', description: '7天高级会员免费体验', points: 150, image: 'https://picsum.photos/400/400?random=63', available: true },
+      { id: 'r5', name: '专业器材租赁券', description: '专业相机镜头租赁一天免费', points: 200, image: 'https://picsum.photos/400/400?random=64', available: false },
+      { id: 'r6', name: '线下活动免费券', description: '免费参加一次线下摄影活动', points: 250, image: 'https://picsum.photos/400/400?random=65', available: false },
     ],
     completedTasks: [
       { id: 't1', name: '完善个人资料', description: '上传头像并填写个人简介', points: 10, completed: true },

@@ -51,7 +51,7 @@ const contests = ref([
     id: '1',
     name: '2024春季风光摄影大赛',
     description: '用镜头捕捉春天的美丽，分享大自然的生机与活力',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=spring%20landscape%20photography%20beautiful%20flowers&sign=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6',
+    cover: 'https://picsum.photos/1280/720?random=239',
     status: '进行中',
     participants: 1256,
     deadline: '2024-04-30'
@@ -60,7 +60,7 @@ const contests = ref([
     id: '2',
     name: '人像摄影大师赛',
     description: '展现人像摄影的艺术魅力，捕捉人物的情感与故事',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=portrait%20photography%20beautiful%20woman%20professional&sign=b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7',
+    cover: 'https://picsum.photos/1280/720?random=240',
     status: '进行中',
     participants: 892,
     deadline: '2024-05-15'
@@ -69,7 +69,7 @@ const contests = ref([
     id: '3',
     name: '城市街头摄影挑战赛',
     description: '记录城市生活的点滴，展现街头的独特魅力',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=urban%20street%20photography%20city%20night%20lights&sign=c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8',
+    cover: 'https://picsum.photos/1280/720?random=241',
     status: '即将开始',
     participants: 0,
     deadline: '2024-05-01'
@@ -78,7 +78,7 @@ const contests = ref([
     id: '4',
     name: '微距摄影艺术展',
     description: '探索微观世界的美丽，展现微距摄影的独特视角',
-    cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=macro%20photography%20beautiful%20butterfly%20flower&sign=d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9',
+    cover: 'https://picsum.photos/1280/720?random=242',
     status: '已结束',
     participants: 456,
     deadline: '2024-03-15'

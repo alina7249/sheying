@@ -87,9 +87,9 @@ const compareData = [
 
 const latestReviews = [
   {
-    id: 'r1', name: '索尼A7R V全画幅微单相机', brand: 'Sony', type: '相机', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=Sony+A7R+V+mirrorless+camera+professional&sign=5f9e2f27c40853405c8b28ab7e864c75',
+    id: 'r1', name: '索尼A7R V全画幅微单相机', brand: 'Sony', type: '相机', image: 'https://picsum.photos/800/600?random=138',
     price: '25999', rating: 4.9, date: '2023-10-25',
-    reviewer: { id: 'u1', name: '摄影器材评测专家王老师', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=camera+review+expert+avatar+male&sign=d93997ce2edd0d1b7142037aaf32e02e', title: '资深器材评测人' },
+    reviewer: { id: 'u1', name: '摄影器材评测专家王老师', avatar: 'https://picsum.photos/400/400?random=139', title: '资深器材评测人' },
     summary: '索尼A7R V是一款拥有6100万像素的专业级全画幅微单相机，支持8K视频录制。采用AI对焦技术，对焦速度快且精准。机身防抖性能优秀，搭配高像素传感器，成像质量极佳，是目前市场上性能最强的全画幅微单相机之一。',
     imageQuality: 5, buildQuality: 4, performance: 5, value: 4,
     specs: { sensor: '全画幅CMOS', megapixels: '6100万', iso: '100-32000', weight: '723g' },
@@ -97,9 +97,9 @@ const latestReviews = [
     cons: '价格较高；高像素对存储卡需求大；8K视频拍摄时电池消耗较快，需多备电池。'
   },
   {
-    id: 'r2', name: '佳能EOS R5全画幅微单相机', brand: 'Canon', type: '相机', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=Canon+EOS+R5+mirrorless+camera+professional&sign=9b385fe5454c58f47d5a5a5c11f99dcb',
+    id: 'r2', name: '佳能EOS R5全画幅微单相机', brand: 'Canon', type: '相机', image: 'https://picsum.photos/800/600?random=140',
     price: '25999', rating: 4.8, date: '2023-10-20',
-    reviewer: { id: 'u2', name: '器材达人小李', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=camera+enthusiast+avatar+male&sign=78333651a183c3049ee0b820a0642879', title: '摄影器材爱好者' },
+    reviewer: { id: 'u2', name: '器材达人小李', avatar: 'https://picsum.photos/400/400?random=141', title: '摄影器材爱好者' },
     summary: '佳能EOS R5是一款4500万像素的全画幅微单相机，支持8K 30p和4K 120p视频录制。配备全像素双核对焦系统，对焦性能出色。机身防抖配合RF镜头防抖，可达8级防抖效果，是佳能专业级微单的代表作。',
     imageQuality: 5, buildQuality: 5, performance: 4, value: 4,
     specs: { sensor: '全画幅CMOS', megapixels: '4500万', iso: '100-51200', weight: '738g' },
@@ -107,9 +107,9 @@ const latestReviews = [
     cons: '高规格视频录制发热问题依然存在；价格较高，预算有限的用户需要考虑；RF镜头群价格较贵。'
   },
   {
-    id: 'r3', name: '尼康Z8全画幅微单相机', brand: 'Nikon', type: '相机', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=Nikon+Z8+mirrorless+camera+professional&sign=ba92ee1ccf869eaa4f4c328fec97fccc',
+    id: 'r3', name: '尼康Z8全画幅微单相机', brand: 'Nikon', type: '相机', image: 'https://picsum.photos/800/600?random=142',
     price: '27999', rating: 4.8, date: '2023-10-18',
-    reviewer: { id: 'u3', name: '尼康粉丝老张', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=nikon+fan+avatar+male+professional&sign=ccbf11cebb75774becc2cf4546e0b08b', title: '尼康相机深度用户' },
+    reviewer: { id: 'u3', name: '尼康粉丝老张', avatar: 'https://picsum.photos/400/400?random=143', title: '尼康相机深度用户' },
     summary: '尼康Z8是一款4570万像素的堆栈式CMOS全画幅微单相机，继承了Z9的核心技术，机身更紧凑。支持20fps RAW连拍、8K 60p视频录制，对焦系统智能精准，是尼康专业级微单的性能标杆。',
     imageQuality: 5, buildQuality: 5, performance: 5, value: 4,
     specs: { sensor: '堆栈式全画幅CMOS', megapixels: '4570万', iso: '64-25600', weight: '910g' },
@@ -117,9 +117,9 @@ const latestReviews = [
     cons: '机身较重，长时间手持拍摄会感到疲劳；价格较高，接近旗舰级定价；电池续航相比同级稍逊。'
   },
   {
-    id: 'r4', name: '富士GFX100 II中画幅相机', brand: 'Fujifilm', type: '相机', image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=Fujifilm+GFX100+II+medium+format+camera&sign=41cbf90b9a0e11a8dfbff43821a050a5',
+    id: 'r4', name: '富士GFX100 II中画幅相机', brand: 'Fujifilm', type: '相机', image: 'https://picsum.photos/800/600?random=144',
     price: '41000', rating: 4.7, date: '2023-10-15',
-    reviewer: { id: 'u4', name: '中画幅玩家老刘', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=medium+format+photographer+avatar+male&sign=fe817dce4d08957c62787348c72eb1b7', title: '中画幅相机深度用户' },
+    reviewer: { id: 'u4', name: '中画幅玩家老刘', avatar: 'https://picsum.photos/400/400?random=145', title: '中画幅相机深度用户' },
     summary: '富士GFX100 II是1.02亿像素的中画幅无反相机，搭载全新的X-Processor 5图像处理器，支持8fps连拍和AI对焦。1.02亿像素带来惊人的解析力，动态范围宽广，色彩表现优异，是追求极致画质的摄影师的理想选择。',
     imageQuality: 5, buildQuality: 5, performance: 4, value: 3,
     specs: { sensor: '中画幅43.8×32.9mm CMOS', megapixels: '1.02亿', iso: '100-12800', weight: '1030g' },

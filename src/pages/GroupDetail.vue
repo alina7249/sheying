@@ -123,8 +123,8 @@ const tabs = [
 const group = {
   id: '1',
   name: '风光摄影俱乐部',
-  avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=landscape%20photography%20group%20logo&sign=c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8',
-  cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=beautiful%20landscape%20mountains%20sunset&sign=d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9',
+  avatar: 'https://picsum.photos/400/400?random=243',
+  cover: 'https://picsum.photos/1280/720?random=244',
   description: '探索大自然的美丽，分享风光摄影技巧。我们每周组织线上交流活动，不定期举办线下摄影采风。欢迎所有热爱风光摄影的朋友加入！',
   members: 2341,
   posts: 5678,
@@ -138,8 +138,8 @@ const groupPosts = [
     id: '1',
     title: '分享上周拍摄的云海照片',
     content: '上周去黄山拍的云海，运气很好遇到了难得的好天气，分享给大家看看！',
-    images: ['https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=huangshan%20mountains%20sea%20of%20clouds&sign=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6'],
-    author: { name: '风光爱好者', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20portrait%20nature&sign=b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7' },
+    images: ['https://picsum.photos/1280/720?random=245'],
+    author: { name: '风光爱好者', avatar: 'https://picsum.photos/400/400?random=246' },
     date: '2小时前',
     likes: 128,
     comments: 24
@@ -149,7 +149,7 @@ const groupPosts = [
     title: '下个月的川西摄影团有人参加吗？',
     content: '计划下个月组织一次川西摄影团，时间大概10天左右，路线包括稻城亚丁、新都桥等地。感兴趣的朋友可以报名！',
     images: [],
-    author: { name: '团长老王', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=middle%20aged%20photographer%20portrait&sign=c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8' },
+    author: { name: '团长老王', avatar: 'https://picsum.photos/400/400?random=247' },
     date: '昨天',
     likes: 89,
     comments: 45
@@ -157,10 +157,10 @@ const groupPosts = [
 ];
 
 const members = [
-  { id: '1', name: '团长老王', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=middle%20aged%20photographer%20portrait&sign=c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8', role: '管理员' },
-  { id: '2', name: '风光爱好者', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20portrait%20nature&sign=b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7', role: '活跃成员' },
-  { id: '3', name: '摄影新手小李', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=young%20male%20photographer&sign=d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5', role: '成员' },
-  { id: '4', name: '资深摄影师', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=professional%20photographer%20portrait&sign=e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6', role: '活跃成员' }
+  { id: '1', name: '团长老王', avatar: 'https://picsum.photos/400/400?random=248', role: '管理员' },
+  { id: '2', name: '风光爱好者', avatar: 'https://picsum.photos/400/400?random=249', role: '活跃成员' },
+  { id: '3', name: '摄影新手小李', avatar: 'https://picsum.photos/400/400?random=250', role: '成员' },
+  { id: '4', name: '资深摄影师', avatar: 'https://picsum.photos/400/400?random=251', role: '活跃成员' }
 ];
 
 const handleJoin = () => {

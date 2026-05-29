@@ -186,7 +186,7 @@
                   }"
                 >
                   <img
-                    src="https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=world%20map%20vintage%20paper%20texture%20blue&sign=a7e6038b84e3276bdf4bf7abc3a1ddb7"
+                    src="https://picsum.photos/1280/720?random=32"
                     alt="Map background"
                     class="w-full h-full object-cover"
                   />
@@ -864,37 +864,37 @@ const mapRef = ref<HTMLDivElement | null>(null)
 const mockLocations: Location[] = [
   {
     id: '1', name: '上海外滩', address: '上海市黄浦区中山东一路', latitude: 31.2304, longitude: 121.4737, photos: 256,
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=shanghai%20bund%20skyline%20night%20photography%20location&sign=c5826fa443a4a31ae340466ff9a0c083',
+    image: 'https://picsum.photos/1280/720?random=33',
     categories: ['城市', '建筑', '夜景'], visitCount: 12, firstVisit: '2023-05-10', lastVisit: '2023-10-22', rating: 5,
     notes: '黄昏和夜晚拍摄效果最佳，需要三脚架和ND滤镜', isFavorite: true,
   },
   {
     id: '2', name: '北京故宫', address: '北京市东城区景山前街4号', latitude: 39.9042, longitude: 116.4074, photos: 189,
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=beijing%20forbidden%20city%20ancient%20architecture%20photography%20location&sign=48da96b2f5b3c60847d97d2acf789507',
+    image: 'https://picsum.photos/1280/720?random=34',
     categories: ['历史', '建筑', '人文'], visitCount: 8, firstVisit: '2023-04-15', lastVisit: '2023-09-30', rating: 4,
     notes: '建议上午9点前到达，光线最佳且游客较少', isFavorite: false,
   },
   {
     id: '3', name: '杭州西湖', address: '浙江省杭州市西湖区龙井路1号', latitude: 30.2741, longitude: 120.1551, photos: 324,
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=hangzhou%20west%20lake%20scenery%20landscape%20photography%20location&sign=962e534ce7b680e8e2a9e894a4967250',
+    image: 'https://picsum.photos/1280/720?random=35',
     categories: ['自然', '风景', '湖泊'], visitCount: 15, firstVisit: '2023-03-20', lastVisit: '2023-10-15', rating: 5,
     notes: '春天桃花盛开和秋天枫叶红时是最佳拍摄季节', isFavorite: true,
   },
   {
     id: '4', name: '成都锦里', address: '四川省成都市武侯区武侯祠大街231号', latitude: 30.6575, longitude: 104.0663, photos: 156,
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=chengdu%20jinli%20ancient%20street%20photography%20location%20china&sign=feb68402462ca5f58dbda88525c932ba',
+    image: 'https://picsum.photos/1280/720?random=36',
     categories: ['古镇', '人文', '街拍'], visitCount: 6, firstVisit: '2023-07-05', lastVisit: '2023-10-08', rating: 4,
     notes: '晚上灯光亮起后氛围更佳，适合人文纪实摄影', isFavorite: false,
   },
   {
     id: '5', name: '张家界国家森林公园', address: '湖南省张家界市武陵源区', latitude: 29.1175, longitude: 110.4878, photos: 218,
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=zhangjiajie%20national%20forest%20park%20mountains%20photography%20location%20china&sign=f696cf51c01cfd7dbe99084a34020ec0',
+    image: 'https://picsum.photos/1280/720?random=37',
     categories: ['自然', '风景', '山脉'], visitCount: 10, firstVisit: '2023-06-15', lastVisit: '2023-09-20', rating: 5,
     notes: '云海景观最佳季节是春末夏初，建议住在景区内以便早起拍摄', isFavorite: true,
   },
   {
     id: '6', name: '广州塔', address: '广东省广州市海珠区阅江西路222号', latitude: 23.1291, longitude: 113.2644, photos: 178,
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=guangzhou%20tower%20modern%20architecture%20photography%20location%20china&sign=de1bb556dbf0b35adcc7f22f45323226',
+    image: 'https://picsum.photos/1280/720?random=38',
     categories: ['城市', '建筑', '现代'], visitCount: 7, firstVisit: '2023-08-10', lastVisit: '2023-10-05', rating: 4,
     notes: '最佳拍摄位置在珠江对岸的花城广场', isFavorite: false,
   }
@@ -902,30 +902,30 @@ const mockLocations: Location[] = [
 
 const locationImages: Record<string, string[]> = {
   '1': [
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=shanghai%20bund%20night%20photography%201&sign=c8632ab0baac9118aae370c9eba03560",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=shanghai%20bund%20architecture%20photography%202&sign=73abc13d604aacd63477f0e580ab50a8",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=shanghai%20skyline%20photography%203&sign=176e9027d3008a6f4f33eebb8fa8a29e"
+    "https://picsum.photos/800/600?random=39",
+    "https://picsum.photos/800/600?random=40",
+    "https://picsum.photos/800/600?random=41"
   ],
   '2': [
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=beijing%20forbidden%20city%20sunset%20photography%201&sign=73f666bf8bd3385d90765b17645661f0",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=beijing%20ancient%20architecture%20photography%202&sign=62eb7f3ee8320f591b037414b2d69358"
+    "https://picsum.photos/800/600?random=42",
+    "https://picsum.photos/800/600?random=43"
   ],
   '3': [
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=hangzhou%20west%20lake%20morning%20photography%201&sign=fffc651f0aa5ad61cf22a9fa5d243683",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=west%20lake%20pagoda%20photography%202&sign=4590a8dda0aac1ed428c53a8b561cb71",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=hangzhou%20garden%20photography%203&sign=ea347165f0dc375a7ebda5fb1aa035c4"
+    "https://picsum.photos/800/600?random=44",
+    "https://picsum.photos/800/600?random=45",
+    "https://picsum.photos/800/600?random=46"
   ],
   '4': [
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=chengdu%20jinli%20ancient%20street%20night%201&sign=4afd852ddebde6f9093ea00d9c6247e3",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=jinli%20traditional%20architecture%202&sign=c206a633862358ad06e149b114bd0672"
+    "https://picsum.photos/800/600?random=47",
+    "https://picsum.photos/800/600?random=48"
   ],
   '5': [
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=zhangjiajie%20mountains%20cloud%20photography%201&sign=55a785ce2ab9c389fc508cf4e996e71e",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=zhangjiajie%20forest%20park%202&sign=7e44e8a25986262bd92f640e276d0541"
+    "https://picsum.photos/800/600?random=49",
+    "https://picsum.photos/800/600?random=50"
   ],
   '6': [
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=guangzhou%20tower%20night%20photography%201&sign=e22b19a088cd6bd7acc85661bac8b588",
-    "https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=guangzhou%20cbd%20skyline%20photography%202&sign=6d76ebd95c29e78ec9e5cfef5445c71c"
+    "https://picsum.photos/800/600?random=51",
+    "https://picsum.photos/800/600?random=52"
   ]
 }
 

@@ -23,7 +23,7 @@
             <div class="text-center mb-4">
               <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden border-4 border-[#4A5F8B]">
                 <img
-                  src="https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc"
+                  src="https://picsum.photos/400/400?random=320"
                   alt="User avatar"
                   class="w-full h-full object-cover"
                 />

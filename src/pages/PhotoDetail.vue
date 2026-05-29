@@ -217,11 +217,11 @@ const mockPhotoPost = {
   id: '1',
   title: '黑白光影',
   description: '极简主义黑白摄影，通过光影对比展现建筑的几何美感。\n\n创作灵感：\n在城市中漫步时，被这座建筑的几何线条所吸引，阳光透过窗户形成的光影效果完美呈现了极简美学。\n\n拍摄参数：\n- 相机：Leica Q2 Monochrom\n- 镜头：Summilux 28mm f/1.7 ASPH\n- 光圈：f/2.8\n- 快门速度：1/125s\n- ISO：800\n- 构图：三分法，利用线条引导视线\n\n后期处理：\n1. 轻微调整对比度，增强黑白对比\n2. 调整高光和阴影，保留细节\n3. 使用渐变滤镜调整天空和地面的曝光平衡\n4. 轻微锐化，增强建筑线条感',
-  image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=black%20and%20white%20architecture%20geometric%20composition&sign=7f2b53dd226ab1ffb3f3eae704bada52',
+  image: 'https://picsum.photos/1280/720?random=275',
   author: {
     id: '1',
     name: '极简摄影师林风',
-    avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=minimalist%20photographer%20male%20serious&sign=fded36172bb86afa4dc326776156459c',
+    avatar: 'https://picsum.photos/400/400?random=276',
     bio: '专注极简主义和黑白摄影',
     followers: 12543,
     following: 324,

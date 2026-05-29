@@ -290,36 +290,36 @@ interface Content {
 const mockContent: Content[] = [
   {
     id: '1', title: '晨曦中的山峦', type: 'photo',
-    thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=morning%20sunrise%20mountain%20landscape%20mist%20china&sign=a50c8d6084b10f76978cc2afb1ca29a9',
-    author: { id: '101', name: '光影捕手', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc' },
+    thumbnail: 'https://picsum.photos/1280/720?random=159',
+    author: { id: '101', name: '光影捕手', avatar: 'https://picsum.photos/400/400?random=160' },
     status: 'active', createdAt: '2023-10-25', views: 1256, likes: 324, comments: 45
   },
   {
     id: '2', title: '城市剪影', type: 'photo',
-    thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=city%20skyline%20silhouette%20sunset%20urban%20architecture%20modern&sign=8de72287cf83cda70c057b89bfc1d186',
-    author: { id: '102', name: '城市摄影师陈默', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=urban%20photographer%20male%20creative&sign=5df0f9b10a5022623be1cb145264b5a1' },
+    thumbnail: 'https://picsum.photos/1280/720?random=161',
+    author: { id: '102', name: '城市摄影师陈默', avatar: 'https://picsum.photos/400/400?random=162' },
     status: 'active', createdAt: '2023-10-22', views: 987, likes: 289, comments: 37
   },
   {
     id: '3', title: '海浪与礁石', type: 'photo',
-    thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=ocean%20waves%20crashing%20on%20rocks%20long%20exposure%20seascape&sign=e3c4cd3840caaaedc19f43f96183a958',
-    author: { id: '103', name: '风景摄影爱好者', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=landscape%20photographer%20male%20nature%20lover&sign=d96b376fb9cd51636566b2ae4aadba91' },
+    thumbnail: 'https://picsum.photos/1280/720?random=163',
+    author: { id: '103', name: '风景摄影爱好者', avatar: 'https://picsum.photos/400/400?random=164' },
     status: 'pending', createdAt: '2023-10-18', views: 1452, likes: 412, comments: 53
   },
   {
     id: '4', title: '森林晨雾', type: 'photo',
-    thumbnail: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=forest%20morning%20mist%20sunlight%20rays%20trees%20mystical&sign=0d866462637658cb7796789831e1cc68',
-    author: { id: '104', name: '自然摄影师小林', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=nature%20photographer%20female%20smiling&sign=0fc618c5f06a07329a62e32cf23c8ca2' },
+    thumbnail: 'https://picsum.photos/1280/720?random=165',
+    author: { id: '104', name: '自然摄影师小林', avatar: 'https://picsum.photos/400/400?random=166' },
     status: 'active', createdAt: '2023-10-15', views: 1328, likes: 387, comments: 49
   },
   {
     id: '5', title: '【分享】我的春季风光摄影心得', type: 'post', thumbnail: '',
-    author: { id: '101', name: '光影捕手', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc' },
+    author: { id: '101', name: '光影捕手', avatar: 'https://picsum.photos/400/400?random=167' },
     status: 'active', createdAt: '2023-10-10', views: 876, likes: 145, comments: 23
   },
   {
     id: '6', title: '请教：关于长曝光拍摄水流的问题', type: 'post', thumbnail: '',
-    author: { id: '103', name: '风景摄影爱好者', avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=landscape%20photographer%20male%20nature%20lover&sign=d96b376fb9cd51636566b2ae4aadba91' },
+    author: { id: '103', name: '风景摄影爱好者', avatar: 'https://picsum.photos/400/400?random=168' },
     status: 'active', createdAt: '2023-10-05', views: 542, likes: 89, comments: 34
   }
 ]

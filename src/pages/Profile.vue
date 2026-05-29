@@ -201,13 +201,13 @@ const mockUser = {
   id: 'user-123',
   username: '@光影捕手',
   email: 'user@example.com',
-  avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male%20portrait&sign=e53a45a0e2ef5ba23982d6db8693456b',
+  avatar: 'https://picsum.photos/400/400?random=127',
   bio: '热爱风光和人像摄影，喜欢探索城市中的几何美感和自然中的光影变化。',
   joinDate: '2023-01-15',
   followers: 123,
   following: 45,
   posts: 28,
-  coverImage: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=photography%20studio%20background%20modern%20minimalist&sign=8848033bdf94e05818be4d57164ea015',
+  coverImage: 'https://picsum.photos/1280/720?random=128',
   level: '新锐摄影师',
   levelNum: 3,
   progress: 120,
@@ -222,7 +222,7 @@ const mockPhotographyPosts = [
     id: '1',
     title: '晨曦中的山峦',
     description: '捕捉清晨第一缕阳光洒在山峦上的壮丽景色',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=morning%20sunrise%20mountain%20landscape%20mist%20china&sign=a50c8d6084b10f76978cc2afb1ca29a9',
+    image: 'https://picsum.photos/1280/720?random=129',
     author: { id: 'user-123', name: '@光影捕手', avatar: '' },
     likes: 324,
     comments: 45,
@@ -237,7 +237,7 @@ const mockPhotographyPosts = [
     id: '2',
     title: '城市剪影',
     description: '从高处俯瞰城市天际线',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=city%20skyline%20silhouette%20sunset%20urban%20architecture%20modern&sign=8de72287cf83cda70c057b89bfc1d186',
+    image: 'https://picsum.photos/1280/720?random=130',
     author: { id: 'user-123', name: '@光影捕手', avatar: '' },
     likes: 289,
     comments: 37,
@@ -252,7 +252,7 @@ const mockPhotographyPosts = [
     id: '3',
     title: '海浪与礁石',
     description: '长时间曝光拍摄海浪拍打礁石',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=ocean%20waves%20crashing%20on%20rocks%20long%20exposure%20seascape&sign=e3c4cd3840caaaedc19f43f96183a958',
+    image: 'https://picsum.photos/1280/720?random=131',
     author: { id: 'user-123', name: '@光影捕手', avatar: '' },
     likes: 412,
     comments: 53,
@@ -267,7 +267,7 @@ const mockPhotographyPosts = [
     id: '4',
     title: '森林晨雾',
     description: '在山间森林中捕捉晨雾弥漫的神秘氛围',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=forest%20morning%20mist%20sunlight%20rays%20trees%20mystical&sign=0d866462637658cb7796789831e1cc68',
+    image: 'https://picsum.photos/1280/720?random=132',
     author: { id: 'user-123', name: '@光影捕手', avatar: '' },
     likes: 387,
     comments: 49,
@@ -282,7 +282,7 @@ const mockPhotographyPosts = [
     id: '5',
     title: '古镇风情',
     description: '雨后的古镇石板路，倒映着古老的建筑',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=ancient%20town%20stone%20street%20reflection%20rain%20chinese%20architecture&sign=4e1f2c0a4a5f3c8b8e4d7a9c2b6e1d5f',
+    image: 'https://picsum.photos/1280/720?random=133',
     author: { id: 'user-123', name: '@光影捕手', avatar: '' },
     likes: 256,
     comments: 32,
@@ -297,7 +297,7 @@ const mockPhotographyPosts = [
     id: '6',
     title: '星空银河',
     description: '在远离城市光污染的山区拍摄璀璨银河',
-    image: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=milky%20way%20galaxy%20stars%20night%20sky%20long%20exposure%20astrophotography&sign=7a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d',
+    image: 'https://picsum.photos/1280/720?random=134',
     author: { id: 'user-123', name: '@光影捕手', avatar: '' },
     likes: 521,
     comments: 67,
@@ -332,9 +332,9 @@ const tagDistribution = [
 ];
 
 const collections = [
-  { id: '1', name: '风光作品集', cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=landscape%20photography%20collection&sign=1a2b3c4d5e6f7a8b9c0d1e2f', count: 12, date: '2023-06-01' },
-  { id: '2', name: '城市探索', cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=urban%20exploration%20photography&sign=2a3b4c5d6e7f8a9b0c1d2e3f', count: 8, date: '2023-08-15' },
-  { id: '3', name: '人像精选', cover: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=portrait%20photography%20collection&sign=3a4b5c6d7e8f9a0b1c2d3e4f', count: 6, date: '2023-09-20' }
+  { id: '1', name: '风光作品集', cover: 'https://picsum.photos/1280/720?random=135', count: 12, date: '2023-06-01' },
+  { id: '2', name: '城市探索', cover: 'https://picsum.photos/1280/720?random=136', count: 8, date: '2023-08-15' },
+  { id: '3', name: '人像精选', cover: 'https://picsum.photos/1280/720?random=137', count: 6, date: '2023-09-20' }
 ];
 
 const tabs = [
