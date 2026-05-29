@@ -103,8 +103,8 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useAuthStore } from '../../store/authStore';
 import { useChatStore } from '../../store/chatStore';
-import { MessageList } from './MessageList.vue';
-import { InputArea } from './InputArea.vue';
+import MessageList from './MessageList.vue';
+import InputArea from './InputArea.vue';
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();

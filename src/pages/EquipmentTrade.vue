@@ -117,7 +117,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useRoute } from 'vue-router';
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { toast } from 'sonner';
 import { mockCameras, mockLenses, mockAccessories } from '../lib/equipmentData';
 

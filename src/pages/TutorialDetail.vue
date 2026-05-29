@@ -136,7 +136,7 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/store/authStore'
-import { CommentSection } from '@/components/CommentSection'
+import CommentSection from '@/components/CommentSection.vue'
 
 const route = useRoute()
 const store = useAuthStore()

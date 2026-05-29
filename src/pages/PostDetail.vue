@@ -172,8 +172,8 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/store/authStore'
-import { CommentSection } from '@/components/CommentSection'
-import { ShareButton } from '@/components/common/ShareButton'
+import CommentSection from '@/components/CommentSection.vue'
+import ShareButton from '@/components/common/ShareButton.vue'
 
 const route = useRoute()
 const store = useAuthStore()

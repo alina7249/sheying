@@ -176,7 +176,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../store/authStore';
 import ProfileDropdown from './ProfileDropdown.vue';
 
 const authStore = useAuthStore();
