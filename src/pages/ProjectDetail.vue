@@ -115,28 +115,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/store/authStore'
+import { storeToRefs } from 'pinia'
 import CommentSection from '@/components/CommentSection.vue'
 
 const route = useRoute()
 const store = useAuthStore()
-
-const authState = reactive({
-  isAuthenticated: store.getState().isAuthenticated,
-  user: store.getState().user,
-})
-
-const unsubscribe = store.subscribe((state) => {
-  authState.isAuthenticated = state.isAuthenticated
-  authState.user = state.user
-})
-
-onUnmounted(() => {
-  unsubscribe()
-})
+const { isAuthenticated, user } = storeToRefs(store)
 
 interface Chapter {
   title: string

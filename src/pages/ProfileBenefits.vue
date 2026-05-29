@@ -998,25 +998,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, reactive } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/store/authStore'
+import { storeToRefs } from 'pinia'
 
 const store = useAuthStore()
-
-const authState = reactive({
-  isAuthenticated: store.getState().isAuthenticated,
-  user: store.getState().user,
-})
-
-const unsubscribe = store.subscribe((state) => {
-  authState.isAuthenticated = state.isAuthenticated
-  authState.user = state.user
-})
-
-onUnmounted(() => {
-  unsubscribe()
-})
+const { isAuthenticated, user } = storeToRefs(store)
 
 const mockMembershipData = {
   currentPlan: {

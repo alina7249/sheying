@@ -302,28 +302,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/store/authStore'
+import { storeToRefs } from 'pinia'
 import CommentSection from '@/components/CommentSection.vue'
 
 const route = useRoute()
 const store = useAuthStore()
-
-const authState = reactive({
-  isAuthenticated: store.getState().isAuthenticated,
-  user: store.getState().user,
-})
-
-const unsubscribe = store.subscribe((state) => {
-  authState.isAuthenticated = state.isAuthenticated
-  authState.user = state.user
-})
-
-onUnmounted(() => {
-  unsubscribe()
-})
+const { isAuthenticated, user } = storeToRefs(store)
 
 interface EventItem {
   id: string
@@ -518,13 +506,13 @@ onMounted(() => {
 })
 
 const handleRegister = () => {
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated.value) {
     window.location.href = `/login?redirect=/event/${route.params.id}`
     return
   }
-  registrationData.name = authState.user?.username || ''
+  registrationData.name = user.value?.username || ''
   registrationData.phone = ''
-  registrationData.email = authState.user?.email || ''
+  registrationData.email = user.value?.email || ''
   registrationData.experience = ''
   registrationData.specialRequests = ''
   registrationData.agreement = false

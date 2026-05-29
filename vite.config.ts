@@ -15,4 +15,9 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/.pnpm-store/**', '**/node_modules/**'],
+    },
+  },
 });

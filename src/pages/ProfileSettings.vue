@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto px-4 py-8 bg-[#1E2532] star-texture min-h-screen">
-    <div v-if="!authState.isAuthenticated" class="flex flex-col items-center justify-center h-[60vh] text-center">
+    <div v-if="!isAuthenticated" class="flex flex-col items-center justify-center h-[60vh] text-center">
       <div class="w-16 h-16 bg-[#4A5F8B] rounded-full flex items-center justify-center text-[#F5F7FA] mb-4">
         <i class="fa-solid fa-user-lock text-2xl"></i>
       </div>
@@ -303,22 +303,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onUnmounted } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { useAuthStore } from '../store/authStore'
+import { storeToRefs } from 'pinia'
 import { toast } from 'vue-sonner'
 
-const store = useAuthStore
-const authState = reactive({ ...store.getState() })
-const unsubscribe = store.subscribe((state) => {
-  Object.assign(authState, state)
-})
-onUnmounted(unsubscribe)
+const store = useAuthStore()
+const { isAuthenticated, user } = storeToRefs(store)
 
-watch(() => authState.user, (user) => {
-  if (user) {
-    formData.username = user.username || formData.username
-    formData.email = user.email || formData.email
-    formData.avatar = user.avatar || formData.avatar
+watch(() => user.value, (newUser) => {
+  if (newUser) {
+    formData.username = newUser.username || formData.username
+    formData.email = newUser.email || formData.email
+    formData.avatar = newUser.avatar || formData.avatar
   }
 })
 
@@ -337,13 +334,13 @@ const tabs = [
 ]
 
 const formData = reactive({
-  username: authState.user?.username || '@光影捕手',
-  email: authState.user?.email || 'photographer@example.com',
+  username: user.value?.username || '@光影捕手',
+  email: user.value?.email || 'photographer@example.com',
   phone: '138****6789',
   bio: '热爱风光和人像摄影，正在不断学习和进步中',
   location: '上海',
   website: 'https://photographer.example.com',
-  avatar: authState.user?.avatar || 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc',
+  avatar: user.value?.avatar || 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional%20male&sign=00137c6d096d210d6579740e0bc1a5cc',
   coverImage: 'https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=photography%20studio%20background%20professional&sign=47d4a7099d77fa3997b410d6959c5bc6',
 })
 
@@ -479,7 +476,7 @@ const closePasswordModal = () => {
 }
 
 const handleLogout = () => {
-  authState.logout?.()
+  store.logout?.()
 }
 
 const handleFileSelect = (type: 'avatar' | 'cover', event: Event) => {

@@ -168,29 +168,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/store/authStore'
+import { storeToRefs } from 'pinia'
 import CommentSection from '@/components/CommentSection.vue'
 import ShareButton from '@/components/common/ShareButton.vue'
 
 const route = useRoute()
 const store = useAuthStore()
-
-const authState = reactive({
-  isAuthenticated: store.getState().isAuthenticated,
-  user: store.getState().user,
-})
-
-const unsubscribe = store.subscribe((state) => {
-  authState.isAuthenticated = state.isAuthenticated
-  authState.user = state.user
-})
-
-onUnmounted(() => {
-  unsubscribe()
-})
+const { isAuthenticated, user } = storeToRefs(store)
 
 interface Post {
   id: string
@@ -357,7 +345,7 @@ const formatRelativeTime = (dateString: string) => {
 }
 
 const handleLike = () => {
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated.value) {
     toast.info('请先登录后再点赞')
     return
   }
@@ -370,7 +358,7 @@ const handleLike = () => {
 }
 
 const handleBookmark = () => {
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated.value) {
     toast.info('请先登录后再收藏')
     return
   }
@@ -379,7 +367,7 @@ const handleBookmark = () => {
 }
 
 const saveReadingProgress = () => {
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated.value) {
     toast.info('请先登录后再保存阅读进度')
     return
   }
@@ -391,7 +379,7 @@ const saveReadingProgress = () => {
 }
 
 const toggleFollow = () => {
-  if (!authState.isAuthenticated) {
+  if (!isAuthenticated.value) {
     toast.info('请先登录后再关注作者')
     return
   }

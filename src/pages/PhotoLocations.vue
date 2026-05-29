@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto px-4 py-8 bg-[#1E2532] star-texture min-h-screen">
-    <div v-if="!authState.isAuthenticated" class="flex flex-col items-center justify-center h-[60vh] text-center">
+    <div v-if="!isAuthenticated" class="flex flex-col items-center justify-center h-[60vh] text-center">
       <div class="w-16 h-16 bg-[#4A5F8B] rounded-full flex items-center justify-center text-[#F5F7FA] mb-4">
         <i class="fa-solid fa-user-lock text-2xl"></i>
       </div>
@@ -790,19 +790,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, watch, onUnmounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../store/authStore'
+import { storeToRefs } from 'pinia'
 import { toast } from 'vue-sonner'
 import ShareButton from '../components/common/ShareButton.vue'
 
 const router = useRouter()
-const store = useAuthStore
-const authState = reactive({ ...store.getState() })
-const unsubscribe = store.subscribe((state) => {
-  Object.assign(authState, state)
-})
-onUnmounted(unsubscribe)
+const store = useAuthStore()
+const { isAuthenticated, user } = storeToRefs(store)
 
 interface Location {
   id: string
