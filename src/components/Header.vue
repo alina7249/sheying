@@ -205,12 +205,12 @@ const mockUserData = {
 
 const navLinks = [
   { name: '作品库', path: '/' },
-  { name: '器材中心', path: '/equipment' },
+  { name: '器材中心', path: '/equipment-hub' },
   { name: '课程', path: '/online-courses' },
   { name: '社区', path: '/community' },
   { name: '资源', path: '/resources' },
-  { name: 'AI助手', path: '/ai-chat' },
-  { name: '活动与赛事', path: '/events-and-contests' }
+  { name: 'AI助手', path: '/aichat' },
+  { name: '活动与赛事', path: '/events-contests' }
 ];
 
 const userAvatar = computed(() => user.value?.avatar || 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20professional&sign=b0609ecfca466fa5510f7df4adb33529');

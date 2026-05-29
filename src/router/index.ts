@@ -11,7 +11,10 @@ const routes = [
   { path: '/profile/:id?', name: 'Profile', component: Profile },
   { path: '/photo-detail/:id', name: 'PhotoDetail', component: () => import('../pages/PhotoDetail.vue') },
 
+  { path: '/equipment', redirect: '/equipment-hub' },
   { path: '/equipment-hub', name: 'EquipmentHub', component: EquipmentHub },
+  { path: '/ai-chat', redirect: '/aichat' },
+  { path: '/events-and-contests', redirect: '/events-contests' },
   { path: '/equipment-database', name: 'EquipmentDatabase', component: () => import('../pages/EquipmentDatabase.vue') },
   { path: '/equipment-library', name: 'EquipmentLibrary', component: () => import('../pages/EquipmentLibrary.vue') },
   { path: '/equipment-review/:id', name: 'EquipmentReview', component: () => import('../pages/EquipmentReview.vue') },
