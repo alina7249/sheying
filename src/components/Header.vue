@@ -177,6 +177,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '../store/authStore';
+import { storeToRefs } from 'pinia';
 import ProfileDropdown from './ProfileDropdown.vue';
 
 const authStore = useAuthStore();
@@ -186,7 +187,8 @@ const isMobileMenuOpen = ref(false);
 const isProfileDropdownOpen = ref(false);
 const scrolled = ref(false);
 
-const { isAuthenticated, user, logout, theme, toggleTheme } = authStore;
+const { isAuthenticated, user, theme } = storeToRefs(authStore);
+const { logout, toggleTheme } = authStore;
 
 const mockUserData = {
   username: '@光影捕手',

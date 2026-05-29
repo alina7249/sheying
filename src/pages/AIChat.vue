@@ -16,24 +16,25 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useAuthStore } from '../store/authStore'
 import { useChatStore } from '../store/chatStore'
+import { storeToRefs } from 'pinia'
 import HistoryPanel from '../components/chat/HistoryPanel.vue'
 import ChatInterface from '../components/chat/ChatInterface.vue'
 
 const authStore = useAuthStore()
 const chatStore = useChatStore()
-
-const theme = authStore.theme
+const { theme } = storeToRefs(authStore)
+const { chatHistories } = storeToRefs(chatStore)
 
 onMounted(() => {
-  if (chatStore.chatHistories.length === 0) {
+  if (chatHistories.value.length === 0) {
     chatStore.createNewChat()
   }
 
-  if (chatStore.chatHistories.length === 1 && chatStore.chatHistories[0].messages.length === 0) {
-    const welcomeChatId = chatStore.chatHistories[0].id
+  if (chatHistories.value.length === 1 && chatHistories.value[0].messages.length === 0) {
+    const welcomeChatId = chatHistories.value[0].id
     chatStore.addMessage(welcomeChatId, {
       content: '嗨！我是您的摄影助手，有什么摄影相关的问题都可以问我。我可以帮您选择相机、提供拍摄技巧、解答后期问题等。您想了解哪方面的内容呢？',
       sender: 'ai'
