@@ -1,11 +1,9 @@
 <template>
-  <footer :class="['w-full py-10 mt-12', bgClass]">
+  <footer :class="['w-full py-10 mt-12', getBgClass()]">
     <div class="container mx-auto px-4">
-      <!-- 上下区域过渡条 -->
       <div class="h-4 bg-[#1E2A3A] rounded-t-xl mb-8"></div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- 品牌信息 -->
         <div class="space-y-4">
           <div class="flex items-center">
             <i :class="['fa-solid fa-camera text-2xl', getTextClass(true), 'mr-2']"></i>
@@ -32,72 +30,69 @@
           </div>
         </div>
 
-        <!-- 快速链接 -->
-        <div :class="['rounded-lg p-5 border', cardBgClass]">
+        <div :class="[getCardBgClass(), 'rounded-lg p-5 border']">
           <h4 :class="['text-lg font-bold mb-4', getTextClass(true)]">快速链接</h4>
           <ul class="space-y-2">
             <li>
-              <router-link to="/" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="/" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 首页
               </router-link>
             </li>
             <li>
-              <router-link to="/community" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="/community" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 社区
               </router-link>
             </li>
             <li>
-              <router-link to="/resources" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="/resources" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 资源
               </router-link>
             </li>
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 赛事
               </router-link>
             </li>
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 器材交易
               </router-link>
             </li>
           </ul>
         </div>
 
-        <!-- 支持 -->
-        <div :class="['rounded-lg p-5 border', cardBgClass]">
+        <div :class="[getCardBgClass(), 'rounded-lg p-5 border']">
           <h4 :class="['text-lg font-bold mb-4', getTextClass(true)]">支持</h4>
           <ul class="space-y-2">
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 帮助中心
               </router-link>
             </li>
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 社区准则
               </router-link>
             </li>
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 隐私政策
               </router-link>
             </li>
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 服务条款
               </router-link>
             </li>
             <li>
-              <router-link to="#" :class="['text-sm', linkClass, 'transition-colors']">
+              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 联系我们
               </router-link>
             </li>
           </ul>
         </div>
 
-        <!-- 订阅 -->
-        <div :class="['rounded-lg p-5 border', cardBgClass]">
+        <div :class="[getCardBgClass(), 'rounded-lg p-5 border']">
           <h4 :class="['text-lg font-bold mb-4', getTextClass(true)]">订阅更新</h4>
           <p :class="['text-sm mb-4', getTextClass(false)]">
             订阅我们的新闻通讯，获取最新的摄影技巧、赛事信息和社区动态。
@@ -106,16 +101,15 @@
             <input
               type="email"
               placeholder="您的邮箱地址"
-              :class="['flex-1 px-4 py-2', subscribeInputClass, 'rounded-l-lg focus:outline-none']"
+              :class="['flex-1 px-4 py-2', getSubscribeInputClass(), 'rounded-l-lg focus:outline-none']"
             />
-            <button :class="['px-4 py-2', subscribeButtonClass, 'rounded-r-lg text-sm font-medium transition-colors']">
+            <button :class="['px-4 py-2', getSubscribeButtonClass(), 'rounded-r-lg text-sm font-medium transition-colors']">
               订阅
             </button>
           </div>
         </div>
       </div>
 
-      <!-- 版权信息 -->
       <div class="mt-10 pt-6 border-t border-gray-700 text-center">
         <p :class="getTextClass(false)">
           © 2025 影研社. 保留所有权利。
@@ -126,48 +120,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-// import { useAuthStore } from '@/store/authStore'
+import { computed } from 'vue';
+import { useAuthStore } from '../stores/authStore';
 
-// 模拟主题状态
-const theme = ref('dark')
+const authStore = useAuthStore();
+const theme = computed(() => authStore.theme);
 
-// 根据主题获取样式类
-const bgClass = computed(() => {
-  return theme.value === 'dark' ? 'bg-[#1E2532]' : 'bg-gray-100'
-})
-
-const cardBgClass = computed(() => {
-  return theme.value === 'dark' ? 'bg-[#1E2A3A] border-[#4A5568]' : 'bg-white border-gray-200'
-})
+const getBgClass = () => {
+  return theme.value === 'dark' ? 'bg-[#1E2532]' : 'bg-gray-100';
+};
 
 const getTextClass = (isPrimary: boolean) => {
-  return isPrimary 
+  return isPrimary
     ? (theme.value === 'dark' ? 'text-[#E0E5EC]' : 'text-[#1E2532]')
-    : (theme.value === 'dark' ? 'text-[#718096]' : 'text-[#4A5F8B]')
-}
+    : (theme.value === 'dark' ? 'text-[#718096]' : 'text-[#4A5F8B]');
+};
 
-const linkClass = computed(() => {
-  return theme.value === 'dark' 
-    ? 'text-[#E2E8F0] hover:text-[#63B3ED]' 
-    : 'text-[#4A5F8B] hover:text-[#63B3ED]'
-})
+const getCardBgClass = () => {
+  return theme.value === 'dark' ? 'bg-[#1E2A3A] border-[#4A5568]' : 'bg-white border-gray-200';
+};
 
-const subscribeInputClass = computed(() => {
-  return theme.value === 'dark' 
-    ? 'bg-[#4A5568] text-[#FFFFFF] focus:ring-[#63B3ED]' 
-    : 'bg-white text-[#1E2532] border-gray-300 focus:ring-[#63B3ED] focus:border-[#63B3ED]'
-})
+const getLinkClass = () => {
+  return theme.value === 'dark'
+    ? 'text-[#E2E8F0] hover:text-[#63B3ED]'
+    : 'text-[#4A5F8B] hover:text-[#63B3ED]';
+};
 
-const subscribeButtonClass = computed(() => {
-  return theme.value === 'dark' 
-    ? 'bg-[#63B3ED] text-[#0F1C2D] hover:bg-[#4299E1]' 
-    : 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]'
-})
+const getSubscribeInputClass = () => {
+  return theme.value === 'dark'
+    ? 'bg-[#4A5568] text-[#FFFFFF] focus:ring-[#63B3ED]'
+    : 'bg-white text-[#1E2532] border-gray-300 focus:ring-[#63B3ED] focus:border-[#63B3ED]';
+};
+
+const getSubscribeButtonClass = () => {
+  return theme.value === 'dark'
+    ? 'bg-[#63B3ED] text-[#0F1C2D] hover:bg-[#4299E1]'
+    : 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]';
+};
 
 const getSocialIconClass = () => {
-  return theme.value === 'dark' 
-    ? 'text-[#E2E8F0] hover:text-[#63B3ED]' 
-    : 'text-[#4A5F8B] hover:text-[#63B3ED]'
-}
+  return theme.value === 'dark'
+    ? 'text-[#E2E8F0] hover:text-[#63B3ED]'
+    : 'text-[#4A5F8B] hover:text-[#63B3ED]';
+};
 </script>
