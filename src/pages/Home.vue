@@ -1,258 +1,259 @@
 <template>
-  <div class="container mx-auto px-4 py-8 bg-[#1E2532] star-texture min-h-screen">
-    <Banner />
+  <div class="home-page">
+    <div class="grain-overlay"></div>
+    
+    <div class="container mx-auto px-4 py-8">
+      <Banner />
 
-    <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-xl p-6 shadow-sm mb-12">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-        <div class="flex items-center mb-4 md:mb-0">
-          <div class="w-16 h-16 rounded-full bg-[#4A5F8B] flex items-center justify-center mr-4">
-            <i class="fa-solid fa-cloud-sun text-2xl text-[#F5F7FA]"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold text-[#F5F7FA]">北京市 - 今天</h3>
-            <p class="text-sm text-[#B8C6D8]">2025年11月17日 17:41</p>
-          </div>
-        </div>
-        <div class="flex items-center">
-          <span class="text-4xl font-bold text-[#F5F7FA] mr-2">15°C</span>
-          <div class="flex items-center">
-            <i class="fa-solid fa-temperature-low text-[#4A5F8B] mr-1"></i>
-            <span class="text-[#B8C6D8]">10°C</span>
-            <span class="mx-1 text-[#4A5F8B]">/</span>
-            <i class="fa-solid fa-temperature-high text-[#4A5F8B] mr-1"></i>
-            <span class="text-[#B8C6D8]">18°C</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-[#1E2532] rounded-lg p-3 text-center">
-          <p class="text-sm text-[#B8C6D8] mb-1">湿度</p>
-          <p class="text-lg font-medium text-[#F5F7FA] flex items-center justify-center">
-            <i class="fa-solid fa-tint mr-1 text-[#4A5F8B]"></i>45%
-          </p>
-        </div>
-        <div class="bg-[#1E2532] rounded-lg p-3 text-center">
-          <p class="text-sm text-[#B8C6D8] mb-1">风速</p>
-          <p class="text-lg font-medium text-[#F5F7FA] flex items-center justify-center">
-            <i class="fa-solid fa-wind mr-1 text-[#4A5F8B]"></i>3级
-          </p>
-        </div>
-        <div class="bg-[#1E2532] rounded-lg p-3 text-center">
-          <p class="text-sm text-[#B8C6D8] mb-1">紫外线</p>
-          <p class="text-lg font-medium text-[#F5F7FA] flex items-center justify-center">
-            <i class="fa-solid fa-sun mr-1 text-[#4A5F8B]"></i>弱
-          </p>
-        </div>
-        <div class="bg-[#1E2532] rounded-lg p-3 text-center">
-          <p class="text-sm text-[#B8C6D8] mb-1">日出日落</p>
-          <p class="text-lg font-medium text-[#F5F7FA] flex items-center justify-center">
-            <i class="fa-solid fa-sunrise mr-1 text-[#4A5F8B]"></i>06:58/17:05
-          </p>
-        </div>
-      </div>
-
-      <div class="bg-[#1E2532] rounded-lg p-4">
-        <h4 class="text-base font-medium text-[#F5F7FA] mb-3 flex items-center">
-          <i class="fa-solid fa-lightbulb text-[#4A5F8B] mr-2"></i>今日摄影建议
-        </h4>
-        <p class="text-sm text-[#B8C6D8] mb-4">今日天气晴朗，微风，非常适合户外摄影。下午光线柔和，是拍摄人像和风光的黄金时段。</p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div class="p-3 rounded-lg text-center bg-[#4A5F8B]/20 border border-[#4A5F8B]">
-            <p class="text-xs text-[#B8C6D8] mb-1">风光摄影</p>
-            <div class="flex justify-center">
-              <i v-for="i in 5" :key="i" :class="['fa-solid fa-star text-sm', i <= 4 ? 'text-[#4A5F8B]' : 'text-[#1E2532]']"></i>
+      <div class="weather-widget fade-in-up" style="animation-delay: 0.2s;">
+        <div class="weather-header">
+          <div class="location-info">
+            <div class="location-icon">
+              <i class="fa-solid fa-cloud-sun"></i>
+            </div>
+            <div>
+              <h3 class="location-name">北京市 - 今天</h3>
+              <p class="location-time">2025年11月17日 17:41</p>
             </div>
           </div>
-          <div class="p-3 rounded-lg text-center bg-[#4A5F8B]/20 border border-[#4A5F8B]">
-            <p class="text-xs text-[#B8C6D8] mb-1">人像摄影</p>
-            <div class="flex justify-center">
-              <i v-for="i in 5" :key="i" :class="['fa-solid fa-star text-sm', i <= 5 ? 'text-[#4A5F8B]' : 'text-[#1E2532]']"></i>
-            </div>
-          </div>
-          <div class="p-3 rounded-lg text-center bg-[#4A5F8B]/20 border border-[#4A5F8B]">
-            <p class="text-xs text-[#B8C6D8] mb-1">街拍摄影</p>
-            <div class="flex justify-center">
-              <i v-for="i in 5" :key="i" :class="['fa-solid fa-star text-sm', i <= 4 ? 'text-[#4A5F8B]' : 'text-[#1E2532]']"></i>
-            </div>
-          </div>
-          <div class="p-3 rounded-lg text-center bg-[#4A5F8B]/20 border border-[#4A5F8B]">
-            <p class="text-xs text-[#B8C6D8] mb-1">夜景摄影</p>
-            <div class="flex justify-center">
-              <i v-for="i in 5" :key="i" :class="['fa-solid fa-star text-sm', i <= 3 ? 'text-[#4A5F8B]' : 'text-[#1E2532]']"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-4">
-        <h4 class="text-base font-medium text-[#F5F7FA] mb-3">未来天气预报</h4>
-        <div class="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide">
-          <div
-            v-for="(day, index) in dailyForecast"
-            :key="index"
-            class="flex-shrink-0 w-24 bg-[#1E2532] rounded-lg p-3 text-center"
-          >
-            <p class="text-sm text-[#F5F7FA] mb-2">{{ day.day }}</p>
-            <div class="w-10 h-10 rounded-full bg-[#4A5F8B]/20 flex items-center justify-center mx-auto mb-2">
-              <i :class="['fa-solid', day.icon, 'text-[#4A5F8B]']"></i>
-            </div>
-            <p class="text-xs text-[#B8C6D8] mb-1">{{ day.weather }}</p>
-            <p class="text-xs text-[#F5F7FA]">{{ day.temp }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <Feature />
-
-    <div class="mb-12">
-      <h2 class="text-2xl font-bold text-[#F5F7FA] mb-6">灵感专栏</h2>
-      <div class="flex overflow-x-auto pb-4 scrollbar-hide space-x-6">
-        <div
-          v-for="item in inspirationItems"
-          :key="item.id"
-          class="flex-shrink-0 w-80 bg-[#2D3748] border border-[#4A5F8B] rounded-lg overflow-hidden shadow-sm inspiration-card"
-        >
-          <div class="h-48 overflow-hidden">
-            <img :src="item.image" :alt="item.title" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-4">
-            <h3 class="text-lg font-bold text-[#F5F7FA] mb-2">{{ item.title }}</h3>
-            <p class="text-sm text-[#B8C6D8] mb-3 line-clamp-2">{{ item.description }}</p>
-            <div class="flex items-center text-sm text-[#4A5F8B]">
-              <span>by {{ item.author }}</span>
-              <i class="fa-solid fa-chevron-right ml-auto text-xs"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div class="lg:col-span-2">
-        <div class="mb-8 overflow-x-auto pb-2">
-          <div class="flex space-x-2 min-w-max">
-            <button
-              @click="selectedCategory = 'all'"
-              :class="selectedCategory === 'all' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
-              :aria-pressed="selectedCategory === 'all'"
-            >
-              全部
-            </button>
-            <button
-              @click="selectedCategory = '极简主义'"
-              :class="selectedCategory === '极简主义' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
-              :aria-pressed="selectedCategory === '极简主义'"
-            >
-              极简主义
-            </button>
-            <button
-              @click="selectedCategory = '黑白'"
-              :class="selectedCategory === '黑白' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
-              :aria-pressed="selectedCategory === '黑白'"
-            >
-              黑白
-            </button>
-            <button
-              @click="selectedCategory = '胶片'"
-              :class="selectedCategory === '胶片' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
-              :aria-pressed="selectedCategory === '胶片'"
-            >
-              胶片质感
-            </button>
-            <button
-              @click="selectedCategory = '暗调'"
-              :class="selectedCategory === '暗调' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#6B7C93]'"
-              class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95"
-              :aria-pressed="selectedCategory === '暗调'"
-            >
-              暗调氛围
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div
-            v-for="post in filteredPosts"
-            :key="post.id"
-            class="photo-card-appear"
-          >
-            <PhotographyCard :post="post" />
-          </div>
-        </div>
-
-        <div class="mt-10 text-center">
-          <Button variant="outline" @click="handleLoadMore" ariaLabel="加载更多摄影作品">
-            加载更多作品
-          </Button>
-        </div>
-      </div>
-
-      <div class="lg:col-span-1 space-y-8">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="搜索作品、摄影师或风格..."
-            class="w-full px-4 py-3 pl-12 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]"
-          />
-          <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B8C6D8]"></i>
-        </div>
-
-        <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-lg p-6">
-          <h3 class="text-lg font-bold mb-4 text-[#F5F7FA]">热门风格</h3>
-          <div class="flex flex-wrap gap-2">
-            <router-link
-              v-for="tag in popularTags"
-              :key="tag.id"
-              :to="`/search?tag=${tag.name}`"
-              class="px-3 py-1 bg-[#2D3748] text-[#B8C6D8] rounded-full text-sm hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors border border-[#4A5F8B]"
-            >
-              #{{ tag.name }}({{ tag.count }})
-            </router-link>
-          </div>
-        </div>
-
-        <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-lg p-6">
-          <h3 class="text-lg font-bold mb-4 text-[#F5F7FA]">推荐艺术家</h3>
-          <div class="space-y-4">
-            <div v-for="photographer in featuredPhotographers" :key="photographer.id" class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <img
-                  :src="photographer.avatar"
-                  :alt="photographer.name"
-                  class="w-12 h-12 rounded-full object-cover border border-[#B8C6D8]"
-                />
-                <div>
-                  <p class="font-medium text-[#F5F7FA]">{{ photographer.name }}</p>
-                  <p class="text-xs text-[#4A5F8B]">{{ photographer.level }}</p>
-                  <p class="text-sm text-[#B8C6D8]">
-                    {{ photographer.followers.toLocaleString() }}粉丝 · {{ photographer.posts }}作品
-                  </p>
-                </div>
+          <div class="temp-display">
+            <span class="current-temp">15°C</span>
+            <div class="temp-range">
+              <div class="temp-item">
+                <i class="fa-solid fa-temperature-low"></i>
+                <span>10°C</span>
               </div>
-              <button class="px-3 py-1 text-xs font-medium text-[#F5F7FA] bg-[#4A5F8B] hover:bg-[#3A4B6F] rounded-full transition-colors">
-                关注
+              <span class="temp-divider">/</span>
+              <div class="temp-item">
+                <i class="fa-solid fa-temperature-high"></i>
+                <span>18°C</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="weather-grid">
+          <div class="weather-stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-tint"></i>
+            </div>
+            <div class="stat-info">
+              <p class="stat-label">湿度</p>
+              <p class="stat-value">45%</p>
+            </div>
+          </div>
+          <div class="weather-stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-wind"></i>
+            </div>
+            <div class="stat-info">
+              <p class="stat-label">风速</p>
+              <p class="stat-value">3级</p>
+            </div>
+          </div>
+          <div class="weather-stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-sun"></i>
+            </div>
+            <div class="stat-info">
+              <p class="stat-label">紫外线</p>
+              <p class="stat-value">弱</p>
+            </div>
+          </div>
+          <div class="weather-stat-card">
+            <div class="stat-icon">
+              <i class="fa-solid fa-sunrise"></i>
+            </div>
+            <div class="stat-info">
+              <p class="stat-label">日出日落</p>
+              <p class="stat-value">06:58/17:05</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="photo-tip-section">
+          <div class="tip-header">
+            <i class="fa-solid fa-lightbulb"></i>
+            <h4>今日摄影建议</h4>
+          </div>
+          <p class="tip-text">
+            今日天气晴朗，微风，非常适合户外摄影。下午光线柔和，是拍摄人像和风光的黄金时段。
+          </p>
+          <div class="tip-ratings">
+            <div class="rating-item" v-for="(rating, index) in photoRatings" :key="index">
+              <p class="rating-label">{{ rating.label }}</p>
+              <div class="stars">
+                <i 
+                  v-for="star in 5" 
+                  :key="star" 
+                  :class="['fa-solid fa-star', star <= rating.value ? 'star-filled' : 'star-empty']"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="forecast-section">
+          <h4 class="forecast-title">未来天气预报</h4>
+          <div class="forecast-scroll">
+            <div
+              v-for="(day, index) in dailyForecast"
+              :key="index"
+              class="forecast-card"
+            >
+              <p class="forecast-day">{{ day.day }}</p>
+              <div class="forecast-icon">
+                <i :class="['fa-solid', day.icon]"></i>
+              </div>
+              <p class="forecast-weather">{{ day.weather }}</p>
+              <p class="forecast-temp">{{ day.temp }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Feature />
+
+      <div class="section-header fade-in-up" style="animation-delay: 0.4s;">
+        <div class="section-title-wrapper">
+          <h2 class="section-title">灵感专栏</h2>
+          <div class="title-line"></div>
+        </div>
+        <p class="section-subtitle">探索来自全球摄影师的创意灵感</p>
+      </div>
+
+      <div class="inspiration-scroll fade-in-up" style="animation-delay: 0.5s;">
+        <div
+          v-for="(item, index) in inspirationItems"
+          :key="item.id"
+          class="inspiration-card"
+          :style="{ animationDelay: `${index * 0.1}s` }"
+        >
+          <div class="inspiration-image-wrapper">
+            <LazyImage :src="item.image" :alt="item.title" />
+            <div class="inspiration-overlay">
+              <div class="overlay-content">
+                <span class="inspiration-tag">创意灵感</span>
+              </div>
+            </div>
+          </div>
+          <div class="inspiration-content">
+            <h3 class="inspiration-title">{{ item.title }}</h3>
+            <p class="inspiration-desc">{{ item.description }}</p>
+            <div class="inspiration-footer">
+              <span class="author-name">by {{ item.author }}</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <div class="filter-section fade-in-up" style="animation-delay: 0.6s;">
+            <div class="filter-buttons">
+              <button
+                v-for="(category, index) in categories"
+                :key="category.id"
+                @click="selectedCategory = category.id"
+                :class="['filter-btn', { active: selectedCategory === category.id }]"
+                :aria-pressed="selectedCategory === category.id"
+              >
+                {{ category.name }}
               </button>
             </div>
           </div>
+
+          <div class="photo-grid">
+            <div
+              v-for="(post, index) in filteredPosts"
+              :key="post.id"
+              class="photo-card-wrapper fade-in-up"
+              :style="{ animationDelay: `${0.7 + index * 0.1}s` }"
+            >
+              <PhotographyCard :post="post" />
+            </div>
+          </div>
+
+          <div class="load-more-section fade-in-up" style="animation-delay: 1.2s;">
+            <Button variant="outline" @click="handleLoadMore" ariaLabel="加载更多摄影作品">
+              <i class="fa-solid fa-inbox mr-2"></i>
+              加载更多作品
+            </Button>
+          </div>
         </div>
 
-        <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-lg p-6">
-          <h3 class="text-lg font-bold mb-3 text-[#F5F7FA]">黑白影像专题</h3>
-          <p class="text-sm text-[#B8C6D8] mb-4">探索黑白摄影的艺术魅力，感受光影交织的视觉语言和情感表达</p>
-          <img
-            src="https://picsum.photos/800/600?random=207"
-            alt="黑白影像专题"
-            class="w-full h-40 object-cover rounded-lg mb-4"
-          />
-          <button class="w-full py-2 bg-gradient-to-r from-[#4A5F8B] to-[#2D3748] text-[#F5F7FA] rounded-lg font-medium transition-colors border border-[#4A5F8B]">
-            探索专题
-          </button>
+        <div class="lg:col-span-1 space-y-8">
+          <div class="search-section fade-in-up" style="animation-delay: 0.8s;">
+            <div class="search-wrapper">
+              <i class="fa-solid fa-search search-icon"></i>
+              <input
+                type="text"
+                placeholder="搜索作品、摄影师或风格..."
+                class="search-input"
+              />
+            </div>
+          </div>
+
+          <div class="sidebar-card fade-in-up" style="animation-delay: 0.9s;">
+            <h3 class="sidebar-title">
+              <i class="fa-solid fa-fire mr-2"></i>
+              热门风格
+            </h3>
+            <div class="tags-cloud">
+              <router-link
+                v-for="tag in popularTags"
+                :key="tag.id"
+                :to="`/search?tag=${tag.name}`"
+                class="tag-chip"
+              >
+                #{{ tag.name }}
+                <span class="tag-count">({{ tag.count }})</span>
+              </router-link>
+            </div>
+          </div>
+
+          <div class="sidebar-card fade-in-up" style="animation-delay: 1s;">
+            <h3 class="sidebar-title">
+              <i class="fa-solid fa-users mr-2"></i>
+              推荐艺术家
+            </h3>
+            <div class="photographers-list">
+              <div v-for="photographer in featuredPhotographers" :key="photographer.id" class="photographer-item">
+                <div class="photographer-info">
+                  <img
+                    :src="photographer.avatar"
+                    :alt="photographer.name"
+                    class="photographer-avatar"
+                  />
+                  <div class="photographer-details">
+                    <p class="photographer-name">{{ photographer.name }}</p>
+                    <span class="photographer-level">{{ photographer.level }}</span>
+                    <p class="photographer-stats">
+                      {{ photographer.followers.toLocaleString() }}粉丝 · {{ photographer.posts }}作品
+                    </p>
+                  </div>
+                </div>
+                <Button variant="primary" size="sm">
+                  关注
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-card special-card fade-in-up" style="animation-delay: 1.1s;">
+            <div class="special-content">
+              <h3 class="special-title">黑白影像专题</h3>
+              <p class="special-desc">探索黑白摄影的艺术魅力，感受光影交织的视觉语言和情感表达</p>
+              <div class="special-image-wrapper">
+                <LazyImage src="https://picsum.photos/800/600?random=207" alt="黑白影像专题" />
+              </div>
+              <Button variant="primary" class="special-btn">
+                探索专题
+                <i class="fa-solid fa-arrow-right ml-2"></i>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -260,259 +261,887 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import Banner from '../components/Banner.vue'
-import Feature from '../components/Feature.vue'
-import PhotographyCard from '../components/PhotographyCard.vue'
-import Button from '../components/common/Button.vue'
+import { ref, computed } from 'vue';
+import Banner from '../components/Banner.vue';
+import Feature from '../components/Feature.vue';
+import PhotographyCard from '../components/PhotographyCard.vue';
+import Button from '../components/common/Button.vue';
+import LazyImage from '../components/LazyImage.vue';
+import '../components/Animations.vue';
 
-const photographyPosts = [{
-  id: "1",
-  title: "黑白光影",
-  description: "Leica Q2 Monochrom | 光圈: f/2.8 | 快门: 1/125s | ISO: 800\n极简主义黑白摄影，通过光影对比展现建筑的几何美感。",
-  image: "https://picsum.photos/1280/720?random=208",
-  author: {
-    id: "1",
-    name: "极简摄影师林风",
-    avatar: "https://picsum.photos/400/400?random=209"
-  },
-  likes: 342,
-  comments: 42,
-  collections: 28,
-  tags: ["极简主义", "黑白", "建筑", "徕卡"],
-  date: "2023-10-25"
-}, {
-  id: "2",
-  title: "胶片质感人像",
-  description: "Canon AE-1 + 50mm f/1.4 | 光圈: f/2.0 | 快门: 1/125s | ISO: 400\n使用复古胶片相机拍摄的人像作品，自然柔和的色调与颗粒感。",
-  image: "https://picsum.photos/600/800?random=210",
-  author: {
-    id: "2",
-    name: "胶片摄影师安娜",
-    avatar: "https://picsum.photos/400/400?random=211"
-  },
-  likes: 412,
-  comments: 56,
-  collections: 35,
-  tags: ["人像", "胶片", "复古", "自然光"],
-  date: "2023-10-24"
-}, {
-  id: "3",
-  title: "暗调氛围",
-  description: "Sony A7R IV + 35mm f/1.4 GM | 光圈: f/2.8 | 快门: 1/60s | ISO: 1600\n营造神秘而富有故事感的暗调氛围人像，强调光影层次与情绪表达。",
-  image: "https://picsum.photos/800/600?random=212",
-  author: {
-    id: "3",
-    name: "情绪摄影师李明",
-    avatar: "https://picsum.photos/400/400?random=213"
-  },
-  likes: 389,
-  comments: 49,
-  collections: 31,
-  tags: ["暗调", "氛围", "情绪", "人像"],
-  date: "2023-10-23"
-}, {
-  id: "4",
-  title: "极简静物",
-  description: "Fujifilm GFX 100S + 120mm f/4 Macro | 光圈: f/5.6 | 快门: 1/125s | ISO: 200\n通过简洁的构图和柔和的光线，展现日常物品的质感与美感。",
-  image: "https://picsum.photos/400/400?random=214",
-  author: {
-    id: "4",
-    name: "静物摄影师王静",
-    avatar: "https://picsum.photos/400/400?random=215"
-  },
-  likes: 276,
-  comments: 32,
-  collections: 22,
-  tags: ["静物", "极简", "中画幅", "富士"],
-  date: "2023-10-22"
-}, {
-  id: "5",
-  title: "城市几何",
-  description: "iPhone 15 Pro + 原生相机 | 光圈: f/2.2 | 快门: 1/1000s | ISO: 25\n从独特视角发现城市中的几何美感，手机摄影也能创造艺术作品。",
-  image: "https://picsum.photos/1280/720?random=216",
-  author: {
-    id: "5",
-    name: "手机摄影师张强",
-    avatar: "https://picsum.photos/400/400?random=217"
-  },
-  likes: 321,
-  comments: 41,
-  collections: 25,
-  tags: ["城市", "几何", "手机摄影", "极简"],
-  date: "2023-10-21"
-}, {
-  id: "6",
-  title: "黑白纪实",
-  description: "Canon EOS R6 + 24-70mm f/2.8 | 光圈: f/4 | 快门: 1/250s | ISO: 800\n用黑白影像记录城市中的人文瞬间，展现生活的真实与温度。",
-  image: "https://picsum.photos/1280/720?random=218",
-  author: {
-    id: "6",
-    name: "纪实摄影师陈默",
-    avatar: "https://picsum.photos/400/400?random=219"
-  },
-  likes: 398,
-  comments: 52,
-  collections: 33,
-  tags: ["黑白", "纪实", "人文", "街头"],
-  date: "2023-10-20"
-}]
+const categories = [
+  { id: 'all', name: '全部' },
+  { id: '极简主义', name: '极简主义' },
+  { id: '黑白', name: '黑白' },
+  { id: '胶片', name: '胶片质感' },
+  { id: '暗调', name: '暗调氛围' }
+];
 
-const popularTags = [{
-  id: 1,
-  name: "极简主义",
-  count: 1456
-}, {
-  id: 2,
-  name: "黑白",
-  count: 1245
-}, {
-  id: 3,
-  name: "胶片质感",
-  count: 987
-}, {
-  id: 4,
-  name: "暗调氛围",
-  count: 765
-}, {
-  id: 5,
-  name: "建筑",
-  count: 654
-}, {
-  id: 6,
-  name: "人像",
-  count: 543
-}, {
-  id: 7,
-  name: "城市几何",
-  count: 432
-}, {
-  id: 8,
-  name: "静物",
-  count: 321
-}]
+const photoRatings = [
+  { label: '风光摄影', value: 4 },
+  { label: '人像摄影', value: 5 },
+  { label: '街拍摄影', value: 4 },
+  { label: '夜景摄影', value: 3 }
+];
 
-const featuredPhotographers = [{
-  id: "101",
-  name: "黑白影像达人",
-  avatar: "https://picsum.photos/400/400?random=220",
-  followers: 12543,
-  posts: 324,
-  level: "新锐艺术家"
-}, {
-  id: "102",
-  name: "胶片艺术师",
-  avatar: "https://picsum.photos/400/400?random=221",
-  followers: 8765,
-  posts: 213,
-  level: "资深摄影师"
-}, {
-  id: "103",
-  name: "建筑几何控",
-  avatar: "https://picsum.photos/400/400?random=222",
-  followers: 6543,
-  posts: 187,
-  level: "创意摄影师"
-}]
+const photographyPosts = [
+  {
+    id: '1',
+    title: '黑白光影',
+    description: 'Leica Q2 Monochrom | 光圈: f/2.8 | 快门: 1/125s | ISO: 800\n极简主义黑白摄影，通过光影对比展现建筑的几何美感。',
+    image: 'https://picsum.photos/1280/720?random=208',
+    author: {
+      id: '1',
+      name: '极简摄影师林风',
+      avatar: 'https://picsum.photos/400/400?random=209'
+    },
+    likes: 342,
+    comments: 42,
+    collections: 28,
+    tags: ['极简主义', '黑白', '建筑', '徕卡'],
+    date: '2023-10-25'
+  },
+  {
+    id: '2',
+    title: '胶片质感人像',
+    description: 'Canon AE-1 + 50mm f/1.4 | 光圈: f/2.0 | 快门: 1/125s | ISO: 400\n使用复古胶片相机拍摄的人像作品，自然柔和的色调与颗粒感。',
+    image: 'https://picsum.photos/600/800?random=210',
+    author: {
+      id: '2',
+      name: '胶片摄影师安娜',
+      avatar: 'https://picsum.photos/400/400?random=211'
+    },
+    likes: 412,
+    comments: 56,
+    collections: 35,
+    tags: ['人像', '胶片', '复古', '自然光'],
+    date: '2023-10-24'
+  },
+  {
+    id: '3',
+    title: '暗调氛围',
+    description: 'Sony A7R IV + 35mm f/1.4 GM | 光圈: f/2.8 | 快门: 1/60s | ISO: 1600\n营造神秘而富有故事感的暗调氛围人像，强调光影层次与情绪表达。',
+    image: 'https://picsum.photos/800/600?random=212',
+    author: {
+      id: '3',
+      name: '情绪摄影师李明',
+      avatar: 'https://picsum.photos/400/400?random=213'
+    },
+    likes: 389,
+    comments: 49,
+    collections: 31,
+    tags: ['暗调', '氛围', '情绪', '人像'],
+    date: '2023-10-23'
+  },
+  {
+    id: '4',
+    title: '极简静物',
+    description: 'Fujifilm GFX 100S + 120mm f/4 Macro | 光圈: f/5.6 | 快门: 1/125s | ISO: 200\n通过简洁的构图和柔和的光线，展现日常物品的质感与美感。',
+    image: 'https://picsum.photos/400/400?random=214',
+    author: {
+      id: '4',
+      name: '静物摄影师王静',
+      avatar: 'https://picsum.photos/400/400?random=215'
+    },
+    likes: 276,
+    comments: 32,
+    collections: 22,
+    tags: ['静物', '极简', '中画幅', '富士'],
+    date: '2023-10-22'
+  },
+  {
+    id: '5',
+    title: '城市几何',
+    description: 'iPhone 15 Pro + 原生相机 | 光圈: f/2.2 | 快门: 1/1000s | ISO: 25\n从独特视角发现城市中的几何美感，手机摄影也能创造艺术作品。',
+    image: 'https://picsum.photos/1280/720?random=216',
+    author: {
+      id: '5',
+      name: '手机摄影师张强',
+      avatar: 'https://picsum.photos/400/400?random=217'
+    },
+    likes: 321,
+    comments: 41,
+    collections: 25,
+    tags: ['城市', '几何', '手机摄影', '极简'],
+    date: '2023-10-21'
+  },
+  {
+    id: '6',
+    title: '黑白纪实',
+    description: 'Canon EOS R6 + 24-70mm f/2.8 | 光圈: f/4 | 快门: 1/250s | ISO: 800\n用黑白影像记录城市中的人文瞬间，展现生活的真实与温度。',
+    image: 'https://picsum.photos/1280/720?random=218',
+    author: {
+      id: '6',
+      name: '纪实摄影师陈默',
+      avatar: 'https://picsum.photos/400/400?random=219'
+    },
+    likes: 398,
+    comments: 52,
+    collections: 33,
+    tags: ['黑白', '纪实', '人文', '街头'],
+    date: '2023-10-20'
+  }
+];
 
-const inspirationItems = [{
-  id: "1",
-  title: "黑白摄影的光影艺术",
-  author: "林风",
-  description: "探索如何通过光影对比创造出富有情感和深度的黑白影像作品...",
-  image: "https://picsum.photos/600/800?random=223"
-}, {
-  id: "2",
-  title: "胶片摄影的复兴与现代应用",
-  author: "安娜",
-  description: "探讨胶片摄影在数字时代的独特魅力和应用场景，以及如何将传统技术融入现代创作...",
-  image: "https://picsum.photos/600/800?random=224"
-}, {
-  id: "3",
-  title: "极简主义摄影的构图法则",
-  author: "李明",
-  description: "解析极简主义摄影的核心构图原则，帮助你创造简洁而有力的视觉表达...",
-  image: "https://picsum.photos/600/800?random=225"
-}, {
-  id: "4",
-  title: "暗房技术与现代数字暗房",
-  author: "张强",
-  description: "比较传统暗房技术与现代数字暗房的异同，以及如何在后期制作中保留胶片质感...",
-  image: "https://picsum.photos/600/800?random=226"
-}]
+const popularTags = [
+  { id: 1, name: '极简主义', count: 1456 },
+  { id: 2, name: '黑白', count: 1245 },
+  { id: 3, name: '胶片质感', count: 987 },
+  { id: 4, name: '暗调氛围', count: 765 },
+  { id: 5, name: '建筑', count: 654 },
+  { id: 6, name: '人像', count: 543 },
+  { id: 7, name: '城市几何', count: 432 },
+  { id: 8, name: '静物', count: 321 }
+];
 
-const dailyForecast = [{
-  day: "明天",
-  weather: "多云",
-  temp: "12°/17°",
-  icon: "fa-cloud"
-}, {
-  day: "周一",
-  weather: "晴",
-  temp: "10°/19°",
-  icon: "fa-sun"
-}, {
-  day: "周二",
-  weather: "晴转多云",
-  temp: "9°/18°",
-  icon: "fa-cloud-sun"
-}, {
-  day: "周三",
-  weather: "小雨",
-  temp: "8°/15°",
-  icon: "fa-cloud-rain"
-}, {
-  day: "周四",
-  weather: "阴",
-  temp: "7°/14°",
-  icon: "fa-cloud"
-}]
+const featuredPhotographers = [
+  {
+    id: '101',
+    name: '黑白影像达人',
+    avatar: 'https://picsum.photos/400/400?random=220',
+    followers: 12543,
+    posts: 324,
+    level: '新锐艺术家'
+  },
+  {
+    id: '102',
+    name: '胶片艺术师',
+    avatar: 'https://picsum.photos/400/400?random=221',
+    followers: 8765,
+    posts: 213,
+    level: '资深摄影师'
+  },
+  {
+    id: '103',
+    name: '建筑几何控',
+    avatar: 'https://picsum.photos/400/400?random=222',
+    followers: 6543,
+    posts: 187,
+    level: '创意摄影师'
+  }
+];
 
-const selectedCategory = ref("all")
+const inspirationItems = [
+  {
+    id: '1',
+    title: '黑白摄影的光影艺术',
+    author: '林风',
+    description: '探索如何通过光影对比创造出富有情感和深度的黑白影像作品...',
+    image: 'https://picsum.photos/600/800?random=223'
+  },
+  {
+    id: '2',
+    title: '胶片摄影的复兴与现代应用',
+    author: '安娜',
+    description: '探讨胶片摄影在数字时代的独特魅力和应用场景，以及如何将传统技术融入现代创作...',
+    image: 'https://picsum.photos/600/800?random=224'
+  },
+  {
+    id: '3',
+    title: '极简主义摄影的构图法则',
+    author: '李明',
+    description: '解析极简主义摄影的核心构图原则，帮助你创造简洁而有力的视觉表达...',
+    image: 'https://picsum.photos/600/800?random=225'
+  },
+  {
+    id: '4',
+    title: '暗房技术与现代数字暗房',
+    author: '张强',
+    description: '比较传统暗房技术与现代数字暗房的异同，以及如何在后期制作中保留胶片质感...',
+    image: 'https://picsum.photos/600/800?random=226'
+  }
+];
+
+const dailyForecast = [
+  { day: '明天', weather: '多云', temp: '12°/17°', icon: 'fa-cloud' },
+  { day: '周一', weather: '晴', temp: '10°/19°', icon: 'fa-sun' },
+  { day: '周二', weather: '晴转多云', temp: '9°/18°', icon: 'fa-cloud-sun' },
+  { day: '周三', weather: '小雨', temp: '8°/15°', icon: 'fa-cloud-rain' },
+  { day: '周四', weather: '阴', temp: '7°/14°', icon: 'fa-cloud' }
+];
+
+const selectedCategory = ref('all');
 
 const filteredPosts = computed(() => {
-  if (selectedCategory.value === "all") {
-    return photographyPosts
+  if (selectedCategory.value === 'all') {
+    return photographyPosts;
   }
-  return photographyPosts.filter(post => post.tags.includes(selectedCategory.value))
-})
+  return photographyPosts.filter(post => post.tags.includes(selectedCategory.value));
+});
 
 const handleLoadMore = () => {
-  // 加载更多功能逻辑
-  console.log('加载更多作品')
-}
+  console.log('加载更多作品');
+};
 </script>
 
 <style scoped>
-.inspiration-card {
-  transition: transform 0.3s ease;
-}
-.inspiration-card:hover {
-  transform: translateY(-5px);
-}
-
-.photo-card-appear {
-  animation: fadeInUp 0.5s ease both;
+.home-page {
+  min-height: 100vh;
+  background: #1E2532;
+  position: relative;
+  overflow-x: hidden;
 }
 
-.load-more-btn {
-  transition: transform 0.2s ease;
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
-.load-more-btn:hover {
-  transform: scale(1.05);
+
+.home-page > .container {
+  position: relative;
+  z-index: 2;
 }
-.load-more-btn:active {
-  transform: scale(0.95);
+
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.weather-widget {
+  background: linear-gradient(135deg, #2D3748 0%, #1E2532 100%);
+  border: 1px solid #4A5F8B;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 40px -12px rgba(74, 95, 139, 0.2);
+}
+
+.weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.location-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A5F8B, #3A4B6F);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F5F7FA;
+  font-size: 24px;
+}
+
+.location-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 4px 0;
+}
+
+.location-time {
+  font-size: 14px;
+  color: #B8C6D8;
+  margin: 0;
+}
+
+.temp-display {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.current-temp {
+  font-size: 48px;
+  font-weight: 700;
+  color: #F5F7FA;
+  line-height: 1;
+}
+
+.temp-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #B8C6D8;
+  font-size: 14px;
+}
+
+.temp-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.temp-divider {
+  color: #4A5F8B;
+}
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.weather-stat-card {
+  background: #1E2532;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.weather-stat-card:hover {
+  transform: translateY(-2px);
+  background: rgba(74, 95, 139, 0.2);
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4A5F8B, #3A4B6F);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F5F7FA;
+  font-size: 16px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #B8C6D8;
+  margin: 0 0 2px 0;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0;
+}
+
+.photo-tip-section {
+  background: #1E2532;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tip-header i {
+  color: #4A5F8B;
+  font-size: 18px;
+}
+
+.tip-header h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0;
+}
+
+.tip-text {
+  font-size: 14px;
+  color: #B8C6D8;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.tip-ratings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.rating-item {
+  text-align: center;
+  padding: 12px;
+  background: rgba(74, 95, 139, 0.1);
+  border: 1px solid #4A5F8B;
+  border-radius: 10px;
+}
+
+.rating-label {
+  font-size: 11px;
+  color: #B8C6D8;
+  margin: 0 0 8px 0;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.star-filled {
+  color: #4A5F8B;
+  font-size: 12px;
+}
+
+.star-empty {
+  color: #1E2532;
+  font-size: 12px;
+}
+
+.forecast-section {
+  border-top: 1px solid rgba(74, 95, 139, 0.2);
+  padding-top: 20px;
+}
+
+.forecast-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0 0 16px 0;
+}
+
+.forecast-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+
+.forecast-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.forecast-card {
+  flex-shrink: 0;
+  width: 88px;
+  background: #1E2532;
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.forecast-card:hover {
+  transform: translateY(-3px);
+  background: rgba(74, 95, 139, 0.2);
+}
+
+.forecast-day {
+  font-size: 13px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0 0 12px 0;
+}
+
+.forecast-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(74, 95, 139, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  color: #4A5F8B;
+  font-size: 18px;
+}
+
+.forecast-weather {
+  font-size: 11px;
+  color: #B8C6D8;
+  margin: 0 0 6px 0;
+}
+
+.forecast-temp {
+  font-size: 12px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0;
+}
+
+.section-header {
+  margin: 48px 0 24px;
+}
+
+.section-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0;
+}
+
+.title-line {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #4A5F8B, transparent);
+  border-radius: 2px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: #B8C6D8;
+  margin: 0;
+}
+
+.inspiration-scroll {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  scrollbar-width: none;
+  margin-bottom: 40px;
+}
+
+.inspiration-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.inspiration-card {
+  flex-shrink: 0;
+  width: 320px;
+  background: #2D3748;
+  border: 1px solid #4A5F8B;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inspiration-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -12px rgba(74, 95, 139, 0.3);
+}
+
+.inspiration-image-wrapper {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.inspiration-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 37, 50, 0.9) 0%, transparent 50%);
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.inspiration-card:hover .inspiration-overlay {
+  opacity: 1;
+}
+
+.inspiration-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #4A5F8B;
+  color: #F5F7FA;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.inspiration-content {
+  padding: 20px;
+}
+
+.inspiration-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 8px 0;
+}
+
+.inspiration-desc {
+  font-size: 13px;
+  color: #B8C6D8;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.inspiration-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author-name {
+  font-size: 13px;
+  color: #4A5F8B;
+  font-weight: 500;
+}
+
+.inspiration-footer i {
+  color: #4A5F8B;
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.inspiration-card:hover .inspiration-footer i {
+  transform: translateX(4px);
+}
+
+.filter-section {
+  margin-bottom: 28px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  background: #2D3748;
+  color: #B8C6D8;
+  border: 1px solid #4A5F8B;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filter-btn:hover {
+  border-color: #6B7C93;
+  transform: translateY(-2px);
+}
+
+.filter-btn.active {
+  background: #4A5F8B;
+  color: #F5F7FA;
+  border-color: #4A5F8B;
+  box-shadow: 0 6px 20px -8px rgba(74, 95, 139, 0.5);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.load-more-section {
+  text-align: center;
+}
+
+.search-section {
+  position: relative;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #B8C6D8;
+  font-size: 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  background: #2D3748;
+  border: 1px solid #4A5F8B;
+  color: #F5F7FA;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6B7C93;
+  box-shadow: 0 0 0 3px rgba(74, 95, 139, 0.2);
+}
+
+.search-input::placeholder {
+  color: #B8C6D8;
+}
+
+.sidebar-card {
+  background: #2D3748;
+  border: 1px solid #4A5F8B;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.sidebar-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-chip {
+  padding: 8px 14px;
+  background: rgba(74, 95, 139, 0.1);
+  color: #B8C6D8;
+  border: 1px solid #4A5F8B;
+  border-radius: 20px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.tag-chip:hover {
+  background: #4A5F8B;
+  color: #F5F7FA;
+  transform: translateY(-2px);
+}
+
+.tag-count {
+  color: #6B7C93;
+  margin-left: 2px;
+}
+
+.photographers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.photographer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.photographer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.photographer-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4A5F8B;
+  transition: transform 0.3s ease;
+}
+
+.photographer-item:hover .photographer-avatar {
+  transform: scale(1.05);
+}
+
+.photographer-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.photographer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0 0 2px 0;
+}
+
+.photographer-level {
+  display: inline-block;
+  font-size: 10px;
+  color: #4A5F8B;
+  font-weight: 500;
+  padding: 2px 8px;
+  background: rgba(74, 95, 139, 0.1);
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.photographer-stats {
+  font-size: 12px;
+  color: #B8C6D8;
+  margin: 0;
+}
+
+.special-card {
+  background: linear-gradient(135deg, #2D3748 0%, #1E2532 100%);
+  border-color: #48BB78;
+  overflow: hidden;
+}
+
+.special-content {
+  text-align: center;
+}
+
+.special-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 8px 0;
+}
+
+.special-desc {
+  font-size: 13px;
+  color: #B8C6D8;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+}
+
+.special-image-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  aspect-ratio: 16/9;
+}
+
+.special-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #48BB78, #38A169);
+  border: none;
+}
+
+.special-btn:hover {
+  background: linear-gradient(135deg, #38A169, #2F855A);
 }
 </style>
