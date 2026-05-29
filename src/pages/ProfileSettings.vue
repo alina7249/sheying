@@ -305,7 +305,7 @@
 <script setup lang="ts">
 import { ref, reactive, watch, onUnmounted } from 'vue'
 import { useAuthStore } from '../store/authStore'
-import { toast } from 'sonner'
+import { toast } from 'vue-sonner'
 
 const store = useAuthStore
 const authState = reactive({ ...store.getState() })

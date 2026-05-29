@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 interface Props {
   url: string;

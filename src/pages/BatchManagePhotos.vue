@@ -371,7 +371,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 interface PhotographyPost {
   id: string;

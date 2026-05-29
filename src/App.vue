@@ -5,11 +5,13 @@
       <router-view />
     </main>
     <Footer />
+    <Toaster position="top-right" richColors />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { Toaster } from 'vue-sonner'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 

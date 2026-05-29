@@ -134,7 +134,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { toast } from 'sonner'
+import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/store/authStore'
 import CommentSection from '@/components/CommentSection.vue'
 

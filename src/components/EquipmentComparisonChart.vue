@@ -72,62 +72,7 @@
     </div>
 
     <div ref="chartRef" :class="['rounded-lg p-4', theme.chartContainer]">
-      <ResponsiveContainer width="100%" :height="chartHeight">
-        <RadarChart v-if="chartType === 'radar'" :outerRadius="chartHeight * 0.35" :data="chartData">
-          <PolarGrid :stroke="darkMode ? '#4A5F8B' : '#B8C6D8'" />
-          <PolarAngleAxis dataKey="category" :tick="{ fill: darkMode ? '#B8C6D8' : '#4A5F8B', fontSize: 12 }" />
-          <PolarRadiusAxis :angle="30" :domain="[0, 10]" :tick="{ fill: darkMode ? '#B8C6D8' : '#4A5F8B' }" />
-
-          <Radar
-            :name="equipmentName"
-            dataKey="current"
-            :stroke="COLORS[0]"
-            :fill="COLORS[0]"
-            fillOpacity="0.3"
-            strokeWidth="2"
-          />
-
-          <Radar
-            v-for="(eq, index) in compareEquipmentList"
-            :key="eq.id"
-            :name="eq.name"
-            :dataKey="`compare${index + 1}`"
-            :stroke="COLORS[index + 1]"
-            :fill="COLORS[index + 1]"
-            fillOpacity="0.3"
-            strokeWidth="2"
-          />
-
-          <Legend />
-          <Tooltip />
-        </RadarChart>
-
-        <BarChart v-else :data="chartData" barGap="0" barCategoryGap="15%">
-          <CartesianGrid :strokeDasharray="'3 3'" :stroke="darkMode ? '#4A5F8B' : '#B8C6D8'" />
-          <XAxis
-            dataKey="category"
-            :tick="{ fill: darkMode ? '#B8C6D8' : '#4A5F8B', fontSize: 12 }"
-            :angle="-45"
-            textAnchor="end"
-            height="70"
-          />
-          <YAxis :domain="[0, 10]" :tick="{ fill: darkMode ? '#B8C6D8' : '#4A5F8B' }" />
-
-          <Bar :name="equipmentName" dataKey="current" :fill="COLORS[0]" :radius="[4, 4, 0, 0]" />
-
-          <Bar
-            v-for="(eq, index) in compareEquipmentList"
-            :key="eq.id"
-            :name="eq.name"
-            :dataKey="`compare${index + 1}`"
-            :fill="COLORS[index + 1]"
-            :radius="[4, 4, 0, 0]"
-          />
-
-          <Legend />
-          <Tooltip />
-        </BarChart>
-      </ResponsiveContainer>
+      <canvas ref="canvasRef" :height="chartHeight"></canvas>
     </div>
 
     <div class="mt-6">
@@ -220,23 +165,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from 'recharts';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { Chart, registerables } from 'chart.js';
 import html2canvas from 'html2canvas';
+
+Chart.register(...registerables);
 
 interface PerformanceData {
   category: string;
@@ -268,6 +201,8 @@ const filterKeyword = ref('');
 const newEquipmentName = ref('');
 const newEquipmentPerformance = ref<Record<string, number>>({});
 const chartRef = ref<HTMLElement | null>(null);
+const canvasRef = ref<HTMLCanvasElement | null>(null);
+const chartInstance = ref<Chart | null>(null);
 
 const COLORS = ['#4A5F8B', '#8884d8', '#6B7C93', '#4CAF50'];
 
@@ -366,16 +301,123 @@ const usageScenarios = computed(() => {
   return scenarios.replace(/、$/, '') || '各种摄影创作';
 });
 
+const createChart = () => {
+  if (!canvasRef.value) return;
+
+  const ctx = canvasRef.value.getContext('2d');
+  if (!ctx) return;
+
+  if (chartInstance.value) {
+    chartInstance.value.destroy();
+  }
+
+  const labels = chartData.value.map(d => d.category);
+  const datasets = [
+    {
+      label: props.equipmentName,
+      data: chartData.value.map(d => d.current),
+      backgroundColor: `${COLORS[0]}33`,
+      borderColor: COLORS[0],
+      borderWidth: 2,
+      pointBackgroundColor: COLORS[0]
+    }
+  ];
+
+  compareEquipmentList.value.forEach((eq, index) => {
+    datasets.push({
+      label: eq.name,
+      data: chartData.value.map(d => d[`compare${index + 1}`] || 0),
+      backgroundColor: `${COLORS[index + 1]}33`,
+      borderColor: COLORS[index + 1],
+      borderWidth: 2,
+      pointBackgroundColor: COLORS[index + 1]
+    });
+  });
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: chartType.value === 'radar' ? {
+        min: 0,
+        max: 10,
+        angleLines: {
+          color: props.darkMode ? '#4A5F8B33' : '#B8C6D833'
+        },
+        grid: {
+          color: props.darkMode ? '#4A5F8B33' : '#B8C6D833'
+        },
+        pointLabels: {
+          color: props.darkMode ? '#B8C6D8' : '#4A5F8B',
+          font: { size: 12 }
+        },
+        ticks: {
+          color: props.darkMode ? '#B8C6D8' : '#4A5F8B'
+        }
+      } : undefined,
+      x: chartType.value === 'bar' ? {
+        ticks: {
+          color: props.darkMode ? '#B8C6D8' : '#4A5F8B',
+          font: { size: 12 }
+        },
+        grid: {
+          color: props.darkMode ? '#4A5F8B33' : '#B8C6D833'
+        }
+      } : undefined,
+      y: chartType.value === 'bar' ? {
+        min: 0,
+        max: 10,
+        ticks: {
+          color: props.darkMode ? '#B8C6D8' : '#4A5F8B'
+        },
+        grid: {
+          color: props.darkMode ? '#4A5F8B33' : '#B8C6D833'
+        }
+      } : undefined
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: props.darkMode ? '#B8C6D8' : '#4A5F8B'
+        }
+      }
+    }
+  };
+
+  chartInstance.value = new Chart(ctx, {
+    type: chartType.value,
+    data: {
+      labels,
+      datasets
+    },
+    options: chartOptions
+  });
+};
+
 const handleResize = () => {
-  // 触发重新渲染
+  if (chartInstance.value) {
+    chartInstance.value.resize();
+  }
 };
 
 onMounted(() => {
+  nextTick(() => {
+    createChart();
+  });
   window.addEventListener('resize', handleResize);
 });
 
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize);
+  if (chartInstance.value) {
+    chartInstance.value.destroy();
+  }
+});
+
+watch([chartType, compareEquipmentList, filterKeyword], () => {
+  nextTick(() => {
+    createChart();
+  });
 });
 
 watch(showAddModal, (newVal) => {

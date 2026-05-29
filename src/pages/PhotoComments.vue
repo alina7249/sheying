@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 interface Reply { id: string; content: string; user: { id: string; name: string; avatar: string }; date: string; }
 interface Comment { id: string; content: string; rating: number; date: string; user: { id: string; name: string; avatar: string; badge?: string }; photoId: string; likes: number; replies: Reply[]; }

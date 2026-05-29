@@ -178,7 +178,7 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive, onUnmounted } from 'vue'
-import { toast } from 'sonner'
+import { toast } from 'vue-sonner'
 import { useAuthStore } from '@/store/authStore'
 
 const store = useAuthStore()

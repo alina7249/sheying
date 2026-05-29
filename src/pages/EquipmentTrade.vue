@@ -119,7 +119,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 import { mockCameras, mockLenses, mockAccessories } from '../lib/equipmentData';
 
 const route = useRoute();

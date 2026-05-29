@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 interface Props {
   isOpen: boolean;

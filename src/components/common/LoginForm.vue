@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 import { useAuthStore } from '../../store/authStore';
 import Captcha from './Captcha.vue';
 

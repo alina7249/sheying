@@ -1,5 +1,5 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 import { useAuthStore } from '../store/authStore';
 
 export const useLikeAndBookmark = (postId: string, initialLikes: number, initialCollections: number) => {

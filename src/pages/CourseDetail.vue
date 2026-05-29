@@ -118,7 +118,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 const route = useRoute();
 const routeId = computed(() => route.params.id as string | undefined);

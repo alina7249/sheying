@@ -793,7 +793,7 @@
 import { ref, computed, reactive, watch, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../store/authStore'
-import { toast } from 'sonner'
+import { toast } from 'vue-sonner'
 import ShareButton from '../components/common/ShareButton.vue'
 
 const router = useRouter()

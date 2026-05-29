@@ -146,7 +146,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 const route = useRoute();
 const router = useRouter();

@@ -221,7 +221,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useAuthStore } from '../../store/authStore';
 import { useChatStore } from '../../store/chatStore';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();

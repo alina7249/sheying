@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 
 interface Props {
   isOpen: boolean;

@@ -149,7 +149,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
-import { toast } from 'sonner';
+import { toast } from 'vue-sonner';
 import { useAuthStore } from '../../store/authStore';
 import { useChatStore, Message } from '../../store/chatStore';
 
