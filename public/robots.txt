@@ -1,0 +1,13 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /private/
+
+# Sitemap
+Sitemap: https://photoshare.example.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
