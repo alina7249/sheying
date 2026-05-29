@@ -4,7 +4,7 @@
   </div>
 
   <div v-else class="space-y-6">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold text-[#F5F7FA]">仪表盘</h1>
         <p class="text-[#B8C6D8] mt-1">欢迎回来，查看系统运行情况</p>
@@ -64,6 +64,41 @@
         trend="up"
         trendValue="+12.3%"
         description="本月收入"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <StatsCard
+        title="活跃用户"
+        icon="fa-user-check"
+        value="2,845"
+        trend="up"
+        trendValue="+12.5%"
+        description="今日活跃"
+      />
+      <StatsCard
+        title="新作品数"
+        icon="fa-camera"
+        value="342"
+        trend="up"
+        trendValue="+6.8%"
+        description="今日新增"
+      />
+      <StatsCard
+        title="评论数"
+        icon="fa-comments"
+        value="1,523"
+        trend="down"
+        trendValue="-3.2%"
+        description="今日评论"
+      />
+      <StatsCard
+        title="系统运行率"
+        icon="fa-server"
+        value="99.8%"
+        trend="up"
+        trendValue="+0.1%"
+        description="系统状态"
       />
     </div>
 
@@ -159,6 +194,105 @@
         </div>
       </div>
     </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-[#F5F7FA]">热门作品</h2>
+          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">查看全部</button>
+        </div>
+        <div class="space-y-4">
+          <div v-for="work in topWorks" :key="work.id" class="flex items-center gap-4 p-3 bg-[#1E2532] rounded-lg">
+            <img :src="work.thumbnail" :alt="work.title" class="w-16 h-16 rounded-lg object-cover" />
+            <div class="flex-1 min-w-0">
+              <h4 class="text-white font-medium truncate">{{ work.title }}</h4>
+              <p class="text-sm text-[#6B7C93]">{{ work.author }}</p>
+            </div>
+            <div class="text-right">
+              <div class="flex items-center gap-4 text-sm text-[#B8C6D8]">
+                <span><i class="fa-solid fa-heart text-red-400 mr-1"></i>{{ work.likes }}</span>
+                <span><i class="fa-solid fa-eye text-blue-400 mr-1"></i>{{ work.views }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-[#F5F7FA]">系统状态</h2>
+          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">详情</button>
+        </div>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-[#B8C6D8]">CPU使用率</span>
+              <span class="text-white">45%</span>
+            </div>
+            <div class="h-2 bg-[#1E2532] rounded-full overflow-hidden">
+              <div class="h-full bg-blue-500 rounded-full" style="width: 45%"></div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-[#B8C6D8]">内存使用率</span>
+              <span class="text-white">68%</span>
+            </div>
+            <div class="h-2 bg-[#1E2532] rounded-full overflow-hidden">
+              <div class="h-full bg-green-500 rounded-full" style="width: 68%"></div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-[#B8C6D8]">磁盘空间</span>
+              <span class="text-white">32%</span>
+            </div>
+            <div class="h-2 bg-[#1E2532] rounded-full overflow-hidden">
+              <div class="h-full bg-purple-500 rounded-full" style="width: 32%"></div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="text-[#B8C6D8]">数据库连接</span>
+              <span class="text-green-400">正常</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-[#F5F7FA]">热门标签</h2>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span v-for="tag in topTags" :key="tag.name" :class="['px-3 py-2 rounded-full text-sm', tag.color]">
+            #{{ tag.name }}
+            <span class="text-xs text-white/60 ml-1">({{ tag.count }})</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-[#F5F7FA]">热门用户</h2>
+          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">查看全部</button>
+        </div>
+        <div class="space-y-3">
+          <div v-for="user in topUsers" :key="user.id" class="flex items-center gap-4 p-2 bg-[#1E2532] rounded-lg">
+            <img :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full object-cover" />
+            <div class="flex-1 min-w-0">
+              <h4 class="text-white font-medium truncate">{{ user.name }}</h4>
+              <p class="text-sm text-[#6B7C93]">{{ user.followers }} 粉丝</p>
+            </div>
+            <span :class="['px-2 py-1 rounded-full text-xs', user.badge]">
+              {{ user.title }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -225,6 +359,31 @@ const orderStatsData = [
 ]
 
 const COLORS = ['#4A5F8B', '#6B7C93', '#38B2AC', '#68D391']
+
+const topWorks = [
+  { id: '1', title: '晨曦中的山峦', author: '光影捕手', thumbnail: 'https://picsum.photos/1280/720?random=190', likes: 2345, views: 15678 },
+  { id: '2', title: '城市剪影', author: '城市摄影师', thumbnail: 'https://picsum.photos/1280/720?random=191', likes: 1876, views: 12345 },
+  { id: '3', title: '海浪与礁石', author: '风光达人', thumbnail: 'https://picsum.photos/1280/720?random=192', likes: 1543, views: 9876 },
+  { id: '4', title: '森林晨雾', author: '自然探索者', thumbnail: 'https://picsum.photos/1280/720?random=193', likes: 1234, views: 8765 },
+]
+
+const topTags = [
+  { name: '风光', count: 3456, color: 'bg-blue-500/20 text-blue-400' },
+  { name: '人像', count: 2345, color: 'bg-pink-500/20 text-pink-400' },
+  { name: '城市', count: 1876, color: 'bg-purple-500/20 text-purple-400' },
+  { name: '夜景', count: 1543, color: 'bg-yellow-500/20 text-yellow-400' },
+  { name: '街拍', count: 1234, color: 'bg-green-500/20 text-green-400' },
+  { name: '建筑', count: 987, color: 'bg-red-500/20 text-red-400' },
+  { name: '星空', count: 765, color: 'bg-indigo-500/20 text-indigo-400' },
+  { name: '微距', count: 543, color: 'bg-cyan-500/20 text-cyan-400' },
+]
+
+const topUsers = [
+  { id: '1', name: '光影捕手', avatar: 'https://picsum.photos/400/400?random=180', followers: 12543, title: '热门摄影师', badge: 'bg-yellow-500/20 text-yellow-400' },
+  { id: '2', name: '城市摄影师', avatar: 'https://picsum.photos/400/400?random=181', followers: 8765, title: '新晋红人', badge: 'bg-purple-500/20 text-purple-400' },
+  { id: '3', name: '风光达人', avatar: 'https://picsum.photos/400/400?random=182', followers: 6543, title: '活跃创作者', badge: 'bg-green-500/20 text-green-400' },
+  { id: '4', name: '自然探索者', avatar: 'https://picsum.photos/400/400?random=183', followers: 4321, title: '创作新星', badge: 'bg-blue-500/20 text-blue-400' },
+]
 
 const recentActivities = [
   { id: 1, type: '用户注册', user: '张三', time: '10分钟前', action: '注册了新账号' },

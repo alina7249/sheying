@@ -85,20 +85,89 @@
           </button>
         </div>
 
-        <div v-if="activeTab === 'works'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div 
-            v-for="post in mockPhotographyPosts" 
-            :key="post.id"
-            class="group relative aspect-[4/3] rounded-lg overflow-hidden bg-[#1E2532]"
-          >
-            <img :src="post.image" :alt="post.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-              <div class="absolute bottom-4 left-4 right-4">
-                <h3 class="text-white font-medium mb-2">{{ post.title }}</h3>
-                <div class="flex items-center gap-4 text-sm text-white/80">
-                  <span><i class="fa-solid fa-heart mr-1"></i>{{ post.likes }}</span>
-                  <span><i class="fa-solid fa-comment mr-1"></i>{{ post.comments }}</span>
-                  <span><i class="fa-solid fa-eye mr-1"></i>{{ post.views }}</span>
+        <div v-if="activeTab === 'works'" class="space-y-8">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white">我的作品</h2>
+            <div class="flex items-center gap-3">
+              <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+                <i class="fa-solid fa-plus mr-2"></i>发布作品
+              </button>
+              <div class="flex bg-[#1E2532] rounded-lg p-1">
+                <button :class="['px-3 py-1 rounded', viewMode === 'grid' ? 'bg-[#4A5F8B] text-white' : 'text-[#B8C6D8]']" @click="viewMode = 'grid'">
+                  <i class="fa-solid fa-th"></i>
+                </button>
+                <button :class="['px-3 py-1 rounded', viewMode === 'list' ? 'bg-[#4A5F8B] text-white' : 'text-[#B8C6D8]']" @click="viewMode = 'list'">
+                  <i class="fa-solid fa-list"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div v-if="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div 
+              v-for="post in mockPhotographyPosts" 
+              :key="post.id"
+              class="group relative aspect-[4/3] rounded-lg overflow-hidden bg-[#1E2532] cursor-pointer"
+            >
+              <img :src="post.image" :alt="post.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="absolute bottom-4 left-4 right-4">
+                  <h3 class="text-white font-medium mb-2">{{ post.title }}</h3>
+                  <div class="flex items-center justify-between text-sm text-white/80">
+                    <div class="flex items-center gap-4">
+                      <span><i class="fa-solid fa-heart mr-1"></i>{{ post.likes }}</span>
+                      <span><i class="fa-solid fa-comment mr-1"></i>{{ post.comments }}</span>
+                      <span><i class="fa-solid fa-eye mr-1"></i>{{ post.views }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button class="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+                        <i class="fa-solid fa-pencil"></i>
+                      </button>
+                      <button class="p-2 bg-red-500/20 rounded-full hover:bg-red-500/30 transition-colors">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="absolute top-3 right-3">
+                <span :class="['px-2 py-1 rounded-full text-xs', post.visibility === '公开' ? 'bg-green-500/80 text-white' : post.visibility === '仅好友可见' ? 'bg-yellow-500/80 text-white' : 'bg-red-500/80 text-white']">
+                  {{ post.visibility }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div v-if="viewMode === 'list'" class="space-y-4">
+            <div 
+              v-for="post in mockPhotographyPosts" 
+              :key="post.id"
+              class="flex items-center gap-4 bg-[#1E2532] rounded-lg p-4 hover:bg-[#2D3748] transition-colors cursor-pointer"
+            >
+              <img :src="post.image" :alt="post.title" class="w-32 h-24 object-cover rounded-lg flex-shrink-0" />
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="text-white font-medium truncate">{{ post.title }}</h3>
+                  <span :class="['px-2 py-1 rounded-full text-xs', post.visibility === '公开' ? 'bg-green-500/20 text-green-400' : post.visibility === '仅好友可见' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400']">
+                    {{ post.visibility }}
+                  </span>
+                </div>
+                <p class="text-[#B8C6D8] text-sm mb-2 line-clamp-2">{{ post.description }}</p>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-4 text-sm text-[#6B7C93]">
+                    <span><i class="fa-solid fa-heart mr-1"></i>{{ post.likes }}</span>
+                    <span><i class="fa-solid fa-comment mr-1"></i>{{ post.comments }}</span>
+                    <span><i class="fa-solid fa-eye mr-1"></i>{{ post.views }}</span>
+                    <span><i class="fa-solid fa-calendar mr-1"></i>{{ post.date }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button class="px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
+                      <i class="fa-solid fa-pencil mr-1"></i>编辑
+                    </button>
+                    <button class="px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/40 transition-colors">
+                      <i class="fa-solid fa-trash mr-1"></i>删除
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -164,26 +233,126 @@
           </div>
         </div>
 
-        <div v-if="activeTab === 'about'" class="bg-[#1E2532] rounded-lg p-6">
-          <h3 class="text-lg font-semibold text-white mb-4">关于我</h3>
-          <div class="space-y-4 text-[#B8C6D8]">
-            <p>{{ mockUser.bio }}</p>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-sm text-[#6B7C93]">加入时间</p>
-                <p class="text-white">{{ mockUser.joinDate }}</p>
+        <div v-if="activeTab === 'collections'" class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-white">我的收藏集</h3>
+            <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+              <i class="fa-solid fa-plus mr-2"></i>新建收藏集
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div 
+              v-for="collection in collections" 
+              :key="collection.id" 
+              class="bg-[#1E2532] rounded-lg overflow-hidden hover:bg-[#2D3748] transition-colors cursor-pointer"
+            >
+              <div class="relative h-40">
+                <img :src="collection.cover" :alt="collection.name" class="w-full h-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               </div>
-              <div>
-                <p class="text-sm text-[#6B7C93]">擅长题材</p>
-                <p class="text-white">风光、人像</p>
+              <div class="p-4">
+                <h4 class="text-white font-medium mb-2">{{ collection.name }}</h4>
+                <div class="flex items-center justify-between text-sm text-[#6B7C93]">
+                  <span>{{ collection.count }} 个作品</span>
+                  <span>{{ collection.date }}</span>
+                </div>
+                <div class="flex items-center gap-2 mt-3">
+                  <button class="flex-1 px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
+                    <i class="fa-solid fa-pencil mr-1"></i>编辑
+                  </button>
+                  <button class="flex-1 px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/40 transition-colors">
+                    <i class="fa-solid fa-trash mr-1"></i>删除
+                  </button>
+                </div>
               </div>
-              <div>
-                <p class="text-sm text-[#6B7C93]">常用器材</p>
-                <p class="text-white">Sony A7R IV, Canon EOS R5</p>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="activeTab === 'about'" class="space-y-6">
+          <div class="bg-[#1E2532] rounded-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-white">关于我</h3>
+              <button class="px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
+                <i class="fa-solid fa-pencil mr-1"></i>编辑
+              </button>
+            </div>
+            <div class="space-y-4 text-[#B8C6D8]">
+              <p class="text-lg">{{ mockUser.bio }}</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#4A5F8B]/30">
+                <div>
+                  <p class="text-sm text-[#6B7C93] mb-1">加入时间</p>
+                  <p class="text-white">{{ mockUser.joinDate }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-[#6B7C93] mb-1">所在地</p>
+                  <p class="text-white">上海市</p>
+                </div>
+                <div>
+                  <p class="text-sm text-[#6B7C93] mb-1">擅长题材</p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm">风光</span>
+                    <span class="px-3 py-1 bg-pink-500/20 text-pink-400 rounded-full text-sm">人像</span>
+                    <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">星空</span>
+                  </div>
+                </div>
+                <div>
+                  <p class="text-sm text-[#6B7C93] mb-1">常用器材</p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-[#4A5F8B]/20 text-[#4A5F8B] rounded-full text-sm">Sony A7R IV</span>
+                    <span class="px-3 py-1 bg-[#4A5F8B]/20 text-[#4A5F8B] rounded-full text-sm">Canon EOS R5</span>
+                  </div>
+                </div>
+                <div class="md:col-span-2">
+                  <p class="text-sm text-[#6B7C93] mb-1">代表作品</p>
+                  <div class="grid grid-cols-3 gap-3 mt-2">
+                    <div v-for="work in ['晨曦中的山峦', '城市剪影', '星空下的古堡']" :key="work" class="aspect-square bg-[#2D3748] rounded-lg overflow-hidden">
+                      <img :src="`https://picsum.photos/400/400?random=${work.length}`" :alt="work" class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p class="text-sm text-[#6B7C93]">代表作品</p>
-                <p class="text-white">晨曦中的山峦、城市剪影</p>
+            </div>
+          </div>
+
+          <div class="bg-[#1E2532] rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">荣誉与成就</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex items-start gap-3 p-4 bg-[#2D3748] rounded-lg">
+                <div class="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center text-yellow-500 flex-shrink-0">
+                  <i class="fa-solid fa-trophy text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-medium">最佳风光摄影奖</h4>
+                  <p class="text-sm text-[#6B7C93]">2023年国际摄影大赛</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-4 bg-[#2D3748] rounded-lg">
+                <div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-500 flex-shrink-0">
+                  <i class="fa-solid fa-medal text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-medium">新锐摄影师</h4>
+                  <p class="text-sm text-[#6B7C93]">平台认证荣誉</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-4 bg-[#2D3748] rounded-lg">
+                <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 flex-shrink-0">
+                  <i class="fa-solid fa-fire text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-medium">热门创作者</h4>
+                  <p class="text-sm text-[#6B7C93]">作品浏览量超过10万</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-4 bg-[#2D3748] rounded-lg">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center text-purple-500 flex-shrink-0">
+                  <i class="fa-solid fa-star text-xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-white font-medium">超级粉丝</h4>
+                  <p class="text-sm text-[#6B7C93]">获得超过1000名粉丝</p>
+                </div>
               </div>
             </div>
           </div>
@@ -196,6 +365,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import ChartCanvas from '../components/common/ChartCanvas.vue';
+
+const viewMode = ref<'grid' | 'list'>('grid');
 
 const mockUser = {
   id: 'user-123',
