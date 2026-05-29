@@ -1,24 +1,10 @@
 <template></template>
 
-<script setup lang="ts">
-export const animations = {
-  fadeInUp: `
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  `,
-  scaleIn: `
-    animation: scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  `,
-  staggerDelay: (index: number) => `
-    animation-delay: ${index * 0.1}s;
-  `
-};
-</script>
-
 <style>
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;

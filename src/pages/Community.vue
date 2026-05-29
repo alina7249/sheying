@@ -14,131 +14,70 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
-          <div class="flex gap-2 mb-6">
-            <button 
-              v-for="filter in filters" 
+          <div class="filter-buttons">
+            <button
+              v-for="filter in filters"
               :key="filter.id"
               @click="activeFilter = filter.id"
-              :class="['px-4 py-2 rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F1C2D] active:scale-95', activeFilter === filter.id ? 'bg-[#4A5F8B] text-white shadow-md' : 'bg-[#1E2532] text-[#6B7C93] hover:text-white hover:bg-[#2D3748]']"
+              class="filter-btn"
+              :class="{ active: activeFilter === filter.id }"
               :aria-pressed="activeFilter === filter.id"
             >
               {{ filter.name }}
             </button>
           </div>
 
-          <div v-for="post in communityPosts" :key="post.id" class="bg-[#1E2532] rounded-xl overflow-hidden transition-all duration-200 hover:shadow-lg">
-            <div class="p-6">
-              <div class="flex items-center gap-4 mb-4">
-                <img :src="post.author.avatar" :alt="post.author.name" class="w-10 h-10 rounded-full border-2 border-transparent hover:border-[#4A5F8B] transition-colors" />
-                <div>
-                  <h3 class="font-medium text-white">{{ post.author.name }}</h3>
-                  <p class="text-sm text-[#6B7C93]">{{ post.date }}</p>
-                </div>
-                <span class="ml-auto px-3 py-1 bg-[#4A5F8B]/30 text-[#4A5F8B] text-sm rounded">{{ post.category }}</span>
-              </div>
-              
-              <h2 class="text-lg font-semibold text-white mb-2">{{ post.title }}</h2>
-              <p class="text-[#B8C6D8] mb-4">{{ post.content }}</p>
-
-              <div v-if="post.images && post.images.length > 0" class="grid grid-cols-2 gap-3 mb-4">
-                <img 
-                  v-for="(img, index) in post.images.slice(0, 2)" 
-                  :key="index"
-                  :src="img" 
-                  :alt="`${post.title} - ${index + 1}`"
-                  class="w-full h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-[1.02]"
-                  loading="lazy"
-                />
-                <div v-if="post.images.length > 2" class="col-span-1 row-span-2 bg-[#0F1C2D] rounded-lg flex items-center justify-center cursor-pointer hover:bg-[#1a293d] transition-colors">
-                  <span class="text-[#6B7C93] text-lg font-semibold">+{{ post.images.length - 2 }}</span>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-6 text-sm text-[#6B7C93]">
-                <button 
-                  @click="handlePostAction('like', post.id)"
-                  class="flex items-center gap-1 hover:text-red-400 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
-                  aria-label="点赞"
-                >
-                  <i class="fa-solid fa-heart"></i>
-                  <span>{{ post.likes }}</span>
-                </button>
-                <button 
-                  @click="handlePostAction('comment', post.id)"
-                  class="flex items-center gap-1 hover:text-[#4A5F8B] transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
-                  aria-label="评论"
-                >
-                  <i class="fa-solid fa-comment"></i>
-                  <span>{{ post.comments }}</span>
-                </button>
-                <button 
-                  @click="handlePostAction('bookmark', post.id)"
-                  class="flex items-center gap-1 hover:text-yellow-400 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
-                  aria-label="收藏"
-                >
-                  <i class="fa-solid fa-bookmark"></i>
-                  <span>{{ post.bookmarks }}</span>
-                </button>
-                <button 
-                  @click="handlePostAction('share', post.id)"
-                  class="flex items-center gap-1 hover:text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded px-2 py-1 active:scale-90"
-                  aria-label="分享"
-                >
-                  <i class="fa-solid fa-share"></i>
-                  <span>分享</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <PostCard
+            v-for="post in communityPosts"
+            :key="post.id"
+            :post="post"
+            @click="handlePostClick"
+            @like="handlePostAction"
+            @comment="handlePostAction"
+            @bookmark="handlePostAction"
+            @share="handlePostAction"
+          />
         </div>
 
         <div class="space-y-6">
-          <div class="bg-[#1E2532] rounded-xl p-6">
-            <h3 class="font-semibold text-white mb-4">热门话题</h3>
-            <div class="space-y-3">
-              <div 
-                v-for="topic in trendingTopics" 
+          <div class="sidebar-section">
+            <h3 class="section-title">
+              <i class="fa-solid fa-fire mr-2"></i>
+              热门话题
+            </h3>
+            <div class="topics-list">
+              <div
+                v-for="topic in trendingTopics"
                 :key="topic.id"
-                class="flex items-center gap-3 p-3 bg-[#0F1C2D] rounded-lg hover:bg-[#4A5F8B]/30 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4A5F8B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532]"
-                tabindex="0"
+                class="topic-item"
               >
-                <span class="text-2xl">{{ topic.emoji }}</span>
-                <div class="flex-1">
-                  <p class="text-white text-sm">{{ topic.name }}</p>
-                  <p class="text-[#6B7C93] text-xs">{{ topic.discussions }} 讨论</p>
+                <span class="topic-emoji">{{ topic.emoji }}</span>
+                <div class="topic-info">
+                  <p class="topic-name">{{ topic.name }}</p>
+                  <p class="topic-discussions">{{ topic.discussions }} 讨论</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="bg-[#1E2532] rounded-xl p-6">
-            <h3 class="font-semibold text-white mb-4">活跃用户</h3>
-            <div class="space-y-3">
-              <div 
-                v-for="user in activeUsers" 
+          <div class="sidebar-section">
+            <h3 class="section-title">
+              <i class="fa-solid fa-users mr-2"></i>
+              活跃用户
+            </h3>
+            <div class="users-list">
+              <UserCard
+                v-for="user in activeUsers"
                 :key="user.id"
-                class="flex items-center gap-3"
-              >
-                <img :src="user.avatar" :alt="user.name" class="w-10 h-10 rounded-full hover:scale-110 transition-transform duration-200" />
-                <div class="flex-1">
-                  <p class="text-white text-sm">{{ user.name }}</p>
-                  <p class="text-[#6B7C93] text-xs">{{ user.posts }} 帖子</p>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  @click="handleFollowUser(user.id)"
-                  :ariaLabel="`关注 ${user.name}`"
-                >
-                  关注
-                </Button>
-              </div>
+                :user="user"
+                @follow="handleFollowUser"
+              />
             </div>
           </div>
 
-          <div class="bg-gradient-to-r from-green-600/20 to-blue-600/20 rounded-xl p-6 border border-green-500/30">
-            <h3 class="font-semibold text-white mb-2">加入摄影挑战</h3>
-            <p class="text-sm text-[#B8C6D8] mb-4">参与每周摄影挑战，赢取精美奖品</p>
+          <div class="challenge-card">
+            <h3 class="challenge-title">加入摄影挑战</h3>
+            <p class="challenge-desc">参与每周摄影挑战，赢取精美奖品</p>
             <Button variant="primary" @click="handleJoinChallenge" ariaLabel="立即参与摄影挑战">
               立即参与
             </Button>
@@ -152,10 +91,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Button from '../components/common/Button.vue';
+import PostCard, { type PostItem } from '../components/PostCard.vue';
+import UserCard, { type UserItem } from '../components/UserCard.vue';
 
 const activeFilter = ref('latest');
 
-// 模拟点击事件处理
 const handlePostAction = (action: string, postId: string) => {
   console.log(`${action} on post ${postId}`);
 };
@@ -172,6 +112,10 @@ const handleJoinChallenge = () => {
   console.log('Join challenge');
 };
 
+const handlePostClick = (post: PostItem) => {
+  console.log('Post clicked:', post);
+};
+
 const filters = [
   { id: 'latest', name: '最新' },
   { id: 'hot', name: '热门' },
@@ -179,7 +123,7 @@ const filters = [
   { id: 'my', name: '我的' }
 ];
 
-const communityPosts = [
+const communityPosts: PostItem[] = [
   {
     id: '1',
     title: '分享我的城市街头摄影作品集',
@@ -241,9 +185,130 @@ const trendingTopics = [
   { id: '4', name: '#器材评测', discussions: 432, emoji: '📷' }
 ];
 
-const activeUsers = [
+const activeUsers: UserItem[] = [
   { id: '1', name: '风光摄影大师', avatar: 'https://picsum.photos/400/400?random=272', posts: 567 },
   { id: '2', name: '人像摄影师小雅', avatar: 'https://picsum.photos/400/400?random=273', posts: 342 },
   { id: '3', name: '旅行摄影玩家', avatar: 'https://picsum.photos/400/400?random=274', posts: 423 }
 ];
 </script>
+
+<style scoped>
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  background: #1E2532;
+  color: #6B7C93;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  color: white;
+  background: #2D3748;
+}
+
+.filter-btn.active {
+  background: #4A5F8B;
+  color: white;
+  box-shadow: 0 4px 12px -4px rgba(74, 95, 139, 0.4);
+}
+
+.sidebar-section {
+  background: #1E2532;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+}
+
+.section-title i {
+  color: #4A5F8B;
+}
+
+.topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #0F1C2D;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.topic-item:hover {
+  background: rgba(74, 95, 139, 0.2);
+  transform: translateX(4px);
+}
+
+.topic-emoji {
+  font-size: 28px;
+}
+
+.topic-info {
+  flex: 1;
+}
+
+.topic-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 2px 0;
+}
+
+.topic-discussions {
+  font-size: 12px;
+  color: #6B7C93;
+  margin: 0;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.challenge-card {
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.15), rgba(66, 153, 225, 0.15));
+  border: 1px solid rgba(72, 187, 120, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.challenge-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px 0;
+}
+
+.challenge-desc {
+  font-size: 14px;
+  color: #B8C6D8;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+</style>
