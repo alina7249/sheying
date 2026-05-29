@@ -109,18 +109,11 @@
           <div class="bg-[#1E2532] rounded-lg p-6">
             <h3 class="text-lg font-semibold text-white mb-4">作品数据趋势</h3>
             <div class="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyStats}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#4A5F8B" />
-                  <XAxis dataKey="month" tick={{ fill: '#B8C6D8', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#B8C6D8' }} />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="posts" stroke="#4A5F8B" strokeWidth={2} />
-                  <Line type="monotone" dataKey="likes" stroke="#63B3ED" strokeWidth={2} />
-                  <Line type="monotone" dataKey="views" stroke="#48BB78" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
+              <ChartCanvas
+                type="line"
+                :data="monthlyStatsChartData"
+                :options="monthlyStatsChartOptions"
+              />
             </div>
           </div>
 
@@ -201,8 +194,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { ref, computed } from 'vue';
+import ChartCanvas from '../components/common/ChartCanvas.vue';
 
 const mockUser = {
   id: 'user-123',
@@ -352,4 +345,21 @@ const tabs = [
 ];
 
 const activeTab = ref('works');
+
+const monthlyStatsChartData = computed(() => ({
+  labels: monthlyStats.map(d => d.month),
+  datasets: [
+    { label: '作品', data: monthlyStats.map(d => d.posts), borderColor: '#4A5F8B', backgroundColor: '#4A5F8B', tension: 0.3, pointRadius: 3, borderWidth: 2 },
+    { label: '获赞', data: monthlyStats.map(d => d.likes), borderColor: '#63B3ED', backgroundColor: '#63B3ED', tension: 0.3, pointRadius: 3, borderWidth: 2 },
+    { label: '浏览', data: monthlyStats.map(d => d.views), borderColor: '#48BB78', backgroundColor: '#48BB78', tension: 0.3, pointRadius: 3, borderWidth: 2 },
+  ],
+}));
+
+const monthlyStatsChartOptions = {
+  plugins: { legend: { labels: { color: '#B8C6D8' } } },
+  scales: {
+    x: { grid: { color: '#4A5F8B' }, ticks: { color: '#B8C6D8', font: { size: 12 } } },
+    y: { grid: { color: '#4A5F8B' }, ticks: { color: '#B8C6D8', font: { size: 12 } } },
+  },
+};
 </script>

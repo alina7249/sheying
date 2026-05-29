@@ -26,16 +26,8 @@
               getTextClass(route.path === link.path)
             ]"
             :style="route.path === link.path ? {
-              '&::after': {
-                content: '""',
-                display: 'block',
-                width: '100%',
-                height: '2px',
-                backgroundColor: theme === 'dark' ? '#4A5F8B' : '#63B3ED',
-                position: 'absolute',
-                bottom: '-6px',
-                left: '0'
-              }
+              borderBottom: `2px solid ${theme === 'dark' ? '#4A5F8B' : '#63B3ED'}`,
+              paddingBottom: '4px'
             } : {}">
             {{ link.name }}
           </router-link>
