@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { login as apiLogin, register as apiRegister } from '../services/api';
 
 export interface User {
@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const localLogin = async (username: string, password: string): Promise<boolean> => {
+  const localLogin = async (username: string, _password: string): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const userData: User = {
@@ -101,6 +101,7 @@ export const useAuthStore = defineStore('auth', () => {
         memberLevel.value = (userData.memberLevel as MemberLevel) || 'free';
 
         localStorage.setItem('authToken', userData.token || `token_${Date.now()}`);
+        localStorage.setItem('localUser', JSON.stringify(user.value));
 
         return true;
       } else {
@@ -131,7 +132,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const localRegister = async (userAccount: string, password: string, _checkPassword: string, userName: string): Promise<boolean> => {
+  const localRegister = async (userAccount: string, _password: string, _checkPassword: string, userName: string): Promise<boolean> => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const userData: User = {

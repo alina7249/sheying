@@ -92,7 +92,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  searchPlaceholder: '搜索...',
+  searchPlaceholder: '搜索…',
   showCondition: false,
   resultCount: 0
 });
@@ -191,11 +191,12 @@ watch(() => props.sort, (val) => {
   color: #F5F7FA;
   border-radius: 10px;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-input:focus {
-  outline: none;
+  outline: 2px solid #6B7C93;
+  outline-offset: 2px;
   border-color: #6B7C93;
   box-shadow: 0 0 0 3px rgba(74, 95, 139, 0.15);
 }
@@ -212,7 +213,7 @@ watch(() => props.sort, (val) => {
   border-radius: 10px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23B8C6D8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -220,7 +221,8 @@ watch(() => props.sort, (val) => {
 }
 
 .filter-select:focus {
-  outline: none;
+  outline: 2px solid #6B7C93;
+  outline-offset: 2px;
   border-color: #6B7C93;
   box-shadow: 0 0 0 3px rgba(74, 95, 139, 0.15);
 }

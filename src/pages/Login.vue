@@ -4,7 +4,7 @@
       <div class="text-center relative">
         <div class="absolute inset-0 bg-[url('https://picsum.photos/1280/720?random=278')] bg-cover opacity-10 rounded-full w-20 h-20 mx-auto -mt-12"></div>
         <div class="relative inline-flex items-center justify-center mb-4 text-3xl text-[#B8C6D8]">
-          <i class="fa-solid fa-camera"></i>
+          <i class="fa-solid fa-camera" aria-hidden="true"></i>
         </div>
         <h1 class="text-2xl font-bold text-[#FFFFFF]">登录 影研社</h1>
         <p class="mt-2 text-sm text-[#E2E8F0]">
@@ -26,16 +26,16 @@
       </div>
 
       <div class="mt-6 grid grid-cols-3 gap-3">
-        <button @click="handleSocialLogin('微信')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
-          <i class="fa-brands fa-weixin text-green-500"></i>
+        <button @click="handleSocialLogin('微信')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors" aria-label="微信登录">
+          <i class="fa-brands fa-weixin text-green-500" aria-hidden="true"></i>
         </button>
 
-        <button @click="handleSocialLogin('微博')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
-          <i class="fa-brands fa-weibo text-red-500"></i>
+        <button @click="handleSocialLogin('微博')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors" aria-label="微博登录">
+          <i class="fa-brands fa-weibo text-red-500" aria-hidden="true"></i>
         </button>
 
-        <button @click="handleSocialLogin('QQ')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
-          <i class="fa-brands fa-qq text-blue-400"></i>
+        <button @click="handleSocialLogin('QQ')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors" aria-label="QQ登录">
+          <i class="fa-brands fa-qq text-blue-400" aria-hidden="true"></i>
         </button>
       </div>
 
@@ -70,7 +70,7 @@ const checkAuthStatus = () => {
 };
 
 const handleSocialLogin = (platform: string) => {
-  showInfo(`正在跳转到${platform}登录...`);
+  showInfo(`正在跳转到${platform}登录…`);
 };
 
 onMounted(() => {

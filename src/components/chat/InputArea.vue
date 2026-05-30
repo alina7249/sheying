@@ -12,7 +12,7 @@
         :style="{ width: `${uploadingProgress}%` }"
       />
       <div class="flex justify-between items-center p-2 text-xs">
-        <span :class="theme === 'dark' ? 'text-[#B8C6D8]' : 'text-gray-600'">上传文件中...</span>
+        <span :class="theme === 'dark' ? 'text-[#B8C6D8]' : 'text-gray-600'">上传文件中…</span>
         <span :class="theme === 'dark' ? 'text-[#B8C6D8]' : 'text-gray-600'">{{ uploadingProgress }}%</span>
       </div>
     </div>
@@ -65,7 +65,7 @@
         ref="textareaRef"
         v-model="message"
         @keydown="handleKeyDown"
-        placeholder="输入您的问题，按Enter发送，Shift+Enter换行..."
+        placeholder="输入您的问题，按Enter发送，Shift+Enter换行…"
         class="flex-1 p-2 bg-transparent resize-none focus:outline-none"
         :class="theme === 'dark' ? 'text-white placeholder:text-[#6B7C93]' : 'text-gray-800 placeholder:text-gray-500'"
         rows="1"
@@ -205,10 +205,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { toast } from 'vue-sonner';
 import { useAuthStore } from '../../store/authStore';
 import { useChatStore, AIRole } from '../../store/chatStore';
+
+const props = defineProps<{
+  pendingPrompt?: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'prompt-consumed'): void;
+}>();
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
@@ -226,6 +234,23 @@ const isRoleDropdownOpen = ref(false);
 const isOptionsOpen = ref(false);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
+
+watch(() => props.pendingPrompt, (newPrompt) => {
+  if (newPrompt) {
+    message.value = newPrompt;
+    emit('prompt-consumed');
+    nextTick(() => {
+      if (textareaRef.value) {
+        textareaRef.value.focus();
+        adjustTextareaHeight();
+      }
+    });
+  }
+});
+
+function nextTick(fn: () => void) {
+  setTimeout(fn, 0);
+}
 
 const triggerFileUpload = () => {
   fileInputRef.value?.click();
@@ -289,8 +314,11 @@ const handleFileUpload = (event: Event) => {
 const handleSendMessage = () => {
   if (!message.value.trim() || !currentChatId.value) return;
 
+  const userMsg = message.value.trim();
+  const aiMsgId = `msg-${Date.now()}`;
+
   chatStore.addMessage(currentChatId.value, {
-    content: message.value.trim(),
+    content: userMsg,
     sender: 'user'
   });
 
@@ -298,67 +326,79 @@ const handleSendMessage = () => {
 
   chatStore.setIsTyping(true);
 
+  chatStore.addMessage(currentChatId.value, {
+    content: '',
+    sender: 'ai'
+  });
+
   setTimeout(() => {
-    let aiResponse = '';
-    const lowerMessage = message.value.toLowerCase();
+    let fullResponse = '';
+    const lowerMessage = userMsg.toLowerCase();
 
     if (selectedRole.value) {
       switch (selectedRole.value.id) {
         case 'photography-expert':
           if (lowerMessage.includes('曝光') || lowerMessage.includes('光圈') || lowerMessage.includes('快门') || lowerMessage.includes('iso')) {
-            aiResponse = `曝光三要素是摄影的基础：\n\n**1. 光圈**：控制进光量和景深\n   - 大光圈(f/1.4-f/2.8)：进光量大，景深浅，适合人像、微距\n   - 小光圈(f/8-f/16)：进光量小，景深深，适合风光、建筑\n\n**2. 快门速度**：控制曝光时间和动态模糊\n   - 高速快门(1/500s以上)：凝固运动，适合体育、野生动物\n   - 低速快门(1/30s以下)：创造模糊效果，适合流水、光轨\n\n**3. ISO**：控制传感器对光线的敏感度\n   - 低ISO(100-400)：画质细腻，适合光线充足的场景\n   - 高ISO(1600以上)：噪点增加，但适合暗光环境\n\n这三者需要相互平衡，才能获得正确的曝光。`;
+            fullResponse = '曝光三要素是摄影的基础：\n\n1. 光圈：控制进光量和景深\n   大光圈适合人像，小光圈适合风光\n\n2. 快门速度：控制曝光时间\n   高速快门凝固运动，低速快门创造模糊\n\n3. ISO：控制传感器灵敏度\n   低ISO画质细腻，高ISO适合暗光\n\n三者相互平衡才能获得正确曝光。';
           } else if (lowerMessage.includes('构图')) {
-            aiResponse = `摄影构图是创作优秀作品的关键，以下是几种常用的构图技巧：\n\n1. **三分法**：将画面分为九宫格，将主体放在交叉点上\n2. **引导线**：利用线条（如道路、河流）引导观众视线到主体\n3. **框架构图**：利用前景元素（如门窗、树枝）创建框架\n4. **对比构图**：通过大小、颜色、明暗的对比突出主体\n5. **对称构图**：创造平衡、稳定的视觉效果\n\n构图没有固定规则，关键是要表达您的创意和主题。`;
+            fullResponse = '摄影构图是创作优秀作品的关键：\n\n1. 三分法：将主体放在交叉点上\n2. 引导线：利用线条引导视线\n3. 框架构图：利用前景创建框架\n4. 对比构图：通过对比突出主体\n5. 对称构图：创造平衡的视觉效果\n\n构图没有固定规则，关键要表达您的创意。';
+          } else if (lowerMessage.includes('相机') || lowerMessage.includes('推荐') || lowerMessage.includes('入门')) {
+            fullResponse = '推荐几款适合新手的相机：\n\n1. 佳能EOS R50 - 轻便易用，直出色彩好\n2. 索尼A6400 - 对焦出色，视频能力强\n3. 尼康Z50 - 操控出色，性价比高\n4. 富士X-S10 - 颜值高，胶片模拟丰富\n\n建议先确定预算和拍摄需求，再选择最合适的机型。';
           } else {
-            aiResponse = `作为摄影专家，我可以为您提供以下方面的帮助：\n\n- 摄影基础理论知识（曝光、对焦、白平衡等）\n- 各类题材拍摄技巧（风光、人像、纪实、微距等）\n- 光线控制与运用技巧\n- 色彩理论与搭配建议\n- 创意拍摄思路与构图指导\n\n您有什么具体的摄影技术问题需要我解答吗？`;
+            fullResponse = '作为摄影专家，我可以为您提供以下帮助：\n\n- 摄影基础理论知识\n- 各类题材拍摄技巧\n- 光线控制与运用\n- 色彩理论与搭配\n- 创意构图指导\n\n您有什么具体的摄影问题需要解答吗？';
           }
           break;
 
         case 'equipment-advisor':
           if (lowerMessage.includes('相机') || lowerMessage.includes('镜头')) {
-            aiResponse = `关于相机和镜头的选择，我建议您考虑以下几个方面：\n\n1. **预算范围**：确定您的预算，这将决定可选择的相机和镜头档次\n2. **拍摄题材**：\n   - 风光摄影：建议选择广角镜头，如16-35mm\n   - 人像摄影：建议选择中长焦镜头，如85mm\n   - 野生动物：建议选择超长焦镜头，如200-500mm\n3. **品牌生态**：考虑未来可能的扩展需求，选择一个完整的品牌生态系统\n\n您主要拍摄什么类型的照片？我可以给出更具体的建议。`;
+            fullResponse = '关于器材选择，建议考虑以下几点：\n\n1. 预算范围确定可选档次\n2. 风光选广角，人像选中长焦\n3. 考虑品牌生态系统的完整性\n\n您主要拍什么类型？我可以给出更具体的建议。';
           } else if (lowerMessage.includes('三脚架') || lowerMessage.includes('滤镜') || lowerMessage.includes('配件')) {
-            aiResponse = `摄影配件是提升拍摄体验的重要工具：\n\n**三脚架**：\n- 碳纤维材质轻便但价格较高，适合户外拍摄\n- 铝合金材质稳定但较重，适合室内或固定位置拍摄\n- 建议选择承重超过您设备总重量1.5倍的三脚架\n\n**滤镜**：\n- UV镜：保护镜头，轻度防尘防刮\n- CPL镜：消除反光，增强色彩饱和度\n- ND镜：减少进光量，适合慢门拍摄\n- GND镜：平衡明暗对比，适合风光摄影\n\n您目前使用什么相机系统？我可以为您推荐更匹配的配件。`;
+            fullResponse = '摄影配件建议：\n\n三脚架：碳纤维轻便适合户外，铝合金稳定适合室内\n滤镜：UV保护镜头，CPL消除反光，ND适合慢门\n闪光灯：原厂兼容性好，副厂性价比高\n\n您目前用什么相机？我可以推荐更匹配的配件。';
           } else {
-            aiResponse = `作为器材顾问，我可以为您提供以下方面的专业建议：\n\n- 相机和镜头的选择与推荐\n- 各类摄影配件的使用技巧\n- 器材参数解读与性能对比\n- 相机系统生态分析\n- 器材保养与维护指南\n\n您在器材选择或使用上有什么具体问题吗？`;
+            fullResponse = '作为器材顾问，我可以提供：\n\n- 相机和镜头选择推荐\n- 配件使用技巧\n- 参数解读与性能对比\n- 系统生态分析\n- 器材保养指南\n\n您在器材方面有什么具体问题吗？';
           }
           break;
 
         case 'copywriter':
           if (lowerMessage.includes('标题') || lowerMessage.includes('描述')) {
-            aiResponse = `为摄影作品创作吸引人的标题和描述，需要抓住作品的核心情感和视觉特点：\n\n**标题创作技巧**：\n1. **简洁有力**：用简短的文字传达作品的核心\n2. **引发共鸣**：使用能唤起情感的词汇\n3. **制造悬念**：激发观众的好奇心\n4. **加入细节**：突出作品的独特之处\n\n**描述撰写要点**：\n- 分享拍摄背景和故事\n- 描述技术细节和创作思路\n- 使用生动的语言描绘画面\n- 表达作品想要传达的情感或观点\n\n您可以分享一下您的作品主题或上传一张样图，我可以帮您创作具体的文案。`;
-          } else if (lowerMessage.includes('社交媒体') || lowerMessage.includes('instagram') || lowerMessage.includes('朋友圈')) {
-            aiResponse = `在不同社交媒体平台发布摄影作品，需要针对性地调整文案风格：\n\n**Instagram**：\n- 简洁有力的标题+emoji表情\n- 使用相关热门标签（如#摄影 #风光 #人像）\n- 简短的描述，重点突出视觉亮点\n\n**朋友圈**：\n- 更口语化的表达\n- 分享拍摄背后的故事或感悟\n- 可以加入一些互动性问题\n\n**专业摄影平台**：\n- 详细的技术参数和创作思路\n- 专业术语的准确使用\n- 深入的艺术表达分析\n\n您主要在哪些平台分享作品？我可以为您提供更具体的建议。`;
+            fullResponse = '创作标题技巧：\n\n1. 简洁有力，传达作品核心\n2. 引发共鸣，唤起情感\n3. 制造悬念，激发好奇心\n4. 加入细节，突出独特性\n\n描述要点：分享背景故事、技术细节、创作思路，用生动语言描绘画面。';
           } else {
-            aiResponse = `作为文案专家，我可以为您提供以下方面的帮助：\n\n- 摄影作品标题创作\n- 图片描述文案优化\n- 社交媒体发布策略\n- 品牌故事撰写\n- 文案风格定位与调整\n\n您需要为哪类摄影作品创作文案呢？可以告诉我作品的主题或风格。`;
+            fullResponse = '作为文案专家，我可以提供：\n\n- 摄影作品标题创作\n- 描述文案优化\n- 社交媒体策略\n- 品牌故事撰写\n- 文案风格定位\n\n需要为哪类作品创作文案呢？';
           }
           break;
 
         case 'photo-editor':
-          if (lowerMessage.includes('后期') || lowerMessage.includes('修图') || lowerMessage.includes('lightroom') || lowerMessage.includes('photoshop')) {
-            aiResponse = `照片后期处理是提升作品质量的重要环节，以下是一些基础技巧：\n\n**Lightroom常用工作流**：\n1. **导入与整理**：添加关键字和标签\n2. **基础调整**：曝光、对比度、高光、阴影\n3. **色彩校正**：白平衡、色温、色调\n4. **细节增强**：清晰度、锐化、降噪\n5. **局部调整**：渐变滤镜、径向滤镜、调整画笔\n\n**Photoshop高级技巧**：\n- 图层与蒙版的灵活运用\n- 曲线调整与色彩分级\n- 频率分离磨皮\n- 景深合成与曝光合成\n\n您主要使用什么后期软件？或者您对哪方面的后期技巧特别感兴趣？`;
-          } else if (lowerMessage.includes('调色') || lowerMessage.includes('预设')) {
-            aiResponse = `色彩调整是照片后期的灵魂，以下是几种常见的调色风格和技巧：\n\n**电影色调**：\n- 降低整体饱和度\n- 调整色阶，增加暗部细节\n- 高光偏暖，阴影偏冷\n- 轻微增加对比度\n\n**胶片风格**：\n- 轻微降低对比度\n- 调整色彩平衡，高光偏青，阴影偏品红\n- 添加颗粒感\n- 高光区域轻微过曝\n\n**日系小清新**：\n- 提高曝光，降低对比度\n- 色温偏冷，色调偏绿\n- 增加阴影亮度\n- 降低饱和度，保持色彩清新\n\n您喜欢哪种风格？我可以为您提供更具体的调色参数。`;
+          if (lowerMessage.includes('后期') || lowerMessage.includes('修图') || lowerMessage.includes('lightroom') || lowerMessage.includes('调色')) {
+            fullResponse = '照片后期基础流程：\n\nLightroom：\n1. 基础调整：曝光、对比度、高光、阴影\n2. 色彩校正：白平衡、色温、色调\n3. 细节增强：清晰度、锐化、降噪\n\n调色风格推荐：\n- 电影色调：降低饱和度，高光偏暖\n- 胶片风格：轻微对比降低，加颗粒感\n- 日系清新：曝光提高，色温偏冷';
           } else {
-            aiResponse = `作为后期编辑专家，我可以为您提供以下方面的指导：\n\n- Lightroom和Photoshop使用技巧\n- 各类风格调色教程\n- 后期工作流优化\n- 批量处理方法\n- 图像质量优化与修复\n\n您在后期处理中遇到了什么具体问题？或者您想学习哪方面的后期技巧？`;
+            fullResponse = '作为后期编辑专家，我可以提供：\n\n- Lightroom和Photoshop技巧\n- 各类风格调色教程\n- 后期工作流优化\n- 批量处理方法\n- 图像质量优化\n\n您想学习哪方面的后期技巧？';
           }
           break;
 
         default:
-          aiResponse = `感谢您的提问！我是您的智能摄影助手，我可以帮助您解决各种摄影相关的问题。请问您有什么具体的摄影问题需要帮助？`;
+          fullResponse = '感谢您的提问！我是您的智能摄影助手，可以帮您解决各种摄影相关问题。请问有什么需要帮助的吗？';
       }
+    } else {
+      fullResponse = '感谢您的提问！我是您的智能摄影助手，可以帮助您解决摄影相关问题。您可以先选择一个AI角色来获得更专业的回答。';
     }
 
-    setTimeout(() => {
-      if (currentChatId.value) {
-        chatStore.addMessage(currentChatId.value, {
-          content: aiResponse,
-          sender: 'ai'
-        });
-        chatStore.setIsTyping(false);
-      }
-    }, 500);
-  }, 1000);
+    streamResponse(aiMsgId, fullResponse);
+  }, 800);
+};
+
+const streamResponse = (msgId: string, fullText: string) => {
+  let index = 0;
+  const chunkSize = 3 + Math.floor(Math.random() * 5);
+  const interval = setInterval(() => {
+    index += chunkSize;
+    if (index >= fullText.length) {
+      clearInterval(interval);
+      chatStore.updateMessage(currentChatId.value!, msgId, { content: fullText });
+      chatStore.setIsTyping(false);
+      return;
+    }
+    chatStore.updateMessage(currentChatId.value!, msgId, { content: fullText.substring(0, index) });
+  }, 30 + Math.random() * 40);
 };
 
 const handleKeyDown = (e: KeyboardEvent) => {

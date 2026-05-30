@@ -3,8 +3,8 @@
     <div class="max-w-6xl mx-auto px-4 py-8">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 class="text-3xl font-bold text-white mb-2">在线课程</h1>
-          <p class="text-[#B8C6D8]">学习专业摄影知识，提升你的摄影技能，从入门到精通</p>
+          <h1 class="text-3xl font-bold text-white mb-2" style="text-wrap: balance">在线课程</h1>
+          <p class="text-[#B8C6D8]" style="text-wrap: balance">学习专业摄影知识，提升你的摄影技能，从入门到精通</p>
         </div>
         <div class="flex gap-2">
           <button 
@@ -19,26 +19,32 @@
       </div>
 
       <div class="mb-12">
-        <div class="bg-gradient-to-r from-[#4A5F8B]/20 via-purple-500/20 to-pink-500/20 rounded-2xl p-8 border border-[#4A5F8B]/30">
-          <div class="flex flex-col md:flex-row items-center gap-8">
+        <div class="bg-gradient-to-r from-[#0F1C2D] via-[#4A5F8B]/10 to-[#0F1C2D] rounded-2xl p-8 md:p-10 border border-[#4A5F8B]/25 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-[#4A5F8B]/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4"></div>
+          <div class="flex flex-col md:flex-row items-center gap-8 relative z-10">
             <div class="flex-1">
-              <span class="inline-block px-3 py-1 bg-[#4A5F8B] text-white rounded-full text-sm font-medium mb-4">
-                🎉 本周特惠
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#4A5F8B]/20 text-[#63B3ED] rounded-full text-sm font-medium mb-4 border border-[#4A5F8B]/25">
+                <i class="fa-solid fa-gem text-xs"></i> 本周特惠
               </span>
-              <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">新用户首月会员，立享全部课程</h2>
-              <p class="text-[#B8C6D8] mb-6">现在加入会员，解锁平台所有优质课程，无限次学习，持续更新中</p>
+              <h2 class="text-2xl md:text-3xl font-bold text-[#F5F7FA] mb-3 leading-tight" style="text-wrap: balance">
+                新用户首月会员，立享全部课程
+              </h2>
+              <p class="text-[#B8C6D8] mb-6 max-w-lg leading-relaxed">
+                现在加入会员，解锁平台所有优质课程，无限次学习，持续更新中
+              </p>
               <div class="flex flex-wrap gap-3">
-                <button @click="router.push('/membership')" class="px-6 py-3 bg-gradient-to-r from-[#4A5F8B] to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all">
+                <button @click="router.push('/membership')" class="px-6 py-3 bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] rounded-xl font-medium hover:shadow-lg hover:shadow-[#4A5F8B]/25 transition-all duration-300">
                   立即开通
                 </button>
-                <button class="px-6 py-3 bg-[#1E2532] text-white rounded-xl font-medium border border-[#4A5F8B] hover:bg-[#2D3748] transition-all">
+                <button class="px-6 py-3 bg-[#1E2532]/80 text-[#F5F7FA] rounded-xl font-medium border border-[#4A5F8B]/30 hover:bg-[#2D3748] hover:border-[#4A5F8B]/60 transition-all duration-300">
                   了解更多
                 </button>
               </div>
             </div>
             <div class="flex-shrink-0">
-              <div class="w-48 h-48 bg-gradient-to-br from-[#4A5F8B] to-purple-600 rounded-2xl flex items-center justify-center">
-                <i class="fa-solid fa-graduation-cap text-6xl text-white"></i>
+              <div class="w-40 h-40 md:w-48 md:h-48 bg-gradient-to-br from-[#4A5F8B] via-[#5B6FA0] to-[#63B3ED] rounded-3xl flex items-center justify-center shadow-2xl shadow-[#4A5F8B]/20 rotate-3">
+                <i class="fa-solid fa-graduation-cap text-5xl md:text-6xl text-[#F5F7FA]"></i>
               </div>
             </div>
           </div>
@@ -51,7 +57,7 @@
           <input 
             type="text" 
             v-model="searchTerm"
-            placeholder="搜索课程、讲师..." 
+            placeholder="搜索课程、讲师…" 
             class="w-full pl-12 pr-4 py-3 bg-[#1E2532] border border-[#4A5F8B] text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all"
           />
         </div>
@@ -72,7 +78,7 @@
           v-for="course in filteredCourses" 
           :key="course.id"
           :to="'/course-detail/' + course.id"
-          class="bg-[#1E2532] rounded-2xl overflow-hidden border border-[#4A5F8B]/30 hover:border-[#4A5F8B] hover:shadow-xl hover:shadow-[#4A5F8B]/20 transition-all duration-300 cursor-pointer group block"
+          class="bg-[#1E2532] rounded-2xl overflow-hidden border border-[#4A5F8B]/20 hover:border-[#4A5F8B]/60 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#4A5F8B]/15 transition-all duration-300 cursor-pointer group block course-card"
         >
           <div class="relative">
             <img :src="course.cover" :alt="course.title" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -97,7 +103,7 @@
               </div>
               <span class="text-sm text-[#6B7C93] ml-2">({{ course.reviewCount }})</span>
             </div>
-            <h3 class="font-semibold text-white text-lg mb-2 group-hover:text-[#4A5F8B] transition-colors">{{ course.title }}</h3>
+            <h3 class="font-semibold text-white text-lg mb-2 group-hover:text-[#63B3ED] transition-colors" style="text-wrap: balance">{{ course.title }}</h3>
             <p class="text-[#B8C6D8] text-sm mb-4 line-clamp-2">{{ course.description }}</p>
             <div class="flex items-center gap-4 mb-4 text-sm text-[#6B7C93]">
               <span><i class="fa-solid fa-book mr-1"></i>{{ course.lessonCount }}课时</span>
@@ -381,3 +387,19 @@ const filteredCourses = computed(() => {
   return filtered;
 });
 </script>
+
+<style scoped>
+@media (prefers-reduced-motion: reduce) {
+  .course-card {
+    transition: none;
+  }
+
+  .course-card:hover {
+    transform: none;
+  }
+
+  .group-hover\:scale-105 {
+    transform: none;
+  }
+}
+</style>

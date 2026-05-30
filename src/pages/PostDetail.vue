@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-4 py-8 bg-[#1E2532] star-texture min-h-screen">
     <div v-if="!post" class="flex items-center justify-center min-h-screen">
-      <div class="text-[#B8C6D8]">加载中...</div>
+      <div class="text-[#B8C6D8]">加载中…</div>
     </div>
 
     <div v-else>
@@ -100,7 +100,45 @@
             </div>
           </div>
 
-          <!-- 评论区 -->
+          <!-- 内联评论区 -->
+          <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-lg p-6">
+            <h3 class="text-lg font-bold text-[#F5F7FA] mb-4">快速评论 ({{ postComments.length }})</h3>
+            <form @submit.prevent="submitPostComment" class="flex gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-[#4A5F8B] flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-sm font-bold">{{ currentUser.charAt(0) }}</span>
+              </div>
+              <div class="flex-1 flex gap-2">
+                <input
+                  v-model="newPostComment"
+                  placeholder="写下你的评论..."
+                  class="flex-1 px-4 py-2 bg-[#1E2532] border border-[#4A5F8B] rounded-lg text-[#F5F7FA] placeholder-[#6B7C93] focus:outline-none focus:ring-2 focus:ring-[#4A5F8B]"
+                />
+                <button
+                  type="submit"
+                  :disabled="!newPostComment.trim()"
+                  :class="['px-4 py-2 rounded-lg font-medium transition-colors', newPostComment.trim() ? 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]' : 'bg-gray-600 text-white cursor-not-allowed']"
+                >
+                  发送
+                </button>
+              </div>
+            </form>
+            <div v-if="postComments.length === 0" class="text-center py-6 text-[#6B7C93] text-sm">
+              暂无评论，快来发表第一条评论吧
+            </div>
+            <div v-for="comment in postComments" :key="comment.id" class="flex gap-3 py-3 border-t border-[#4A5F8B]/20">
+              <div class="w-8 h-8 rounded-full bg-[#4A5F8B] flex items-center justify-center flex-shrink-0">
+                <span class="text-white text-xs font-bold">{{ comment.author.charAt(0) }}</span>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-[#F5F7FA] text-sm font-medium">{{ comment.author }}</span>
+                  <span class="text-xs text-[#6B7C93]">{{ comment.time }}</span>
+                </div>
+                <p class="text-[#B8C6D8] text-sm">{{ comment.content }}</p>
+              </div>
+            </div>
+          </div>
+
           <CommentSection :postId="post.id" />
         </div>
 
@@ -131,19 +169,23 @@
               </div>
             </div>
             <button
-              :class="['w-full py-2 rounded-lg font-medium transition-colors', isFollowing ? 'bg-[#6B7C93] text-[#F5F7FA] hover:bg-[#718096]' : 'bg-[#4A5F8B] text-[#F5F7FA] hover:bg-[#6B7C93]']"
               @click="toggleFollow"
+              :class="['w-full py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2', isFollowing ? 'bg-[#1E2532] border border-[#6B7C93] text-[#6B7C93] hover:bg-[#6B7C93] hover:text-[#F5F7FA]' : 'bg-[#4A5F8B] text-[#F5F7FA] hover:bg-[#6B7C93]']"
             >
+              <i :class="['fa-solid', isFollowing ? 'fa-user-check' : 'fa-user-plus']"></i>
               {{ isFollowing ? '已关注' : '关注作者' }}
             </button>
           </div>
 
           <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-lg p-6">
             <h3 class="text-lg font-bold text-[#F5F7FA] mb-4">相关帖子</h3>
+            <div v-if="relatedPosts.length === 0" class="text-center py-4 text-[#6B7C93] text-sm">
+              暂无相关帖子
+            </div>
             <div class="space-y-4">
               <div v-for="relatedPost in relatedPosts" :key="relatedPost.id" class="group">
-                <router-link :to="`/post/${relatedPost.id}`" class="block">
-                  <div class="bg-[#1E2532] rounded-lg p-4 border border-[#4A5F8B] group-hover:border-[#4A5F8B] transition-colors">
+                <router-link :to="`/post-detail/${relatedPost.id}`" class="block">
+                  <div class="bg-[#1E2532] rounded-lg p-4 border border-[#4A5F8B]/50 group-hover:border-[#4A5F8B] transition-all group-hover:shadow-md group-hover:-translate-y-0.5">
                     <h4 class="font-medium text-[#F5F7FA] group-hover:text-[#4A5F8B] transition-colors mb-1 line-clamp-2">
                       {{ relatedPost.title }}
                     </h4>
@@ -315,6 +357,32 @@ const isLiked = ref(false)
 const likes = ref(0)
 const isBookmarked = ref(false)
 const isFollowing = ref(false)
+
+interface PostComment {
+  id: string
+  author: string
+  content: string
+  time: string
+}
+
+const currentUser = '光影捕手'
+const newPostComment = ref('')
+const postComments = ref<PostComment[]>([
+  { id: 'c1', author: '摄影新手小李', content: '写得非常详细，学到了很多构图技巧！', time: '2023-10-25 16:20' },
+  { id: 'c2', author: '器材顾问张工', content: '期待更多这样有深度的技术分享！', time: '2023-10-26 09:15' },
+])
+
+const submitPostComment = () => {
+  if (!newPostComment.value.trim()) return
+  postComments.value.unshift({
+    id: `c-${Date.now()}`,
+    author: currentUser,
+    content: newPostComment.value.trim(),
+    time: new Date().toLocaleString('zh-CN')
+  })
+  showSuccess('评论发表成功')
+  newPostComment.value = ''
+}
 
 const allUniqueTags = [...new Set(mockPosts.flatMap(p => p.tags))].sort(() => Math.random() - 0.5).slice(0, 10)
 

@@ -37,6 +37,30 @@
           </div>
 
           <div v-if="activeTab === 'posts'" class="space-y-6">
+            <div class="bg-[#1E2532] rounded-xl p-6 mb-6">
+              <h3 class="text-lg font-semibold text-white mb-3">发布新帖子</h3>
+              <form @submit.prevent="submitGroupPost">
+                <input
+                  v-model="newPostTitle"
+                  placeholder="帖子标题..."
+                  class="w-full px-4 py-2 bg-[#0F1C2D] border border-[#4A5F8B] rounded-lg text-white placeholder-[#6B7C93] focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] mb-3"
+                />
+                <textarea
+                  v-model="newPostContent"
+                  placeholder="分享你的想法..."
+                  rows="3"
+                  class="w-full px-4 py-2 bg-[#0F1C2D] border border-[#4A5F8B] rounded-lg text-white placeholder-[#6B7C93] focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] resize-none mb-3"
+                ></textarea>
+                <button
+                  type="submit"
+                  :disabled="!newPostTitle.trim() || !newPostContent.trim()"
+                  :class="['px-4 py-2 rounded-lg transition-colors', newPostTitle.trim() && newPostContent.trim() ? 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]' : 'bg-gray-600 text-white cursor-not-allowed']"
+                >
+                  发布帖子
+                </button>
+              </form>
+            </div>
+
             <div v-for="post in groupPosts" :key="post.id" class="bg-[#1E2532] rounded-xl p-6">
               <div class="flex items-center gap-4 mb-4">
                 <img :src="post.author.avatar" :alt="post.author.name" class="w-10 h-10 rounded-full" />
@@ -66,11 +90,17 @@
             </div>
           </div>
 
-          <div v-if="activeTab === 'members'" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div v-for="member in members" :key="member.id" class="bg-[#1E2532] rounded-xl p-4 text-center">
-              <img :src="member.avatar" :alt="member.name" class="w-16 h-16 rounded-full mx-auto mb-2" />
-              <h3 class="text-white text-sm font-medium">{{ member.name }}</h3>
-              <p class="text-[#6B7C93] text-xs">{{ member.role }}</p>
+          <div v-if="activeTab === 'members'" class="space-y-4">
+            <div class="bg-[#1E2532] rounded-xl p-4 flex items-center justify-between">
+              <h3 class="text-white font-medium">小组成员 ({{ members.length }}人)</h3>
+              <span class="text-sm text-[#6B7C93]">{{ group.members }} 总成员</span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div v-for="member in members" :key="member.id" class="bg-[#1E2532] rounded-xl p-4 text-center">
+                <img :src="member.avatar" :alt="member.name" class="w-16 h-16 rounded-full mx-auto mb-2" />
+                <h3 class="text-white text-sm font-medium">{{ member.name }}</h3>
+                <p class="text-[#6B7C93] text-xs">{{ member.role }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -139,7 +169,7 @@ const group = {
 
 const isJoined = ref(true);
 
-const groupPosts = [
+const groupPosts = ref([
   {
     id: '1',
     title: '分享上周拍摄的云海照片',
@@ -160,7 +190,32 @@ const groupPosts = [
     likes: 89,
     comments: 45
   }
-];
+]);
+
+const currentMemberName = '光影捕手';
+const newPostTitle = ref('');
+const newPostContent = ref('');
+
+const submitGroupPost = () => {
+  if (!newPostTitle.value.trim() || !newPostContent.value.trim()) return;
+  groupPosts.value.unshift({
+    id: `post-${Date.now()}`,
+    title: newPostTitle.value.trim(),
+    content: newPostContent.value.trim(),
+    images: [],
+    author: {
+      name: currentMemberName,
+      avatar: `https://picsum.photos/400/400?random=${Date.now()}`
+    },
+    date: '刚刚',
+    likes: 0,
+    comments: 0
+  });
+  group.posts++;
+  showSuccess('帖子发布成功');
+  newPostTitle.value = '';
+  newPostContent.value = '';
+};
 
 const members = [
   { id: '1', name: '团长老王', avatar: 'https://picsum.photos/400/400?random=248', role: '管理员' },

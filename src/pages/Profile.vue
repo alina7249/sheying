@@ -8,7 +8,10 @@
     <div class="max-w-6xl mx-auto px-4 -mt-24 relative">
       <div class="flex flex-col md:flex-row gap-6">
         <div class="flex-shrink-0">
-          <img :src="mockUser.avatar" :alt="mockUser.username" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-[#4A5F8B] object-cover" />
+          <img :src="mockUser.avatar" :alt="mockUser.username" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-[#4A5F8B] object-cover cursor-pointer hover:opacity-80 transition-opacity" @click="showEditModal = true" />
+          <button @click="showEditModal = true" class="mt-2 w-full px-3 py-1 border border-[#4A5F8B] text-[#4A5F8B] text-sm rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
+            <i class="fa-solid fa-pencil mr-1"></i>编辑资料
+          </button>
         </div>
         <div class="flex-1">
           <div class="flex flex-wrap items-center gap-3 mb-2">
@@ -48,6 +51,12 @@
             <button @click="showInfo('私信功能即将上线')" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
               <i class="fa-solid fa-message-circle mr-1"></i> 私信
             </button>
+            <router-link to="/profile-settings" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
+              <i class="fa-solid fa-gear mr-1"></i> 设置
+            </router-link>
+            <router-link to="/profile-benefits" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
+              <i class="fa-solid fa-crown mr-1"></i> 权益
+            </router-link>
             <button @click="showInfo('更多操作')" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
               <i class="fa-solid fa-ellipsis-h"></i>
             </button>
@@ -107,6 +116,7 @@
             <div 
               v-for="post in mockPhotographyPosts" 
               :key="post.id"
+              @click="navigateToPhoto(post.id)"
               class="group relative aspect-[4/3] rounded-lg overflow-hidden bg-[#1E2532] cursor-pointer"
             >
               <img :src="post.image" :alt="post.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -359,20 +369,49 @@
         </div>
       </div>
     </div>
+
+    <Transition name="fade">
+      <div v-if="showEditModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4" @click="showEditModal = false">
+        <div class="w-full max-w-md bg-[#1E2532] rounded-xl p-6" @click.stop>
+          <h3 class="text-xl font-bold text-white mb-4">编辑资料</h3>
+          <form @submit.prevent="saveProfile">
+            <div class="mb-4 text-center">
+              <img :src="editForm.avatar" alt="" class="w-20 h-20 rounded-full mx-auto mb-2 object-cover border-2 border-[#4A5F8B]" />
+              <button type="button" @click="editForm.avatar = `https://picsum.photos/400/400?random=${Date.now()}`" class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">更换头像</button>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm text-[#6B7C93] mb-1">用户名</label>
+              <input v-model="editForm.username" class="w-full px-4 py-2 bg-[#0F1C2D] border border-[#4A5F8B] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#4A5F8B]" />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm text-[#6B7C93] mb-1">个人简介</label>
+              <textarea v-model="editForm.bio" rows="3" class="w-full px-4 py-2 bg-[#0F1C2D] border border-[#4A5F8B] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] resize-none"></textarea>
+            </div>
+            <div class="flex justify-end gap-3">
+              <button type="button" @click="showEditModal = false" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg">取消</button>
+              <button type="submit" class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">保存</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useInteraction } from '../composables/useInteraction';
 import ChartCanvas from '../components/common/ChartCanvas.vue';
 
-const { handleFollow, handleUnfollow, handleCreate, handleDelete, handleAction, showInfo } = useInteraction();
+const router = useRouter();
+const { handleFollow, handleUnfollow, handleCreate, handleDelete, handleAction, showInfo, showSuccess } = useInteraction();
 
 const isFollowing = ref(false);
 const viewMode = ref<'grid' | 'list'>('grid');
+const showEditModal = ref(false);
 
-const mockUser = {
+const mockUser = ref({
   id: 'user-123',
   username: '@光影捕手',
   email: 'user@example.com',
@@ -390,6 +429,24 @@ const mockUser = {
   tags: '风光/人像双题材创作者',
   memberStatus: '银河会员·年卡',
   memberDaysLeft: 128
+});
+
+const editForm = ref({
+  avatar: mockUser.value.avatar,
+  username: mockUser.value.username,
+  bio: mockUser.value.bio
+});
+
+const saveProfile = () => {
+  mockUser.value.avatar = editForm.value.avatar;
+  mockUser.value.username = editForm.value.username;
+  mockUser.value.bio = editForm.value.bio;
+  showEditModal.value = false;
+  showSuccess('资料已更新');
+};
+
+const navigateToPhoto = (photoId: string) => {
+  router.push(`/photo-detail/${photoId}`);
 };
 
 const mockPhotographyPosts = [
@@ -524,9 +581,9 @@ const activeTab = ref('works');
 const toggleFollow = () => {
   isFollowing.value = !isFollowing.value;
   if (isFollowing.value) {
-    handleFollow(mockUser.username);
+    handleFollow(mockUser.value.username);
   } else {
-    handleUnfollow(mockUser.username);
+    handleUnfollow(mockUser.value.username);
   }
 };
 
@@ -547,3 +604,15 @@ const monthlyStatsChartOptions = {
   },
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

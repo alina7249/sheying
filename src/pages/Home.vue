@@ -21,7 +21,7 @@
             <span class="current-temp">15°C</span>
             <div class="temp-range">
               <div class="temp-item">
-                <i class="fa-solid fa-temperature-low"></i>
+                <i class="fa-solid fa-temperature-low" aria-hidden="true"></i>
                 <span>10°C</span>
               </div>
               <span class="temp-divider">/</span>
@@ -36,7 +36,7 @@
         <div class="weather-grid">
           <div class="weather-stat-card">
             <div class="stat-icon">
-              <i class="fa-solid fa-tint"></i>
+              <i class="fa-solid fa-tint" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
               <p class="stat-label">湿度</p>
@@ -45,7 +45,7 @@
           </div>
           <div class="weather-stat-card">
             <div class="stat-icon">
-              <i class="fa-solid fa-wind"></i>
+              <i class="fa-solid fa-wind" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
               <p class="stat-label">风速</p>
@@ -54,7 +54,7 @@
           </div>
           <div class="weather-stat-card">
             <div class="stat-icon">
-              <i class="fa-solid fa-sun"></i>
+              <i class="fa-solid fa-sun" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
               <p class="stat-label">紫外线</p>
@@ -63,7 +63,7 @@
           </div>
           <div class="weather-stat-card">
             <div class="stat-icon">
-              <i class="fa-solid fa-sunrise"></i>
+              <i class="fa-solid fa-sunrise" aria-hidden="true"></i>
             </div>
             <div class="stat-info">
               <p class="stat-label">日出日落</p>
@@ -74,7 +74,7 @@
 
         <div class="photo-tip-section">
           <div class="tip-header">
-            <i class="fa-solid fa-lightbulb"></i>
+            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
             <h4>今日摄影建议</h4>
           </div>
           <p class="tip-text">
@@ -88,6 +88,7 @@
                   v-for="star in 5" 
                   :key="star" 
                   :class="['fa-solid fa-star', star <= rating.value ? 'star-filled' : 'star-empty']"
+                  aria-hidden="true"
                 ></i>
               </div>
             </div>
@@ -104,7 +105,7 @@
             >
               <p class="forecast-day">{{ day.day }}</p>
               <div class="forecast-icon">
-                <i :class="['fa-solid', day.icon]"></i>
+                <i :class="['fa-solid', day.icon]" aria-hidden="true"></i>
               </div>
               <p class="forecast-weather">{{ day.weather }}</p>
               <p class="forecast-temp">{{ day.temp }}</p>
@@ -126,7 +127,7 @@
       </div>
       
       <div class="featured-topics fade-in-up" style="animation-delay: 0.4s;">
-        <div v-for="(topic, index) in featuredTopics" :key="topic.id" class="topic-card" :style="{ animationDelay: `${index * 0.1}s` }" @click="router.push(`/topics/${topic.id}`)">
+        <div v-for="(topic, index) in featuredTopics" :key="topic.id" class="topic-card" :style="{ animationDelay: `${index * 0.1}s` }" role="button" tabindex="0" @click="router.push(`/topics/${topic.id}`)" @keydown.enter="router.push(`/topics/${topic.id}`)">
           <LazyImage :src="topic.image" :alt="topic.title" class="topic-image" />
           <div class="topic-overlay">
             <div class="topic-content">
@@ -134,8 +135,8 @@
               <h3 class="topic-title">{{ topic.title }}</h3>
               <p class="topic-desc">{{ topic.description }}</p>
               <div class="topic-meta">
-                <span><i class="fa-solid fa-images"></i> {{ topic.photos }} 作品</span>
-                <span><i class="fa-solid fa-users"></i> {{ topic.photographers }} 摄影师</span>
+                <span><i class="fa-solid fa-images" aria-hidden="true"></i> {{ topic.photos }} 作品</span>
+                <span><i class="fa-solid fa-users" aria-hidden="true"></i> {{ topic.photographers }} 摄影师</span>
               </div>
             </div>
           </div>
@@ -157,7 +158,10 @@
           :key="item.id"
           class="inspiration-card"
           :style="{ animationDelay: `${index * 0.1}s` }"
+          role="button"
+          tabindex="0"
           @click="router.push(`/inspiration/${item.id}`)"
+          @keydown.enter="router.push(`/inspiration/${item.id}`)"
         >
           <div class="inspiration-image-wrapper">
             <LazyImage :src="item.image" :alt="item.title" />
@@ -172,14 +176,14 @@
             <p class="inspiration-desc">{{ item.description }}</p>
             <div class="inspiration-footer">
               <span class="author-name">by {{ item.author }}</span>
-              <i class="fa-solid fa-arrow-right"></i>
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </div>
           </div>
         </div>
       </div>
 
       <!-- 活跃活动横幅 -->
-      <div class="promo-banner fade-in-up cursor-pointer" style="animation-delay: 0.7s;" @click="router.push('/membership')">
+      <div class="promo-banner fade-in-up cursor-pointer" style="animation-delay: 0.7s;" role="button" tabindex="0" @click="router.push('/membership')" @keydown.enter="router.push('/membership')">
         <div class="promo-content">
           <div class="promo-text">
             <span class="promo-badge">🎉 热门活动</span>
@@ -201,7 +205,7 @@
             </div>
             <Button variant="primary" class="promo-btn" @click.stop="handleJoin">
               立即参与
-              <i class="fa-solid fa-arrow-right ml-2"></i>
+              <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
             </Button>
           </div>
           <div class="promo-image">
@@ -248,11 +252,13 @@
         <div class="lg:col-span-1 space-y-8">
           <div class="search-section fade-in-up" style="animation-delay: 1s;">
             <div class="search-wrapper">
-              <i class="fa-solid fa-search search-icon"></i>
+              <i class="fa-solid fa-search search-icon" aria-hidden="true"></i>
               <input
-                type="text"
+                type="search"
+                name="search"
+                autocomplete="off"
                 v-model="searchQuery"
-                placeholder="搜索作品、摄影师或风格..."
+                placeholder="搜索作品、摄影师或风格…"
                 class="search-input"
               />
             </div>
@@ -260,7 +266,7 @@
 
           <div class="sidebar-card fade-in-up" style="animation-delay: 1.1s;">
             <h3 class="sidebar-title">
-              <i class="fa-solid fa-fire mr-2"></i>
+              <i class="fa-solid fa-fire mr-2" aria-hidden="true"></i>
               热门风格
             </h3>
             <div class="tags-cloud">
@@ -278,14 +284,14 @@
 
           <div class="sidebar-card fade-in-up" style="animation-delay: 1.2s;">
             <h3 class="sidebar-title">
-              <i class="fa-solid fa-trophy mr-2"></i>
+              <i class="fa-solid fa-trophy mr-2" aria-hidden="true"></i>
               本周新星
             </h3>
             <div class="leaderboard">
               <div v-for="(user, index) in weeklyLeaders" :key="user.id" class="leader-item">
                 <div class="leader-rank" :class="{'top-three': index < 3}">
                   <span v-if="index < 3">{{ index + 1 }}</span>
-                  <i v-else class="fa-solid fa-user"></i>
+                  <i v-else class="fa-solid fa-user" aria-hidden="true"></i>
                 </div>
                 <img :src="user.avatar" :alt="user.name" class="leader-avatar" />
                 <div class="leader-info">
@@ -298,11 +304,11 @@
 
           <div class="sidebar-card fade-in-up" style="animation-delay: 1.3s;">
             <h3 class="sidebar-title">
-              <i class="fa-solid fa-users mr-2"></i>
+              <i class="fa-solid fa-users mr-2" aria-hidden="true"></i>
               推荐艺术家
             </h3>
             <div class="photographers-list">
-              <div v-for="photographer in featuredPhotographers" :key="photographer.id" class="photographer-item" @click="router.push(`/profile/${photographer.id}`)">
+              <div v-for="photographer in featuredPhotographers" :key="photographer.id" class="photographer-item" role="button" tabindex="0" @click="router.push(`/profile/${photographer.id}`)" @keydown.enter="router.push(`/profile/${photographer.id}`)">
                 <div class="photographer-info">
                   <img
                     :src="photographer.avatar"
@@ -333,7 +339,7 @@
               </div>
               <Button variant="primary" class="special-btn" @click="handleJoin">
                 探索专题
-                <i class="fa-solid fa-arrow-right ml-2"></i>
+                <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i>
               </Button>
             </div>
           </div>
@@ -733,7 +739,7 @@ const handleLoadMore = () => {
   display: flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .weather-stat-card:hover {
@@ -866,7 +872,7 @@ const handleLoadMore = () => {
   border-radius: 12px;
   padding: 16px 12px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .forecast-card:hover {
@@ -950,7 +956,7 @@ const handleLoadMore = () => {
   border-radius: 16px;
   overflow: hidden;
   height: 280px;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .topic-card:hover {
@@ -1034,7 +1040,7 @@ const handleLoadMore = () => {
   border: 1px solid #4A5F8B;
   border-radius: 16px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .inspiration-card:hover {
@@ -1210,7 +1216,7 @@ const handleLoadMore = () => {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .filter-btn:hover {
@@ -1261,11 +1267,12 @@ const handleLoadMore = () => {
   color: #F5F7FA;
   border-radius: 12px;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-input:focus {
-  outline: none;
+  outline: 2px solid #6B7C93;
+  outline-offset: 2px;
   border-color: #6B7C93;
   box-shadow: 0 0 0 3px rgba(74, 95, 139, 0.2);
 }
@@ -1304,7 +1311,7 @@ const handleLoadMore = () => {
   border-radius: 20px;
   font-size: 13px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .tag-chip:hover {
@@ -1331,7 +1338,7 @@ const handleLoadMore = () => {
   padding: 10px;
   background: #1E2532;
   border-radius: 10px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .leader-item:hover {

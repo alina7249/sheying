@@ -7,7 +7,9 @@
         </label>
         <input
           id="username"
+          name="username"
           type="text"
+          autocomplete="username"
           v-model="formData.username"
           @blur="validateUsername"
           :class="[
@@ -27,7 +29,9 @@
         <div class="relative">
           <input
             id="password"
+            name="password"
             :type="showPassword ? 'text' : 'password'"
+            autocomplete="current-password"
             v-model="formData.password"
             @blur="validatePassword"
             :class="[
@@ -43,7 +47,7 @@
             class="absolute inset-y-0 right-0 pr-3 flex items-center text-[#718096] hover:text-[#B8C6D8]"
             :aria-label="showPassword ? '隐藏密码' : '显示密码'"
           >
-            <i :class="['fa-solid', showPassword ? 'fa-eye-slash' : 'fa-eye']"></i>
+            <i :class="['fa-solid', showPassword ? 'fa-eye-slash' : 'fa-eye']" aria-hidden="true"></i>
           </button>
         </div>
         <p v-if="errors.password" class="mt-1 text-sm text-red-500">{{ errors.password }}</p>
@@ -89,8 +93,8 @@
         class="w-full py-3 px-4 bg-[#63B3ED] hover:bg-[#4299E1] text-[#0F1C2D] font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-[#63B3ED] transition-colors"
       >
         <span v-if="isSubmitting" class="flex items-center justify-center">
-          <i class="fa-solid fa-circle-notch fa-spin mr-2"></i>
-          登录中...
+          <i class="fa-solid fa-circle-notch fa-spin mr-2" aria-hidden="true"></i>
+          登录中…
         </span>
         <span v-else>登录</span>
       </button>

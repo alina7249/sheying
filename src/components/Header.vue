@@ -1,6 +1,6 @@
 <template>
   <header
-    :class="['sticky top-0 z-50 w-full border-b border-[#4A5F8B] transition-all duration-300', getBgClass()]">
+    :class="['sticky top-0 z-50 w-full border-b border-[#4A5F8B] transition-colors transition-[backdrop-filter,box-shadow] duration-300', getBgClass()]">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
@@ -8,7 +8,7 @@
             <div
               class="mr-2 text-2xl transition-transform hover:rotate-10"
               :class="theme === 'dark' ? 'text-[#63B3ED]' : 'text-[#4A5F8B]'">
-              <i class="fa-solid fa-camera"></i>
+              <i class="fa-solid fa-camera" aria-hidden="true"></i>
             </div>
             <span
               :class="['text-xl font-bold', theme === 'dark' ? 'text-[#F5F7FA]' : 'text-[#1E2532]']">影研社
@@ -16,13 +16,13 @@
           </router-link>
         </div>
 
-        <nav class="hidden md:flex items-center space-x-8">
+        <nav class="hidden md:flex items-center space-x-8" style="overscroll-behavior: contain">
           <router-link
             v-for="link in navLinks"
             :key="link.path"
             :to="link.path"
             :class="[
-              'font-medium transition-colors relative',
+              'font-medium transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#63B3ED]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded',
               getTextClass(route.path === link.path)
             ]"
             :style="route.path === link.path ? {
@@ -47,7 +47,7 @@
                 ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA]'
                 : 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#63B3ED] hover:from-[#4A5F8B]/30 hover:to-[#63B3ED]/30'
             ]">
-            <i class="fa-solid fa-crown text-xs"></i>开通会员
+            <i class="fa-solid fa-crown text-xs" aria-hidden="true"></i>开通会员
           </router-link>
 
           <div v-if="isAuthenticated" class="relative">
@@ -83,7 +83,7 @@
             :class="theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8]' : 'bg-gray-100 text-[#6B7C93]'"
             @click="toggleTheme"
             :aria-label="theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'">
-            <i :class="['fa-solid', theme === 'dark' ? 'fa-sun' : 'fa-moon']"></i>
+            <i :class="['fa-solid', theme === 'dark' ? 'fa-sun' : 'fa-moon']" aria-hidden="true"></i>
           </button>
           <button
             v-if="isAuthenticated"
@@ -100,8 +100,8 @@
             class="p-2 rounded-full transition-colors"
             :class="theme === 'dark' ? 'hover:bg-[#2D3748] text-[#B8C6D8]' : 'hover:bg-gray-100 text-[#6B7C93]'"
             @click="isMobileMenuOpen = !isMobileMenuOpen"
-            aria-label="Open menu">
-            <i :class="['fa-solid', isMobileMenuOpen ? 'fa-times' : 'fa-bars']"></i>
+            aria-label="打开菜单">
+            <i :class="['fa-solid', isMobileMenuOpen ? 'fa-times' : 'fa-bars']" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -127,37 +127,37 @@
                 :to="`/profile/${user?.id}`"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-image mb-1"></i>作品
+                <i class="fa-solid fa-image mb-1" aria-hidden="true"></i>作品
               </router-link>
               <router-link
                 :to="isAuthenticated ? '/profile/1' : '/login'"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-heart mb-1"></i>收藏
+                <i class="fa-solid fa-heart mb-1" aria-hidden="true"></i>收藏
               </router-link>
               <router-link
                 :to="isAuthenticated ? '/profile-settings' : '/login'"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-cog mb-1"></i>设置
+                <i class="fa-solid fa-cog mb-1" aria-hidden="true"></i>设置
               </router-link>
               <router-link
                 to="/admin"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#4A5F8B]/20 text-[#4A5F8B] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-[#63B3ED]/10 text-[#63B3ED] hover:bg-[#63B3ED]/20 hover:text-[#4299E1]']"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-user-shield mb-1"></i>管理后台
+                <i class="fa-solid fa-user-shield mb-1" aria-hidden="true"></i>管理后台
               </router-link>
               <router-link
                 to="/membership"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#63B3ED] hover:from-[#4A5F8B]/30 hover:to-[#63B3ED]/30']"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-crown mb-1"></i>开通会员
+                <i class="fa-solid fa-crown mb-1" aria-hidden="true"></i>开通会员
               </router-link>
             </div>
             <button
               @click="handleLogout(); isMobileMenuOpen = false"
               :class="['w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']">
-              <i class="fa-solid fa-sign-out-alt mr-2"></i>退出登录
+              <i class="fa-solid fa-sign-out-alt mr-2" aria-hidden="true"></i>退出登录
             </button>
           </div>
           <div v-else class="px-4 space-y-3">
@@ -252,7 +252,7 @@ const toggleProfileDropdown = () => {
 
 const getBgClass = () => {
   if (scrolled.value) {
-    return theme.value === 'dark' ? 'bg-[#1E2532]/95 backdrop-blur-sm' : 'bg-white/95 backdrop-blur-sm shadow-md';
+    return theme.value === 'dark' ? 'bg-[#1E2532]/80 backdrop-blur-lg shadow-lg shadow-black/20' : 'bg-white/80 backdrop-blur-lg shadow-md';
   }
   return theme.value === 'dark' ? 'bg-[#1E2532]' : 'bg-white';
 };
@@ -266,9 +266,13 @@ const getTextClass = (isActive: boolean) => {
 </script>
 
 <style scoped>
-.slide-enter-active,
+.slide-enter-active {
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
 .slide-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 1, 1), max-height 0.25s cubic-bezier(0.4, 0, 1, 1), transform 0.25s cubic-bezier(0.4, 0, 1, 1);
   overflow: hidden;
 }
 
@@ -276,11 +280,20 @@ const getTextClass = (isActive: boolean) => {
 .slide-leave-to {
   opacity: 0;
   max-height: 0;
+  transform: translateY(-8px);
 }
 
 .slide-enter-to,
 .slide-leave-from {
   opacity: 1;
-  max-height: 500px;
+  max-height: 600px;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: none;
+  }
 }
 </style>

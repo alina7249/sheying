@@ -1,13 +1,16 @@
 <template>
-  <div class="min-h-screen bg-[#0F1C2D]">
+  <div class="min-h-screen bg-black">
+    <div class="mx-auto" style="max-width: 1440px">
+      <div class="relative bg-black flex items-center justify-center" style="min-height: 60vh">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/80 z-10 pointer-events-none"></div>
+        <img :src="mockPhotoPost.image" :alt="mockPhotoPost.title" class="w-full object-contain" style="max-height: 80vh" />
+      </div>
+    </div>
+
     <div class="max-w-6xl mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-          <div class="bg-[#1E2532] rounded-xl overflow-hidden aspect-[16/9]">
-            <LazyImage :src="mockPhotoPost.image" :alt="mockPhotoPost.title" :lazy="false" rounded />
-          </div>
-
-          <div class="mt-6">
+          <div>
             <div class="flex items-start justify-between mb-4">
               <div>
                 <h1 class="text-2xl font-bold text-white">{{ mockPhotoPost.title }}</h1>
@@ -27,7 +30,7 @@
                   <h3 class="font-medium text-white">{{ mockPhotoPost.author.name }}</h3>
                   <p class="text-sm text-[#6B7C93]">{{ mockPhotoPost.author.followers }} 粉丝 · {{ mockPhotoPost.author.posts }} 作品</p>
                 </div>
-                <button 
+                <button
                   @click="isFollowing = !isFollowing; showSuccess(isFollowing ? `已关注 @${mockPhotoPost.author.name}` : `已取消关注 @${mockPhotoPost.author.name}`)"
                   :class="['ml-auto px-4 py-2 rounded-lg transition-colors', isFollowing ? 'bg-[#1E2532] border border-[#4A5F8B] text-[#4A5F8B]' : 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]']"
                 >
@@ -40,30 +43,76 @@
 
             <div class="mt-6 bg-[#1E2532] rounded-xl p-6">
               <h3 class="text-lg font-semibold text-white mb-4">EXIF 信息</h3>
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <p class="text-sm text-[#6B7C93]">相机</p>
-                  <p class="text-white">{{ mockPhotoPost.exif.camera }}</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.camera }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-[#6B7C93]">镜头</p>
-                  <p class="text-white">{{ mockPhotoPost.exif.lens }}</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.lens }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-[#6B7C93]">光圈</p>
-                  <p class="text-white">{{ mockPhotoPost.exif.aperture }}</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.aperture }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-[#6B7C93]">快门</p>
-                  <p class="text-white">{{ mockPhotoPost.exif.shutter }}</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.shutter }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-[#6B7C93]">ISO</p>
-                  <p class="text-white">{{ mockPhotoPost.exif.iso }}</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.iso }}</p>
                 </div>
                 <div>
                   <p class="text-sm text-[#6B7C93]">焦距</p>
-                  <p class="text-white">{{ mockPhotoPost.exif.focalLength }}</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.focalLength }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-[#6B7C93]">白平衡</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.whiteBalance }}</p>
+                </div>
+                <div>
+                  <p class="text-sm text-[#6B7C93]">拍摄时间</p>
+                  <p class="text-white text-sm font-mono">{{ mockPhotoPost.exif.date }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 bg-[#1E2532] rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-white mb-4">评论 ({{ photoComments.length }})</h3>
+              <div class="flex gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-[#4A5F8B] flex items-center justify-center flex-shrink-0">
+                  <span class="text-white text-sm font-bold">{{ currentUser.charAt(0) }}</span>
+                </div>
+                <form @submit.prevent="submitPhotoComment" class="flex-1 flex gap-2">
+                  <input
+                    v-model="newPhotoComment"
+                    placeholder="写下你的评论..."
+                    class="flex-1 px-4 py-2 bg-[#0F1C2D] border border-[#4A5F8B] rounded-lg text-white placeholder-[#6B7C93] focus:outline-none focus:ring-2 focus:ring-[#4A5F8B]"
+                  />
+                  <button
+                    type="submit"
+                    :disabled="!newPhotoComment.trim()"
+                    :class="['px-4 py-2 rounded-lg transition-colors', newPhotoComment.trim() ? 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]' : 'bg-gray-600 text-white cursor-not-allowed']"
+                  >
+                    发送
+                  </button>
+                </form>
+              </div>
+              <div v-if="photoComments.length === 0" class="text-center py-8 text-[#6B7C93]">
+                暂无评论，快来发表第一条评论吧
+              </div>
+              <div v-for="comment in photoComments" :key="comment.id" class="flex gap-3 py-4 border-t border-[#4A5F8B]/30">
+                <div class="w-8 h-8 rounded-full bg-[#4A5F8B] flex items-center justify-center flex-shrink-0">
+                  <span class="text-white text-xs font-bold">{{ comment.author.charAt(0) }}</span>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-white text-sm font-medium">{{ comment.author }}</span>
+                    <span class="text-xs text-[#6B7C93]">{{ comment.time }}</span>
+                  </div>
+                  <p class="text-[#B8C6D8] text-sm">{{ comment.content }}</p>
                 </div>
               </div>
             </div>
@@ -80,7 +129,7 @@
             </div>
 
             <div class="flex items-center gap-8">
-              <button 
+              <button
                 @click="handleLike"
                 :class="['flex items-center gap-2 transition-colors', isLiked ? 'text-[#F56565]' : 'text-[#6B7C93] hover:text-white']"
               >
@@ -89,9 +138,9 @@
               </button>
               <button class="flex items-center gap-2 text-[#6B7C93] hover:text-white transition-colors">
                 <i class="fa-solid fa-comment"></i>
-                <span class="font-medium">{{ mockPhotoPost.comments }}</span>
+                <span class="font-medium">{{ mockPhotoPost.comments + photoComments.length }}</span>
               </button>
-              <button 
+              <button
                 @click="handleBookmark"
                 :class="['flex items-center gap-2 transition-colors', isBookmarked ? 'text-[#4A5F8B]' : 'text-[#6B7C93] hover:text-white']"
               >
@@ -123,7 +172,7 @@
                 <h3 class="font-medium text-white">订阅专栏</h3>
                 <p class="text-sm text-[#B8C6D8]">获取独家摄影教程和技巧</p>
               </div>
-              <button 
+              <button
                 @click="isSubscribed = !isSubscribed; showSuccess(isSubscribed ? '订阅成功' : '已取消订阅')"
                 :class="['px-4 py-2 rounded-lg transition-colors', isSubscribed ? 'bg-[#1E2532] border border-[#4A5F8B] text-[#4A5F8B]' : 'bg-purple-500 text-white hover:bg-purple-600']"
               >
@@ -135,8 +184,8 @@
           <div class="bg-[#1E2532] rounded-xl p-6">
             <h3 class="text-lg font-semibold text-white mb-4">授权选项</h3>
             <div class="space-y-3">
-              <div 
-                v-for="option in mockPhotoPost.licensingOptions" 
+              <div
+                v-for="option in mockPhotoPost.licensingOptions"
                 :key="option.id"
                 :class="['p-4 rounded-lg border cursor-pointer transition-colors', selectedLicense?.id === option.id ? 'border-[#4A5F8B] bg-[#4A5F8B]/10' : 'border-[#4A5F8B]/30 hover:border-[#4A5F8B]']"
                 @click="selectedLicense = option"
@@ -150,7 +199,7 @@
                 </div>
               </div>
             </div>
-            <button 
+            <button
               v-if="selectedLicense"
               @click="showSuccess(`已购买「${selectedLicense.name}」授权，金额 ¥${selectedLicense.price}`)"
               class="w-full mt-4 px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors"
@@ -196,7 +245,7 @@
             <button @click="showDonationModal = false" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg">
               取消
             </button>
-            <button 
+            <button
               @click="handleDonate"
               :disabled="!canDonate"
               :class="['px-4 py-2 rounded-lg', canDonate ? 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]' : 'bg-gray-600 text-white cursor-not-allowed']"
@@ -217,6 +266,15 @@ import CommentSection from '../components/CommentSection.vue';
 import LazyImage from '../components/LazyImage.vue';
 
 const { showSuccess, handleLike: composableLike, handleBookmark: composableBookmark, handleShare, handleDownload } = useInteraction();
+
+interface PhotoComment {
+  id: string;
+  author: string;
+  content: string;
+  time: string;
+}
+
+const currentUser = '光影捕手';
 
 const mockPhotoPost = {
   id: '1',
@@ -277,6 +335,11 @@ const selectedLicense = ref(mockPhotoPost.licensingOptions[0]);
 const showDonationModal = ref(false);
 const selectedDonation = ref(mockPhotoPost.donationOptions[0]);
 const customDonationAmount = ref(0);
+const newPhotoComment = ref('');
+const photoComments = ref<PhotoComment[]>([
+  { id: 'pc1', author: '极简摄影师林风', content: '感谢大家的喜欢！这张照片拍摄于上海当代艺术博物馆，光线条件非常好。', time: '2023-10-26 10:30' },
+  { id: 'pc2', author: '风光爱好者', content: '构图很完美，黑白对比处理得恰到好处！', time: '2023-10-26 11:15' },
+]);
 
 const canDonate = computed(() => {
   if (selectedDonation.value?.id === 'custom') {
@@ -284,6 +347,18 @@ const canDonate = computed(() => {
   }
   return selectedDonation.value?.amount > 0;
 });
+
+const submitPhotoComment = () => {
+  if (!newPhotoComment.value.trim()) return;
+  photoComments.value.unshift({
+    id: `pc-${Date.now()}`,
+    author: currentUser,
+    content: newPhotoComment.value.trim(),
+    time: new Date().toLocaleString('zh-CN')
+  });
+  showSuccess('评论发表成功');
+  newPhotoComment.value = '';
+};
 
 const handleLike = () => {
   isLiked.value = !isLiked.value;

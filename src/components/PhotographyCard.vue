@@ -156,7 +156,7 @@ const handleBookmark = () => {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid #4A5F8B;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -217,7 +217,7 @@ const handleBookmark = () => {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .action-btn:hover {
@@ -264,7 +264,7 @@ const handleBookmark = () => {
   font-weight: 600;
   border-radius: 12px;
   border: 1px solid rgba(245, 247, 250, 0.1);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .card-hovered .tag-badge {
@@ -295,7 +295,7 @@ const handleBookmark = () => {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid transparent;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
 .avatar-border {
@@ -305,7 +305,7 @@ const handleBookmark = () => {
   border: 2px solid #4A5F8B;
   opacity: 0;
   transform: scale(0.8);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-hovered .avatar-border {

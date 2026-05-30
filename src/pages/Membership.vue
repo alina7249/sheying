@@ -1,18 +1,20 @@
 <template>
   <div class="min-h-screen bg-[#0F1C2D]">
-    <section class="relative overflow-hidden py-16 md:py-24">
-      <div class="absolute inset-0 bg-gradient-to-b from-[#4A5F8B]/20 via-transparent to-transparent"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#4A5F8B]/10 rounded-full blur-3xl"></div>
+    <section class="relative overflow-hidden py-20 md:py-28">
+      <div class="absolute inset-0 bg-gradient-to-b from-[#4A5F8B]/25 via-[#0F1C2D]/50 to-[#0F1C2D]"></div>
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-radial from-[#4A5F8B]/30 via-[#0F1C2D]/10 to-transparent rounded-full blur-3xl"></div>
+      <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-[#63B3ED]/8 rounded-full blur-3xl"></div>
+      <div class="absolute inset-0 membership-hero-grid opacity-[0.03]"></div>
       <div class="container mx-auto px-4 relative z-10">
         <div class="text-center max-w-3xl mx-auto">
-          <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#4A5F8B]/20 border border-[#4A5F8B]/30 text-[#63B3ED] text-sm font-medium mb-6">
-            <i class="fa-solid fa-crown mr-2"></i>影研社会员
+          <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#4A5F8B]/15 border border-[#4A5F8B]/25 text-[#63B3ED] text-sm font-medium mb-8 tracking-wide">
+            <i class="fa-solid fa-crown mr-2" aria-hidden="true"></i>影研社会员
           </div>
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#F5F7FA] mb-6 leading-tight">
-            解锁<span class="text-[#63B3ED]">无限创意</span>可能
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#F5F7FA] mb-6 leading-tight" style="text-wrap: balance">
+            解锁<span class="hero-accent-text">无限创意</span>可能
           </h1>
-          <p class="text-lg text-[#B8C6D8] mb-8 max-w-2xl mx-auto leading-relaxed">
-            选择适合您的会员方案，享受高清原图下载、专属预设包、优先赛事报名等专属特权，让您的摄影之旅更加精彩
+          <p class="text-lg text-[#B8C6D8] mb-10 max-w-2xl mx-auto leading-relaxed" style="text-wrap: balance">
+            选择适合您的会员方案，享受高清原图下载、专属预设包、优先赛事报名等专属特权
           </p>
           <div class="flex items-center justify-center gap-2">
             <div class="flex items-center bg-[#1E2532] rounded-xl p-1.5 border border-[#4A5F8B]/30">
@@ -45,21 +47,21 @@
           v-for="tier in tiers"
           :key="tier.id"
           :class="[
-            'relative rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-2',
+            'relative rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-2 tier-card',
             tier.recommended
-              ? 'border-[#4A5F8B] bg-[#1E2532] ring-1 ring-[#4A5F8B]/50 shadow-[0_0_30px_rgba(74,95,139,0.15)]'
+              ? 'border-[#4A5F8B] bg-[#1E2532] tier-card-glow'
               : 'border-[#4A5F8B]/20 bg-[#1E2532] hover:border-[#4A5F8B]/50'
           ]">
           <div v-if="tier.recommended" class="absolute -top-3 left-1/2 -translate-x-1/2">
             <span class="px-4 py-1 bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] text-xs font-bold rounded-full shadow-lg">
-              <i class="fa-solid fa-star mr-1"></i>推荐
+              <i class="fa-solid fa-star mr-1" aria-hidden="true"></i>推荐
             </span>
           </div>
 
           <div class="text-center mb-6">
             <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4"
               :class="tier.recommended ? 'bg-[#4A5F8B]/20' : 'bg-[#2D3748]'">
-              <i :class="['fa-solid text-2xl', tier.icon, tier.recommended ? 'text-[#63B3ED]' : 'text-[#6B7C93]']"></i>
+              <i :class="['fa-solid text-2xl', tier.icon, tier.recommended ? 'text-[#63B3ED]' : 'text-[#6B7C93]']" aria-hidden="true"></i>
             </div>
             <h3 class="text-xl font-bold text-[#F5F7FA] mb-1">{{ tier.name }}</h3>
             <p class="text-sm text-[#6B7C93]">{{ tier.description }}</p>
@@ -67,7 +69,7 @@
 
           <div class="text-center mb-6">
             <div class="flex items-baseline justify-center">
-              <span class="text-4xl font-bold text-[#F5F7FA]">¥{{ billingCycle === 'monthly' ? tier.monthlyPrice : tier.yearlyPrice }}</span>
+              <span class="text-4xl font-bold text-[#F5F7FA] pricing-number">¥{{ billingCycle === 'monthly' ? tier.monthlyPrice : tier.yearlyPrice }}</span>
               <span class="text-[#6B7C93] ml-1">/{{ billingCycle === 'monthly' ? '月' : '年' }}</span>
             </div>
             <p v-if="billingCycle === 'yearly' && tier.id !== 'free'" class="text-xs text-[#48BB78] mt-1">
@@ -80,11 +82,11 @@
               <i :class="[
                 'fa-solid mr-2 mt-0.5 flex-shrink-0',
                 tier.recommended ? 'fa-check text-[#63B3ED]' : 'fa-check text-[#4A5F8B]'
-              ]"></i>
+              ]" aria-hidden="true"></i>
               <span class="text-[#B8C6D8]">{{ feature }}</span>
             </li>
             <li v-for="feature in tier.unavailableFeatures" :key="feature" class="flex items-start text-sm">
-              <i class="fa-solid fa-times mr-2 mt-0.5 flex-shrink-0 text-[#6B7C93]/40"></i>
+              <i class="fa-solid fa-times mr-2 mt-0.5 flex-shrink-0 text-[#6B7C93]/40" aria-hidden="true"></i>
               <span class="text-[#6B7C93]/40 line-through">{{ feature }}</span>
             </li>
           </ul>
@@ -115,34 +117,34 @@
           <div>
             <h2 class="text-2xl md:text-3xl font-bold text-[#F5F7FA] mb-4">全功能对比</h2>
             <p class="text-[#B8C6D8] mb-8">一目了然地了解每个会员等级提供的功能，选择最适合您的方案</p>
-            <div class="overflow-x-auto">
-              <table class="w-full">
+            <div class="overflow-x-auto compare-table-wrapper">
+              <table class="w-full border-collapse">
                 <thead>
                   <tr class="border-b border-[#4A5F8B]/20">
-                    <th class="py-3 text-left text-sm font-medium text-[#B8C6D8]">功能</th>
-                    <th class="py-3 text-center text-sm font-medium text-[#6B7C93]">免费</th>
-                    <th class="py-3 text-center text-sm font-medium text-[#B8C6D8]">Basic</th>
-                    <th class="py-3 text-center text-sm font-medium text-[#63B3ED]">Pro</th>
-                    <th class="py-3 text-center text-sm font-medium text-[#B8C6D8]">VIP</th>
+                    <th class="py-3.5 text-left text-sm font-medium text-[#B8C6D8] pl-4">功能</th>
+                    <th class="py-3.5 text-center text-sm font-medium text-[#6B7C93]">免费</th>
+                    <th class="py-3.5 text-center text-sm font-medium text-[#B8C6D8]">Basic</th>
+                    <th class="py-3.5 text-center text-sm font-medium text-[#63B3ED] compare-pro-col">Pro</th>
+                    <th class="py-3.5 text-center text-sm font-medium text-[#B8C6D8] pr-4">VIP</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="row in comparisonRows" :key="row.name" class="border-b border-[#4A5F8B]/10">
-                    <td class="py-3 text-sm text-[#B8C6D8]">{{ row.name }}</td>
-                    <td class="py-3 text-center">
-                      <i v-if="row.free" class="fa-solid fa-check text-[#4A5F8B] text-sm"></i>
-                      <i v-else class="fa-solid fa-minus text-[#6B7C93]/30 text-sm"></i>
+                  <tr v-for="(row, i) in comparisonRows" :key="row.name" class="border-b border-[#4A5F8B]/8 transition-colors duration-150" :class="i % 2 === 0 ? 'bg-[#0F1C2D]/40' : ''">
+                    <td class="py-3.5 text-sm text-[#B8C6D8] pl-4 font-medium">{{ row.name }}</td>
+                    <td class="py-3.5 text-center">
+                      <i v-if="row.free" class="fa-solid fa-check text-[#4A5F8B] text-sm" aria-hidden="true"></i>
+                      <i v-else class="fa-solid fa-minus text-[#6B7C93]/30 text-sm" aria-hidden="true"></i>
                     </td>
-                    <td class="py-3 text-center">
-                      <span v-if="row.basic === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#4A5F8B] text-sm"></i></span>
+                    <td class="py-3.5 text-center">
+                      <span v-if="row.basic === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#4A5F8B] text-sm" aria-hidden="true"></i></span>
                       <span v-else class="text-sm text-[#B8C6D8]">{{ row.basic }}</span>
                     </td>
-                    <td class="py-3 text-center">
-                      <span v-if="row.pro === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#63B3ED] text-sm"></i></span>
+                    <td class="py-3.5 text-center compare-pro-col">
+                      <span v-if="row.pro === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#63B3ED] text-sm" aria-hidden="true"></i></span>
                       <span v-else class="text-sm text-[#63B3ED]">{{ row.pro }}</span>
                     </td>
-                    <td class="py-3 text-center">
-                      <span v-if="row.vip === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#4A5F8B] text-sm"></i></span>
+                    <td class="py-3.5 text-center pr-4">
+                      <span v-if="row.vip === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#4A5F8B] text-sm" aria-hidden="true"></i></span>
                       <span v-else class="text-sm text-[#B8C6D8]">{{ row.vip }}</span>
                     </td>
                   </tr>
@@ -152,9 +154,18 @@
           </div>
           <div class="space-y-6">
             <h3 class="text-xl font-bold text-[#F5F7FA] mb-6">常见问题</h3>
-            <div v-for="faq in faqs" :key="faq.q" class="bg-[#0F1C2D] rounded-xl p-5 border border-[#4A5F8B]/10">
-              <h4 class="font-medium text-[#F5F7FA] mb-2">{{ faq.q }}</h4>
-              <p class="text-sm text-[#B8C6D8] leading-relaxed">{{ faq.a }}</p>
+            <div class="space-y-3">
+              <details v-for="faq in faqs" :key="faq.q" class="faq-details bg-[#0F1C2D] rounded-xl border border-[#4A5F8B]/10 group">
+                <summary class="flex items-center justify-between p-5 cursor-pointer list-none marker:content-none">
+                  <span class="font-medium text-[#F5F7FA] pr-4">{{ faq.q }}</span>
+                  <span class="faq-chevron flex-shrink-0 w-6 h-6 rounded-full bg-[#4A5F8B]/15 flex items-center justify-center text-[#63B3ED] text-xs transition-transform duration-300">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </span>
+                </summary>
+                <div class="px-5 pb-5">
+                  <p class="text-sm text-[#B8C6D8] leading-relaxed">{{ faq.a }}</p>
+                </div>
+              </details>
             </div>
           </div>
         </div>
@@ -168,8 +179,8 @@
           <div class="relative bg-[#1E2532] rounded-2xl border border-[#4A5F8B] w-full max-w-md shadow-2xl">
             <div class="flex items-center justify-between p-6 border-b border-[#4A5F8B]/20">
               <h3 class="text-lg font-bold text-[#F5F7FA]">确认开通</h3>
-              <button @click="showPaymentModal = false" class="w-8 h-8 rounded-lg bg-[#2D3748] flex items-center justify-center text-[#B8C6D8] hover:text-[#F5F7FA] hover:bg-[#4A5F8B]/30 transition-colors">
-                <i class="fa-solid fa-times"></i>
+              <button @click="showPaymentModal = false" class="w-8 h-8 rounded-lg bg-[#2D3748] flex items-center justify-center text-[#B8C6D8] hover:text-[#F5F7FA] hover:bg-[#4A5F8B]/30 transition-colors" aria-label="关闭">
+                <i class="fa-solid fa-times" aria-hidden="true"></i>
               </button>
             </div>
             <div class="p-6 space-y-5">
@@ -199,7 +210,7 @@
                         ? 'border-[#4A5F8B] bg-[#4A5F8B]/10 text-[#63B3ED]'
                         : 'border-[#4A5F8B]/20 bg-[#0F1C2D] text-[#B8C6D8] hover:border-[#4A5F8B]/50'
                     ]">
-                    <i class="fa-brands fa-alipay text-2xl"></i>
+                    <i class="fa-brands fa-alipay text-2xl" aria-hidden="true"></i>
                     <span class="font-medium">支付宝</span>
                   </button>
                   <button
@@ -210,7 +221,7 @@
                         ? 'border-[#4A5F8B] bg-[#4A5F8B]/10 text-[#63B3ED]'
                         : 'border-[#4A5F8B]/20 bg-[#0F1C2D] text-[#B8C6D8] hover:border-[#4A5F8B]/50'
                     ]">
-                    <i class="fa-brands fa-weixin text-2xl"></i>
+                    <i class="fa-brands fa-weixin text-2xl" aria-hidden="true"></i>
                     <span class="font-medium">微信支付</span>
                   </button>
                 </div>
@@ -222,7 +233,7 @@
                 :disabled="isProcessing"
                 class="w-full py-3.5 rounded-xl font-medium bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] hover:shadow-lg hover:shadow-[#4A5F8B]/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span v-if="!isProcessing">确认支付 ¥{{ billingCycle === 'monthly' ? selectedTier?.monthlyPrice : selectedTier?.yearlyPrice }}</span>
-                <span v-else><i class="fa-solid fa-spinner fa-spin mr-2"></i>处理中...</span>
+                <span v-else><i class="fa-solid fa-spinner fa-spin mr-2" aria-hidden="true"></i>处理中…</span>
               </button>
             </div>
           </div>
@@ -390,7 +401,7 @@ async function confirmPayment() {
   if (!selectedTier.value) return
 
   isProcessing.value = true
-  const loadingId = showLoading('正在处理支付...')
+  const loadingId = showLoading('正在处理支付…')
 
   await new Promise(resolve => setTimeout(resolve, 1500))
 
@@ -423,9 +434,80 @@ async function confirmPayment() {
 </script>
 
 <style scoped>
+.hero-accent-text {
+  background: linear-gradient(135deg, #63B3ED 0%, #8a50ff 50%, #63B3ED 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: accentShift 6s ease-in-out infinite;
+}
+
+@keyframes accentShift {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 200% center; }
+}
+
+.membership-hero-grid {
+  background-image:
+    linear-gradient(rgba(74, 95, 139, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 95, 139, 0.15) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.pricing-number {
+  font-variant-numeric: tabular-nums;
+}
+
+.tier-card-glow {
+  box-shadow:
+    0 0 40px rgba(74, 95, 139, 0.2),
+    0 0 80px rgba(74, 95, 139, 0.08),
+    inset 0 1px 0 rgba(99, 179, 237, 0.1);
+  position: relative;
+}
+
+.tier-card-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 18px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(74, 95, 139, 0.5), rgba(99, 179, 237, 0.3), rgba(74, 95, 139, 0.5));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.faq-details[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.faq-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.compare-table-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.compare-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.compare-table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(74, 95, 139, 0.3);
+  border-radius: 3px;
+}
+
+.compare-pro-col {
+  background: rgba(74, 95, 139, 0.06);
+}
+
 .modal-enter-active,
 .modal-leave-active {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-enter-from,
@@ -436,5 +518,28 @@ async function confirmPayment() {
 .modal-enter-from > div:last-child,
 .modal-leave-to > div:last-child {
   transform: scale(0.95) translateY(-20px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tier-card {
+    transition: none;
+  }
+
+  .hero-accent-text {
+    animation: none;
+  }
+
+  .modal-enter-active,
+  .modal-leave-active {
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 </style>

@@ -5,7 +5,12 @@
     :class="{ loading: isLoading, loaded: isLoaded, error: hasError, rounded: rounded }"
     :style="{ borderRadius: rounded ? '0.75rem' : '0' }"
   >
-    <div v-if="isLoading" class="image-skeleton" :style="{ backgroundColor: placeholderColor }">
+    <div
+      v-if="isLoading"
+      class="image-skeleton"
+      :style="{ backgroundColor: placeholderColor }"
+      aria-hidden="true"
+    >
       <div class="shimmer"></div>
     </div>
     <img
@@ -13,8 +18,10 @@
       ref="imgRef"
       :src="shouldLoad ? src : ''"
       :alt="alt"
+      :width="width"
+      :height="height"
+      :fetchpriority="fetchpriority"
       :class="['lazy-image', { visible: isLoaded, rounded: rounded }]"
-      :style="{ objectFit: objectFit, borderRadius: rounded ? '0.75rem' : '0' }"
       :loading="lazy ? 'lazy' : 'eager'"
       @load="onLoad"
       @error="onError"
@@ -35,12 +42,18 @@ interface Props {
   lazy?: boolean;
   rounded?: boolean;
   objectFit?: string;
+  width?: number;
+  height?: number;
+  fetchpriority?: 'auto' | 'high' | 'low';
 }
 
 const props = withDefaults(defineProps<Props>(), {
   lazy: true,
   rounded: false,
-  objectFit: 'cover'
+  objectFit: 'cover',
+  width: 800,
+  height: 600,
+  fetchpriority: 'auto'
 });
 
 const emit = defineEmits<{
@@ -160,7 +173,6 @@ onBeforeUnmount(() => {
   inset: 0;
   background: #2D3748;
   background-size: 200% 100%;
-  animation: shimmer 1.8s ease-in-out infinite;
 }
 
 .shimmer {
@@ -173,7 +185,16 @@ onBeforeUnmount(() => {
     transparent 100%
   );
   background-size: 200% 100%;
-  animation: shimmerSlide 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .image-skeleton {
+    animation: shimmer 1.8s ease-in-out infinite;
+  }
+
+  .shimmer {
+    animation: shimmerSlide 1.8s ease-in-out infinite;
+  }
 }
 
 .lazy-image {

@@ -53,7 +53,7 @@ const authStore = useAuthStore()
 const { theme } = storeToRefs(authStore)
 
 // Base styles with accessibility and motion support
-const baseStyles = 'font-medium rounded-lg transition-all duration-200 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95 touch-action:manipulation'
+const baseStyles = 'font-medium rounded-lg transition-colors transition-transform transition-shadow duration-200 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] active:scale-95 touch-action:manipulation'
 
 // Size styles
 const sizeStyles: Record<string, string> = {

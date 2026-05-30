@@ -32,27 +32,31 @@
               </div>
             </div>
 
-            <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
-              <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">课程章节 ({{ course.chapters.length }}章)</h2>
+            <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]/20">
+              <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">课程章节 ({{ course.chapters.length }}章 · {{ course.chapters.reduce((a, c) => a + c.lessons.length, 0) }}课时)</h2>
               <div class="space-y-2">
-                <div v-for="(chapter, idx) in course.chapters" :key="idx" class="border border-[#4A5F8B] rounded-lg">
-                  <button @click="toggleChapter(idx)" class="flex items-center justify-between w-full p-4">
-                    <div class="flex items-center space-x-3">
-                      <span class="w-8 h-8 bg-[#1E2A3A] rounded flex items-center justify-center text-[#4A5F8B]"><i :class="openChapters.includes(idx) ? 'fa-solid fa-chevron-down' : 'fa-solid fa-chevron-right'"></i></span>
-                      <span class="font-medium text-[#F5F7FA]">{{ chapter.title }}</span>
-                      <span class="text-sm text-[#6B7C93]">({{ chapter.lessons.length }}课时)</span>
+                <div v-for="(chapter, idx) in course.chapters" :key="idx" class="border border-[#4A5F8B]/15 rounded-lg overflow-hidden transition-colors duration-200 hover:border-[#4A5F8B]/30">
+                  <button @click="toggleChapter(idx)" class="flex items-center w-full p-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#63B3ED]/40 focus-visible:ring-inset">
+                    <div class="flex items-center gap-4 flex-1 min-w-0">
+                      <span class="chapter-index flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold" :class="openChapters.includes(idx) ? 'bg-[#4A5F8B]/20 text-[#63B3ED]' : 'bg-[#1E2A3A] text-[#6B7C93]'">{{ idx + 1 }}</span>
+                      <div class="min-w-0">
+                        <span class="font-medium text-[#F5F7FA] block truncate">{{ chapter.title }}</span>
+                        <span class="text-xs text-[#6B7C93]">{{ chapter.lessons.length }} 课时 · {{ chapter.duration }}</span>
+                      </div>
                     </div>
-                    <span class="text-sm text-[#6B7C93]">{{ chapter.duration }}</span>
+                    <span class="faq-chevron flex-shrink-0 w-7 h-7 rounded-full bg-[#4A5F8B]/10 flex items-center justify-center text-[#6B7C93] text-xs transition-transform duration-300" :class="openChapters.includes(idx) ? 'rotate-180' : ''">
+                      <i class="fa-solid fa-chevron-down"></i>
+                    </span>
                   </button>
-                  <Transition name="fade">
-                    <div v-if="openChapters.includes(idx)" class="px-4 pb-4 space-y-2">
-                      <div v-for="lesson in chapter.lessons" :key="lesson.id" class="flex items-center justify-between p-2 rounded hover:bg-[#1E2A3A] transition-colors">
-                        <div class="flex items-center space-x-2">
-                          <i :class="lesson.completed ? 'fa-solid fa-check-circle text-[#4A5F8B]' : 'fa-solid fa-play-circle text-[#B8C6D8]'"></i>
-                          <span class="text-sm text-[#B8C6D8]">{{ lesson.title }}</span>
-                          <span v-if="lesson.isFree" class="px-2 py-0.5 bg-[#4A5F8B] text-[#F5F7FA] rounded text-xs">免费</span>
+                  <Transition name="chapter-expand">
+                    <div v-if="openChapters.includes(idx)" class="px-4 pb-4 space-y-1">
+                      <div v-for="lesson in chapter.lessons" :key="lesson.id" class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#1E2A3A]/60 transition-colors cursor-pointer group/lesson">
+                        <div class="flex items-center gap-3 min-w-0">
+                          <i :class="lesson.completed ? 'fa-solid fa-check-circle text-green-400' : 'fa-regular fa-circle-play text-[#6B7C93] group-hover/lesson:text-[#63B3ED]'"></i>
+                          <span class="text-sm text-[#B8C6D8] truncate">{{ lesson.title }}</span>
+                          <span v-if="lesson.isFree" class="flex-shrink-0 px-2 py-0.5 bg-green-500/10 text-green-400 rounded text-[11px] font-medium border border-green-500/20">免费试看</span>
                         </div>
-                        <span class="text-xs text-[#6B7C93]">{{ lesson.duration }}</span>
+                        <span class="text-xs text-[#6B7C93] flex-shrink-0 ml-3 font-mono">{{ lesson.duration }}</span>
                       </div>
                     </div>
                   </Transition>
@@ -60,16 +64,30 @@
               </div>
             </div>
 
-            <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
-              <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">授课讲师</h2>
-              <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-[#4A5F8B]">
+            <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]/20">
+              <h2 class="text-xl font-bold text-[#F5F7FA] mb-5">授课讲师</h2>
+              <div class="flex flex-col sm:flex-row gap-5">
+                <div class="w-20 h-20 rounded-2xl overflow-hidden border-2 border-[#4A5F8B]/30 flex-shrink-0">
                   <LazyImage :src="course.instructor.avatar" :alt="course.instructor.name" />
                 </div>
-                <div>
-                  <h3 class="font-medium text-[#F5F7FA]">{{ course.instructor.name }}</h3>
-                  <p class="text-sm text-[#4A5F8B]">{{ course.instructor.title }}</p>
-                  <p class="text-sm text-[#B8C6D8]">{{ course.instructor.experience }}</p>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-bold text-[#F5F7FA] text-lg">{{ course.instructor.name }}</h3>
+                  <p class="text-sm text-[#63B3ED] font-medium mb-2">{{ course.instructor.title }}</p>
+                  <p class="text-sm text-[#B8C6D8] leading-relaxed mb-3">{{ course.instructor.bio }}</p>
+                  <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center gap-1.5 text-xs text-[#6B7C93]">
+                      <i class="fa-solid fa-book-open text-[#4A5F8B]"></i>
+                      <span>{{ course.instructor.coursesCount }}门课程</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-xs text-[#6B7C93]">
+                      <i class="fa-solid fa-users text-[#4A5F8B]"></i>
+                      <span>{{ course.instructor.studentsCount }}名学员</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-xs text-[#6B7C93]">
+                      <i class="fa-solid fa-star text-[#4A5F8B]"></i>
+                      <span>评分 {{ course.instructor.rating }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -93,12 +111,16 @@
           </div>
 
           <div class="lg:col-span-1 space-y-6">
-            <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B] sticky top-20">
+            <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]/20 sticky top-20">
               <div class="text-center mb-6">
-                <div class="text-3xl font-bold text-[#4A5F8B] mb-2">¥{{ course.price }}</div>
+                <div class="text-3xl font-bold mb-2">
+                  <span class="bg-gradient-to-r from-[#63B3ED] to-[#4A5F8B] bg-clip-text text-transparent">¥{{ course.price }}</span>
+                </div>
                 <p class="text-sm text-[#B8C6D8]">一次性购买，终身学习</p>
               </div>
-              <button @click="showPaymentDialog = true" class="w-full py-3 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors mb-4 block text-center">立即购买</button>
+              <button @click="showPaymentDialog = true" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] hover:shadow-lg hover:shadow-[#4A5F8B]/30 hover:brightness-110 transition-all duration-300 mb-5 block text-center">
+                立即购买
+              </button>
               <div class="space-y-3">
                 <div class="flex items-center text-sm text-[#B8C6D8]"><i class="fa-solid fa-check-circle text-[#4A5F8B] mr-2"></i>{{ course.chapters.length }}章课程内容</div>
                 <div class="flex items-center text-sm text-[#B8C6D8]"><i class="fa-solid fa-check-circle text-[#4A5F8B] mr-2"></i>共{{ course.chapters.reduce((a, c) => a + c.lessons.length, 0) }}课时</div>
@@ -203,7 +225,7 @@ const courses = [
     id: 'vt1', title: '风光摄影基础入门', description: '从零开始学习风光摄影的基本技巧和构图方法。本课程涵盖相机设置、曝光控制、滤镜使用、经典构图法则等内容，帮助您打好风光摄影的坚实基础。',
     thumbnail: 'https://picsum.photos/1280/720?random=108',
     duration: '45:20', level: '初级', views: 12000, rating: 4.8, price: 299,
-    instructor: { name: '张明', avatar: 'https://picsum.photos/400/400?random=109', title: '国家地理摄影师', experience: '10年摄影经验，多次参加国内外摄影大赛并获得奖项' },
+    instructor: { name: '张明', avatar: 'https://picsum.photos/400/400?random=109', title: '国家地理摄影师', experience: '10年摄影经验', bio: '国家地理签约摄影师，拥有超过10年的风光摄影经验。作品曾发表于《中国国家地理》《摄影之友》等知名杂志，擅长将复杂的光影理论转化为简单易懂的实战技巧。', coursesCount: 5, studentsCount: 35800, rating: 4.9 },
     tags: ['风光', '基础', '入门'],
     chapters: [
       { title: '课程导论', duration: '10分钟', lessons: [
@@ -231,7 +253,7 @@ const courses = [
     id: 'vt2', title: '人像摄影用光技巧', description: '掌握人像摄影中光线运用的技巧，拍出自然生动的人像作品。',
     thumbnail: 'https://picsum.photos/1280/720?random=112',
     duration: '38:15', level: '中级', views: 8500, rating: 4.7, price: 399,
-    instructor: { name: '李华', avatar: 'https://picsum.photos/400/400?random=113', title: '人像摄影师', experience: '15年人像摄影经验' },
+    instructor: { name: '李华', avatar: 'https://picsum.photos/400/400?random=113', title: '人像摄影师', experience: '15年人像摄影经验', bio: '拥有15年专业人像摄影经验，曾为多位知名艺人及品牌拍摄人像作品。专注于自然光人像和情绪风人像，作品以细腻的光影和自然的情绪表达著称。', coursesCount: 3, studentsCount: 22400, rating: 4.8 },
     tags: ['人像', '光线', '技巧'],
     chapters: [
       { title: '导论', duration: '10分钟', lessons: [
@@ -252,7 +274,7 @@ const courses = [
     id: 'vt3', title: '后期修图大师班 - Lightroom & Photoshop', description: '从入门到精通，系统学习Lightroom和Photoshop的后期处理技巧。本课程涵盖RAW文件处理、色彩管理、图层与蒙版、人像精修、风光调色、创意合成等全流程内容，帮助你建立完整的后期工作流。',
     thumbnail: 'https://picsum.photos/1280/720?random=115',
     duration: '120:00', level: '高级', views: 15200, rating: 4.9, price: 599,
-    instructor: { name: '后期专家王磊', avatar: 'https://picsum.photos/400/400?random=116', title: 'Adobe认证讲师', experience: '12年后期处理与教学经验，曾为多家知名摄影机构提供后期培训' },
+    instructor: { name: '后期专家王磊', avatar: 'https://picsum.photos/400/400?random=116', title: 'Adobe认证讲师', experience: '12年后期处理与教学经验', bio: 'Adobe认证讲师，拥有12年后期处理与教学经验。曾为多家知名摄影机构和电商平台提供后期培训，累计培养学员超过5万人。授课程风格深入浅出，注重实战。', coursesCount: 8, studentsCount: 52000, rating: 4.9 },
     tags: ['后期', 'Lightroom', 'Photoshop', '调色', '精修'],
     chapters: [
       { title: '后期基础与工作流', duration: '25分钟', lessons: [
@@ -297,7 +319,38 @@ function handleConfirmPayment() {
 </script>
 
 <style scoped>
+.chapter-expand-enter-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.chapter-expand-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
+  overflow: hidden;
+}
+
+.chapter-expand-enter-from,
+.chapter-expand-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+
+.chapter-expand-enter-to,
+.chapter-expand-leave-from {
+  opacity: 1;
+  max-height: 600px;
+}
+
 .fade-enter-active, .fade-leave-active { transition: all 0.3s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; max-height: 0; }
 .fade-enter-to, .fade-leave-from { opacity: 1; max-height: 500px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chapter-expand-enter-active,
+  .chapter-expand-leave-active,
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: none;
+  }
+}
 </style>

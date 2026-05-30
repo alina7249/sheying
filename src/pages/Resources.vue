@@ -68,7 +68,7 @@
               <input
                 type="text"
                 v-model="searchQuery"
-                placeholder="搜索资源名称、标签或描述..."
+                placeholder="搜索资源名称、标签或描述…"
                 class="search-input"
               />
             </div>
@@ -572,11 +572,12 @@ const handleBookmark = (resource: any) => {
   color: #F5F7FA;
   border-radius: 12px;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-input:focus {
-  outline: none;
+  outline: 2px solid #6B7C93;
+  outline-offset: 2px;
   border-color: #6B7C93;
   box-shadow: 0 0 0 3px rgba(74, 95, 139, 0.2);
 }

@@ -9,7 +9,7 @@
       <div class="lg:col-span-2 space-y-6">
         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <div class="relative flex-1">
-            <input type="text" v-model="searchTerm" placeholder="继续搜索..." class="w-full px-4 py-3 pl-12 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]" />
+            <input type="text" v-model="searchTerm" placeholder="继续搜索…" class="w-full px-4 py-3 pl-12 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]" />
             <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B8C6D8]"></i>
           </div>
           <select v-model="sortBy" @change="showInfo(`排序方式：${sortBy === 'relevance' ? '相关度' : sortBy === 'date' ? '按日期' : '受欢迎度'}`)" class="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer">

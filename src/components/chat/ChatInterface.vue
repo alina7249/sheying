@@ -24,7 +24,7 @@
             <span :class="['inline-flex items-center text-xs', theme === 'dark' ? 'text-[#B8C6D8]' : 'text-gray-500']">
               <template v-if="isTyping">
                 <div class="flex items-center">
-                  <span class="mr-1">正在输入...</span>
+                  <span class="mr-1">正在输入…</span>
                   <div class="flex space-x-0.5">
                     <div
                       class="w-1.5 h-1.5 rounded-full animate-bounce"
@@ -89,12 +89,32 @@
       class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-transparent scrollbar-thumb-opacity-50 hover:scrollbar-thumb-opacity-100"
       :style="{ scrollBehavior: 'smooth', minHeight: 0 }"
     >
-      <MessageList />
+      <MessageList @insert-prompt="insertPrompt" />
+    </div>
+
+    <!-- 建议提示 -->
+    <div
+      v-if="suggestedPrompts.length > 0"
+      class="px-4 pb-2 flex flex-wrap gap-2"
+    >
+      <button
+        v-for="(prompt, i) in suggestedPrompts"
+        :key="i"
+        @click="insertPrompt(prompt)"
+        :class="[
+          'px-3 py-1.5 text-xs rounded-full border transition-colors',
+          theme === 'dark'
+            ? 'bg-[#1E2532] text-[#B8C6D8] border-[#4A5F8B]/50 hover:bg-[#4A5F8B]/20 hover:border-[#4A5F8B]'
+            : 'bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200'
+        ]"
+      >
+        {{ prompt }}
+      </button>
     </div>
 
     <!-- 输入区域 -->
     <div :class="['p-4 border-t', theme === 'dark' ? 'border-[#4A5F8B]' : 'border-gray-200']">
-      <InputArea />
+      <InputArea :pending-prompt="pendingPrompt" @prompt-consumed="pendingPrompt = ''" />
     </div>
   </div>
 </template>
@@ -105,24 +125,42 @@ import { useAuthStore } from '../../store/authStore';
 import { useChatStore } from '../../store/chatStore';
 import MessageList from './MessageList.vue';
 import InputArea from './InputArea.vue';
+import { useInteraction } from '../../composables/useInteraction';
 
 const authStore = useAuthStore();
 const chatStore = useChatStore();
+const { showSuccess } = useInteraction();
 
 const messageListRef = ref<HTMLElement | null>(null);
 const isEntering = ref(true);
+const pendingPrompt = ref('');
 
 const theme = computed(() => authStore.theme);
 const currentChatId = computed(() => chatStore.currentChatId);
 const isTyping = computed(() => chatStore.isTyping);
 const selectedRole = computed(() => chatStore.selectedRole);
 
+const suggestedPrompts = [
+  '推荐一款适合新手的相机',
+  '如何拍出好看的人像照片',
+  '风光摄影构图技巧',
+  'Lightroom调色入门',
+  '夜景拍摄参数设置',
+  '如何选择第一个镜头'
+];
+
+const insertPrompt = (prompt: string) => {
+  pendingPrompt.value = prompt;
+};
+
 const createNewChat = () => {
   chatStore.createNewChat();
+  showSuccess('已创建新对话');
 };
 
 const clearCurrentChat = () => {
   chatStore.clearCurrentChat();
+  showSuccess('对话已清空');
 };
 
 onMounted(() => {

@@ -24,7 +24,7 @@
             <i class="fa-solid fa-users"></i>
           </div>
           <div>
-            <p class="stat-value">12,456</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">12,456</p>
             <p class="stat-label">社区成员</p>
           </div>
         </div>
@@ -33,7 +33,7 @@
             <i class="fa-solid fa-images"></i>
           </div>
           <div>
-            <p class="stat-value">89,234</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">89,234</p>
             <p class="stat-label">摄影作品</p>
           </div>
         </div>
@@ -42,7 +42,7 @@
             <i class="fa-solid fa-comments"></i>
           </div>
           <div>
-            <p class="stat-value">234,567</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">234,567</p>
             <p class="stat-label">讨论回复</p>
           </div>
         </div>
@@ -51,7 +51,7 @@
             <i class="fa-solid fa-fire"></i>
           </div>
           <div>
-            <p class="stat-value">1,234</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">1,234</p>
             <p class="stat-label">今日活跃</p>
           </div>
         </div>
@@ -115,7 +115,7 @@
               <input
                 type="text"
                 v-model="searchQuery"
-                placeholder="搜索帖子、话题或用户..."
+                placeholder="搜索帖子、话题或用户…"
                 class="search-input"
               />
             </div>
@@ -129,15 +129,17 @@
             </h3>
             <div class="topics-list">
               <div
-                v-for="topic in trendingTopics"
+                v-for="(topic, idx) in trendingTopics"
                 :key="topic.id"
                 class="topic-item"
+                :class="idx === 0 ? 'topic-item-top' : ''"
                 @click="handleTopicClick(topic)"
               >
+                <span class="topic-rank" :class="idx < 3 ? 'topic-rank-hot' : ''">{{ idx + 1 }}</span>
                 <span class="topic-emoji">{{ topic.emoji }}</span>
                 <div class="topic-info">
                   <p class="topic-name">{{ topic.name }}</p>
-                  <p class="topic-discussions">{{ topic.discussions }} 讨论</p>
+                  <p class="topic-discussions">{{ topic.discussions.toLocaleString() }} 讨论</p>
                 </div>
                 <i class="fa-solid fa-chevron-right text-[#6B7C93]"></i>
               </div>
@@ -438,19 +440,18 @@ const activeUsers: UserItem[] = [
 }
 
 .stat-card {
-  background: #2D3748;
-  border: 1px solid #4A5F8B;
+  background: linear-gradient(135deg, rgba(45, 55, 72, 0.6), rgba(45, 55, 72, 0.3));
+  border: 1px solid rgba(74, 95, 139, 0.15);
   border-radius: 16px;
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px -8px rgba(74, 95, 139, 0.3);
+  border-color: rgba(74, 95, 139, 0.4);
 }
 
 .stat-icon {
@@ -576,11 +577,12 @@ const activeUsers: UserItem[] = [
   color: #F5F7FA;
   border-radius: 12px;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search-input:focus {
-  outline: none;
+  outline: 2px solid #6B7C93;
+  outline-offset: 2px;
   border-color: #6B7C93;
   box-shadow: 0 0 0 3px rgba(74, 95, 139, 0.2);
 }
@@ -627,6 +629,25 @@ const activeUsers: UserItem[] = [
 
 .topic-emoji {
   font-size: 24px;
+}
+
+.topic-rank {
+  font-size: 14px;
+  font-weight: 700;
+  color: #6B7C93;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.topic-rank-hot {
+  color: #F6AD55;
+}
+
+.topic-item-top {
+  background: linear-gradient(135deg, rgba(246, 173, 85, 0.08), rgba(74, 95, 139, 0.08));
+  border: 1px solid rgba(246, 173, 85, 0.15);
 }
 
 .topic-info {
@@ -742,6 +763,7 @@ const activeUsers: UserItem[] = [
   font-weight: 700;
   color: #48BB78;
   margin-bottom: 2px;
+  font-variant-numeric: tabular-nums;
 }
 
 .stat-text {
@@ -793,5 +815,18 @@ const activeUsers: UserItem[] = [
   color: #B8C6D8;
   margin: 0;
   line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-up {
+    animation: none;
+    opacity: 1;
+  }
+
+  .stat-card,
+  .topic-item,
+  .filter-btn {
+    transition: none;
+  }
 }
 </style>
