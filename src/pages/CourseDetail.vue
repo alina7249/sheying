@@ -101,6 +101,14 @@
                 <div class="flex items-center text-sm text-[#B8C6D8]"><i class="fa-solid fa-check-circle text-[#4A5F8B] mr-2"></i>永久访问权限</div>
                 <div class="flex items-center text-sm text-[#B8C6D8]"><i class="fa-solid fa-check-circle text-[#4A5F8B] mr-2"></i>社群答疑支持</div>
               </div>
+              <div class="flex gap-2 mt-4 pt-4 border-t border-[#4A5F8B]">
+                <button @click="handleBookmark(course.title)" class="flex-1 py-2 border border-[#4A5F8B] text-[#B8C6D8] rounded-lg hover:bg-[#4A5F8B]/20 transition-colors text-sm">
+                  <i class="fa-solid fa-bookmark mr-1"></i> 收藏
+                </button>
+                <button @click="handleShare" class="flex-1 py-2 border border-[#4A5F8B] text-[#B8C6D8] rounded-lg hover:bg-[#4A5F8B]/20 transition-colors text-sm">
+                  <i class="fa-solid fa-share mr-1"></i> 分享
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -118,11 +126,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { toast } from 'vue-sonner';
+import { useInteraction } from '../composables/useInteraction';
 
 const route = useRoute();
 const routeId = computed(() => route.params.id as string | undefined);
 const openChapters = ref<number[]>([0]);
+const { showSuccess, handleBookmark, handleShare } = useInteraction();
 
 const courses = [
   {
@@ -184,7 +193,7 @@ function toggleChapter(idx: number) {
   else openChapters.value.splice(i, 1);
 }
 
-function handleEnroll() { toast.success('购买成功，开始学习'); }
+function handleEnroll() { showSuccess('购买成功，开始学习'); }
 </script>
 
 <style scoped>

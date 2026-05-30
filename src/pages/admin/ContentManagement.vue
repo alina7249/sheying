@@ -6,7 +6,7 @@
         <p class="text-[#B8C6D8] mt-1">查看和管理所有用户发布的内容</p>
       </div>
       <div class="mt-4 md:mt-0">
-        <Button>
+        <Button @click="showInfo('打开筛选面板')">
           <i class="fa-solid fa-filter mr-2"></i>
           筛选
         </Button>
@@ -249,11 +249,11 @@
           显示 1 到 {{ filteredContent.length }} 条，共 {{ filteredContent.length }} 条
         </div>
         <nav class="flex items-center space-x-1">
-          <button class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+          <button @click="showInfo('上一页')" class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
             <i class="fa-solid fa-chevron-left text-xs"></i>
           </button>
           <button class="px-3 py-1 border border-[#4A5F8B] rounded-lg bg-[#4A5F8B] text-[#F5F7FA]">1</button>
-          <button class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+          <button @click="showInfo('下一页')" class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </button>
         </nav>
@@ -266,7 +266,10 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from '../../composables/useToast'
+import { useInteraction } from '../../composables/useInteraction'
 import Button from '../../components/common/Button.vue'
+
+const { showInfo } = useInteraction()
 
 interface ContentAuthor {
   id: string

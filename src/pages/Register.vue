@@ -31,4 +31,7 @@
 
 <script setup lang="ts">
 import RegisterForm from '../components/common/RegisterForm.vue';
+import { useInteraction } from '../composables/useInteraction';
+
+const {} = useInteraction();
 </script>

@@ -6,7 +6,7 @@
         <p class="text-[#B8C6D8] mt-1">查看和管理所有摄影小组</p>
       </div>
       <div class="mt-4 md:mt-0">
-        <Button>
+        <Button @click="handleCreate">
           <i class="fa-solid fa-plus mr-2"></i>
           创建小组
         </Button>
@@ -208,7 +208,10 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from '../../composables/useToast'
+import { useInteraction } from '../../composables/useInteraction'
 import Button from '../../components/common/Button.vue'
+
+const { handleCreate } = useInteraction()
 
 interface GroupOwner {
   id: string

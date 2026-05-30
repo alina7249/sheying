@@ -370,8 +370,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { toast } from 'vue-sonner';
+import { useInteraction } from '../composables/useInteraction';
 
 interface PhotographyPost {
   id: string;
@@ -397,8 +398,9 @@ interface OperationHistory {
   timestamp: string;
 }
 
+const { handleDownload: composableDownload } = useInteraction();
+
 const isAuthenticated = ref(!!localStorage.getItem('token'));
-const user = ref(JSON.parse(localStorage.getItem('user') || 'null'));
 
 const selectedPhotos = ref<string[]>(JSON.parse(localStorage.getItem('selectedPhotos') || '[]'));
 const sortBy = ref('latest');
@@ -578,8 +580,7 @@ function handleBatchCopyrightType(copyrightType: '独家授权' | '非独家') {
 function handleBatchDownload() {
   if (selectedPhotos.value.length === 0) { toast.warning('请先选择要下载的作品'); return; }
   addHistoryRecord('批量下载作品', selectedPhotos.value.length);
-  toast.success(`开始下载 ${selectedPhotos.value.length} 个作品，正在准备文件...`);
-  setTimeout(() => { toast.success('下载完成'); }, 1500);
+  composableDownload(`${selectedPhotos.value.length} 个作品`);
 }
 
 function handleClearHistory() {

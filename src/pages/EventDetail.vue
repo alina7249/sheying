@@ -164,7 +164,7 @@
                 <p class="text-xs text-[#B8C6D8]">{{ event.instructor.experience }}摄影经验</p>
               </div>
             </div>
-            <button class="w-full py-2 bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors border border-[#4A5F8B] text-sm">
+            <button @click="showSuccess('查看导师主页功能开发中')" class="w-full py-2 bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors border border-[#4A5F8B] text-sm">
               查看导师主页
             </button>
           </div>
@@ -177,7 +177,7 @@
               <div class="text-4xl font-bold text-[#4A5F8B]">{{ new Date(event.date.split(' ')[0]).getDate() }}</div>
               <div class="text-sm text-[#B8C6D8]">{{ ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'][new Date(event.date.split(' ')[0]).getMonth()] }}</div>
             </div>
-            <button class="w-full mt-4 py-2 bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors border border-[#4A5F8B] text-sm">
+            <button @click="showSuccess('已添加到日历')" class="w-full mt-4 py-2 bg-[#2D3748] text-[#B8C6D8] rounded-lg font-medium hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors border border-[#4A5F8B] text-sm">
               添加到日历
             </button>
           </div>
@@ -186,16 +186,16 @@
           <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
             <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">分享活动</h2>
             <div class="grid grid-cols-4 gap-3">
-              <button class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+              <button @click="showSuccess('请在微信中打开此链接进行分享')" class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
                 <i class="fa-brands fa-weixin text-xl"></i>
               </button>
-              <button class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+              <button @click="showSuccess('已复制微博分享链接')" class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
                 <i class="fa-brands fa-weibo text-xl"></i>
               </button>
-              <button class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+              <button @click="showSuccess('已复制QQ分享链接')" class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
                 <i class="fa-brands fa-qq text-xl"></i>
               </button>
-              <button class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+              <button @click="handleShare" class="w-full h-12 bg-[#1E2532] rounded-lg flex items-center justify-center text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
                 <i class="fa-solid fa-link text-xl"></i>
               </button>
             </div>
@@ -305,6 +305,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { useInteraction } from '@/composables/useInteraction'
 import { useAuthStore } from '@/store/authStore'
 import { storeToRefs } from 'pinia'
 import CommentSection from '@/components/CommentSection.vue'
@@ -312,6 +313,7 @@ import CommentSection from '@/components/CommentSection.vue'
 const route = useRoute()
 const store = useAuthStore()
 const { isAuthenticated, user } = storeToRefs(store)
+const { showSuccess, handleShare } = useInteraction();
 
 interface EventItem {
   id: string

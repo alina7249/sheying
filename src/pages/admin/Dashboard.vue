@@ -14,7 +14,7 @@
           <button
             v-for="range in timeRanges"
             :key="range.value"
-            @click="timeRange = range.value"
+            @click="handleTimeRangeChange(range)"
             :class="[
               'px-4 py-2 text-sm transition-colors',
               timeRange === range.value
@@ -40,6 +40,7 @@
         trend="up"
         trendValue="+5.2%"
         description="较上月增长"
+        @click="handleStatClick('总用户数')"
       />
       <StatsCard
         title="新增用户"
@@ -48,6 +49,7 @@
         trend="up"
         trendValue="+8.7%"
         description="本月新增"
+        @click="handleStatClick('新增用户')"
       />
       <StatsCard
         title="内容总数"
@@ -56,6 +58,7 @@
         trend="up"
         trendValue="+3.1%"
         description="包括作品和帖子"
+        @click="handleStatClick('内容总数')"
       />
       <StatsCard
         title="订单收入"
@@ -64,6 +67,7 @@
         trend="up"
         trendValue="+12.3%"
         description="本月收入"
+        @click="handleStatClick('订单收入')"
       />
     </div>
 
@@ -75,6 +79,7 @@
         trend="up"
         trendValue="+12.5%"
         description="今日活跃"
+        @click="handleStatClick('活跃用户')"
       />
       <StatsCard
         title="新作品数"
@@ -83,6 +88,7 @@
         trend="up"
         trendValue="+6.8%"
         description="今日新增"
+        @click="handleStatClick('新作品数')"
       />
       <StatsCard
         title="评论数"
@@ -91,6 +97,7 @@
         trend="down"
         trendValue="-3.2%"
         description="今日评论"
+        @click="handleStatClick('评论数')"
       />
       <StatsCard
         title="系统运行率"
@@ -99,6 +106,7 @@
         trend="up"
         trendValue="+0.1%"
         description="系统状态"
+        @click="handleStatClick('系统运行率')"
       />
     </div>
 
@@ -122,6 +130,7 @@
             type="line"
             :data="userGrowthChartData"
             :options="lineChartOptions"
+            @click="handleChartClick('userGrowth')"
           />
         </div>
       </div>
@@ -133,6 +142,7 @@
             type="pie"
             :data="contentStatsChartData"
             :options="pieChartOptions"
+            @click="handleChartClick('contentStats')"
           />
         </div>
         <div class="grid grid-cols-2 gap-2 mt-4">
@@ -156,6 +166,7 @@
             type="bar"
             :data="orderStatsChartData"
             :options="barChartOptions"
+            @click="handleChartClick('orderStats')"
           />
         </div>
       </div>
@@ -187,7 +198,7 @@
           </div>
         </div>
         <div class="mt-4 text-center">
-          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">
+          <button @click="showInfo('查看全部活动')" class="text-sm text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">
             查看全部活动
             <i class="fa-solid fa-chevron-right ml-1 text-xs"></i>
           </button>
@@ -199,7 +210,7 @@
       <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-[#F5F7FA]">热门作品</h2>
-          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">查看全部</button>
+          <button @click="showInfo('查看全部热门作品')" class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">查看全部</button>
         </div>
         <div class="space-y-4">
           <div v-for="work in topWorks" :key="work.id" class="flex items-center gap-4 p-3 bg-[#1E2532] rounded-lg">
@@ -221,7 +232,7 @@
       <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-[#F5F7FA]">系统状态</h2>
-          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">详情</button>
+          <button @click="showInfo('查看系统状态详情')" class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">详情</button>
         </div>
         <div class="space-y-4">
           <div class="space-y-2">
@@ -277,7 +288,7 @@
       <div class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-[#F5F7FA]">热门用户</h2>
-          <button class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">查看全部</button>
+          <button @click="showInfo('查看全部热门用户')" class="text-sm text-[#4A5F8B] hover:text-[#6B7C93]">查看全部</button>
         </div>
         <div class="space-y-3">
           <div v-for="user in topUsers" :key="user.id" class="flex items-center gap-4 p-2 bg-[#1E2532] rounded-lg">
@@ -301,6 +312,9 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import StatsCard from '../../components/common/StatsCard.vue'
 import Button from '../../components/common/Button.vue'
 import ChartCanvas from '../../components/common/ChartCanvas.vue'
+import { useInteraction } from '../../composables/useInteraction'
+
+const { showInfo, showSuccess } = useInteraction()
 
 const timeRanges = [
   { value: 'day' as const, label: '今日' },
@@ -328,7 +342,21 @@ function refreshData() {
   loadingRefreshing.value = true
   setTimeout(() => {
     loadingRefreshing.value = false
+    showSuccess('数据已刷新')
   }, 800)
+}
+
+function handleTimeRangeChange(range: { value: string; label: string }) {
+  timeRange.value = range.value as 'day' | 'week' | 'month'
+  showInfo(`已切换到${range.label}视图`)
+}
+
+function handleStatClick(statName: string) {
+  showInfo(`正在查看${statName}详情`)
+}
+
+function handleChartClick(chartName: string) {
+  showInfo(`正在查看${chartName}图表详情`)
 }
 
 const userGrowthData = [

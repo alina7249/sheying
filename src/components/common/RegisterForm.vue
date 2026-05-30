@@ -116,11 +116,11 @@
         <div class="ml-3 text-sm">
           <label for="terms" class="text-[#718096]">
             我已阅读并同意
-            <a href="#" class="text-[#63B3ED] hover:text-[#63B3ED] transition-colors">
+            <a href="#" @click.prevent="showInfo('服务条款页面即将上线')" class="text-[#63B3ED] hover:text-[#63B3ED] transition-colors">
               服务条款
             </a>
             和
-            <a href="#" class="text-[#63B3ED] hover:text-[#63B3ED] transition-colors">
+            <a href="#" @click.prevent="showInfo('隐私政策页面即将上线')" class="text-[#63B3ED] hover:text-[#63B3ED] transition-colors">
               隐私政策
             </a>
           </label>
@@ -150,6 +150,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import { useAuthStore } from '../../store/authStore';
+import { useInteraction } from '../../composables/useInteraction';
 import Captcha from './Captcha.vue';
 
 interface RegisterFormData {
@@ -163,6 +164,7 @@ interface RegisterFormData {
 
 const authStore = useAuthStore();
 const router = useRouter();
+const { showInfo } = useInteraction();
 
 const captchaValue = ref('');
 const showPassword = ref(false);

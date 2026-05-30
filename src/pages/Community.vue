@@ -84,22 +84,22 @@
           <!-- 帖子列表 -->
           <div class="posts-list space-y-4">
             <PostCard
-              v-for="(post, index) in communityPosts"
+              v-for="(post, index) in filteredPosts"
               :key="post.id"
               :post="post"
               :style="{ animationDelay: `${0.3 + index * 0.1}s` }"
               class="fade-in-up"
               @click="handlePostClick"
-              @like="handlePostAction"
-              @comment="handlePostAction"
-              @bookmark="handlePostAction"
-              @share="handlePostAction"
+              @like="(id: string) => handleLike(id)"
+              @comment="(id: string) => showInfo('评论功能')"
+              @bookmark="(id: string) => handleBookmark(id)"
+              @share="(id: string) => handleShare()"
             />
           </div>
 
           <!-- 加载更多 -->
           <div class="load-more fade-in-up" style="animation-delay: 0.8s;">
-            <Button variant="outline">
+            <Button variant="outline" @click="loadMore">
               <i class="fa-solid fa-spinner mr-2"></i>
               加载更多
             </Button>
@@ -114,6 +114,7 @@
               <i class="fa-solid fa-search search-icon"></i>
               <input
                 type="text"
+                v-model="searchQuery"
                 placeholder="搜索帖子、话题或用户..."
                 class="search-input"
               />
@@ -140,7 +141,7 @@
                 <i class="fa-solid fa-chevron-right text-[#6B7C93]"></i>
               </div>
             </div>
-            <button class="view-all-btn">
+            <button class="view-all-btn" @click="showInfo('查看全部话题')">
               查看全部话题 <i class="fa-solid fa-arrow-right ml-2"></i>
             </button>
           </div>
@@ -159,7 +160,7 @@
                 @follow="handleFollowUser"
               />
             </div>
-            <button class="view-all-btn">
+            <button class="view-all-btn" @click="showInfo('发现更多用户')">
               发现更多 <i class="fa-solid fa-arrow-right ml-2"></i>
             </button>
           </div>
@@ -218,11 +219,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 import Button from '../components/common/Button.vue';
 import PostCard, { type PostItem } from '../components/PostCard.vue';
 import UserCard, { type UserItem } from '../components/UserCard.vue';
 
+const router = useRouter();
+const {
+  showInfo,
+  handleFollow: followAction,
+  handleCreate,
+  handleJoin,
+  handleLoadMore: loadMore,
+  handleLike,
+  handleBookmark,
+  handleShare
+} = useInteraction();
+
+const searchQuery = ref('');
 const activeFilter = ref('all');
 
 const filters = [
@@ -234,24 +250,33 @@ const filters = [
   { id: 'activity', name: '活动约拍', icon: 'fa-solid fa-calendar-alt' }
 ];
 
-const handlePostAction = (action: string, postId: string) => {
-  console.log(`${action} on post ${postId}`);
-};
+const filteredPosts = computed(() => {
+  if (activeFilter.value === 'all') return communityPosts;
+  const filterMap: Record<string, string> = {
+    works: '摄影作品',
+    qa: '摄影问答',
+    equipment: '器材讨论',
+    tutorial: '教程技巧',
+    activity: '活动约拍'
+  };
+  const target = filterMap[activeFilter.value];
+  return target ? communityPosts.filter(p => p.category === target) : communityPosts;
+});
 
 const handleFollowUser = (userId: string) => {
-  console.log(`Follow user ${userId}`);
+  followAction(userId);
 };
 
 const handleCreatePost = () => {
-  console.log('Create new post');
+  handleCreate();
 };
 
 const handleJoinChallenge = () => {
-  console.log('Join challenge');
+  handleJoin();
 };
 
 const handlePostClick = (post: PostItem) => {
-  console.log('Post clicked:', post);
+  router.push(`/community/post/${post.id}`);
 };
 
 const communityPosts: PostItem[] = [

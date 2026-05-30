@@ -6,16 +6,38 @@
           <h1 class="text-2xl font-bold text-white">摄影小组</h1>
           <p class="text-[#6B7C93]">加入志同道合的摄影爱好者群体</p>
         </div>
-        <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors flex items-center gap-2">
+        <button @click="handleCreateGroup" class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors flex items-center gap-2">
           <i class="fa-solid fa-plus"></i>
-          <span>创建小组</span>
+          <span>创建群组</span>
         </button>
+      </div>
+
+      <div class="mb-6">
+        <div class="relative">
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="搜索摄影小组..."
+            class="w-full px-4 py-3 pl-12 bg-[#1E2532] border border-[#4A5F8B] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#6B7C93]"
+          />
+          <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#6B7C93]"></i>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          @click="activeTab = tab.id"
+          :class="['px-4 py-2 rounded-lg transition-colors', activeTab === tab.id ? 'bg-[#4A5F8B] text-white' : 'bg-[#1E2532] text-[#6B7C93] hover:text-white']"
+        >{{ tab.name }}</button>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div 
-          v-for="group in groups" 
+          v-for="group in filteredGroups" 
           :key="group.id"
+          @click="navigateToGroup(group.id)"
           class="bg-[#1E2532] rounded-xl overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
         >
           <img :src="group.cover" :alt="group.name" class="w-full h-40 object-cover" />
@@ -49,7 +71,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
+
+const router = useRouter();
+const { showSuccess, handleCreate } = useInteraction();
+
+const searchQuery = ref('');
+const activeTab = ref('全部');
+
+const tabs = [
+  { id: '全部', name: '全部' },
+  { id: '风光', name: '风光' },
+  { id: '人像', name: '人像' },
+  { id: '纪实', name: '纪实' },
+  { id: '器材', name: '器材' },
+];
 
 const groups = ref([
   {
@@ -120,11 +158,29 @@ const groups = ref([
   }
 ]);
 
+const filteredGroups = computed(() => {
+  let result = groups.value;
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
+    result = result.filter(g => g.name.toLowerCase().includes(q) || g.description.toLowerCase().includes(q));
+  }
+  return result;
+});
+
+const handleCreateGroup = () => {
+  handleCreate();
+};
+
+const navigateToGroup = (groupId: string) => {
+  router.push(`/group/${groupId}`);
+};
+
 const handleJoin = (groupId: string) => {
   const group = groups.value.find(g => g.id === groupId);
   if (group) {
     group.isJoined = !group.isJoined;
     group.members += group.isJoined ? 1 : -1;
+    showSuccess(group.isJoined ? `已加入「${group.name}」` : `已退出「${group.name}」`);
   }
 };
 </script>

@@ -85,8 +85,8 @@
                   </div>
                   <div class="flex space-x-2">
                     <router-link :to="`/event/${event.id}`" class="flex-1 py-2 text-center bg-[#F5F7FA] text-[#4A5F8B] rounded-lg font-medium hover:bg-[#FFFFFF] transition-colors border border-[#F5F7FA]">查看详情</router-link>
-                    <button v-if="isUserPersonalEvents" class="flex-1 py-2 text-center bg-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#4A5F8B] transition-colors border border-[#4A5F8B]"><i class="fa-solid fa-calendar-check mr-1"></i> 已报名</button>
-                    <button v-else class="flex-1 py-2 text-center bg-[#F5F7FA] text-[#4A5F8B] rounded-lg font-medium hover:bg-[#FFFFFF] transition-colors border border-[#F5F7FA]"><i class="fa-solid fa-calendar-plus mr-1"></i> 立即报名</button>
+                    <button v-if="isUserPersonalEvents" @click="showSuccess('已查看报名详情')" class="flex-1 py-2 text-center bg-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#4A5F8B] transition-colors border border-[#4A5F8B]"><i class="fa-solid fa-calendar-check mr-1"></i> 已报名</button>
+                    <button v-else @click="handleJoin" class="flex-1 py-2 text-center bg-[#F5F7FA] text-[#4A5F8B] rounded-lg font-medium hover:bg-[#FFFFFF] transition-colors border border-[#F5F7FA]"><i class="fa-solid fa-calendar-plus mr-1"></i> 立即报名</button>
                   </div>
                 </div>
               </div>
@@ -101,13 +101,13 @@
 
           <div v-if="filteredEvents.length > 0" class="flex justify-center">
             <nav class="flex items-center space-x-1 bg-[#2D3748] p-2 rounded-lg border border-[#4A5F8B]">
-              <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+              <button @click="showSuccess('已切换到上一页')" class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-left text-xs"></i></button>
               <button class="px-3 py-2 rounded border border-[#4A5F8B] bg-[#4A5F8B] text-[#F5F7FA]">1</button>
               <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">2</button>
               <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">3</button>
               <span class="px-2 text-[#B8C6D8]">...</span>
               <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">8</button>
-              <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+              <button @click="showSuccess('已切换到下一页')" class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></button>
             </nav>
           </div>
         </div>
@@ -129,8 +129,8 @@
               <div v-for="d in 31" :key="d" class="py-2 rounded-full transition-colors cursor-pointer" :class="[15,22,28].includes(d) ? 'bg-[#4A5F8B] text-[#F5F7FA] font-medium' : 'text-[#B8C6D8] hover:bg-[#4A5F8B]/20'">{{ d }}</div>
             </div>
             <div class="mt-4 flex justify-between text-sm">
-              <button class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">上个月</button>
-              <button class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">下个月</button>
+              <button @click="showSuccess('已切换到上个月')" class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">上个月</button>
+              <button @click="showSuccess('已切换到下个月')" class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">下个月</button>
             </div>
           </div>
 
@@ -140,7 +140,7 @@
               <div class="bg-[#2D3748]/30 p-3 rounded-lg backdrop-blur-sm"><p class="text-sm font-medium">新疆喀纳斯秋季风光摄影团</p><p class="text-xs text-[#F5F7FA]/90 mt-1">10月15日开始 · 剩余8个名额</p></div>
               <div class="bg-[#2D3748]/30 p-3 rounded-lg backdrop-blur-sm"><p class="text-sm font-medium">上海城市纪实摄影沙龙</p><p class="text-xs text-[#F5F7FA]/90 mt-1">10月28日 · 剩余12个名额</p></div>
             </div>
-            <button class="w-full py-2 bg-[#F5F7FA] text-[#4A5F8B] font-medium rounded-lg hover:bg-[#FFFFFF] transition-colors">查看全部活动</button>
+            <button @click="showSuccess('正在加载全部活动')" class="w-full py-2 bg-[#F5F7FA] text-[#4A5F8B] font-medium rounded-lg hover:bg-[#FFFFFF] transition-colors">查看全部活动</button>
           </div>
 
           <div class="bg-[#2D3748] rounded-xl p-6 shadow-sm border border-[#4A5F8B]">
@@ -161,9 +161,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 
 const route = useRoute();
 const isAuthenticated = ref(!!localStorage.getItem('token'));
+const { showSuccess, handleJoin } = useInteraction();
 
 const isUserPersonalEvents = computed(() => route.path.includes('/profile-center/events'));
 

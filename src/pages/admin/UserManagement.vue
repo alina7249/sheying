@@ -10,11 +10,11 @@
         </p>
       </div>
       <div class="mt-4 md:mt-0 flex flex-wrap gap-3">
-        <Button>
+        <Button @click="handleCreate">
           <i class="fa-solid fa-plus mr-2"></i>
           添加用户
         </Button>
-        <Button variant="secondary">
+        <Button variant="secondary" @click="handleUpload">
           <i class="fa-solid fa-upload mr-2"></i>
           批量导入
         </Button>
@@ -241,11 +241,11 @@
           显示 1 到 {{ filteredUsers.length }} 条，共 {{ filteredUsers.length }} 条
         </div>
         <nav class="flex items-center space-x-1">
-          <button class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+          <button @click="showInfo('上一页')" class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
             <i class="fa-solid fa-chevron-left text-xs"></i>
           </button>
           <button class="px-3 py-1 border border-[#4A5F8B] rounded-lg bg-[#4A5F8B] text-[#F5F7FA]">1</button>
-          <button class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
+          <button @click="showInfo('下一页')" class="px-3 py-1 border border-[#4A5F8B] rounded-lg text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">
             <i class="fa-solid fa-chevron-right text-xs"></i>
           </button>
         </nav>
@@ -258,7 +258,10 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { toast } from '../../composables/useToast'
+import { useInteraction } from '../../composables/useInteraction'
 import Button from '../../components/common/Button.vue'
+
+const { showInfo, handleCreate, handleUpload, handleDelete, handleAction } = useInteraction()
 
 interface User {
   id: string

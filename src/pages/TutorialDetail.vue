@@ -14,7 +14,7 @@
 
       <!-- 视频播放区 -->
       <div class="relative rounded-xl overflow-hidden mb-8 bg-black border border-[#4A5F8B]">
-        <div class="aspect-video bg-[#1E2532] flex items-center justify-center cursor-pointer relative">
+        <div @click="showSuccess('视频开始播放')" class="aspect-video bg-[#1E2532] flex items-center justify-center cursor-pointer relative">
           <img :src="tutorial.thumbnail" :alt="tutorial.title" class="absolute inset-0 w-full h-full object-cover" />
           <div class="absolute inset-0 bg-black/40"></div>
           <div class="relative flex flex-col items-center z-10">
@@ -92,7 +92,7 @@
                 <p class="text-sm text-[#B8C6D8]">{{ tutorial.instructor.title }}</p>
               </div>
             </div>
-            <button class="w-full py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors">
+            <button @click="handleFollow(tutorial.instructor.name)" class="w-full py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors">
               关注讲师
             </button>
           </div>
@@ -134,14 +134,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { toast } from 'vue-sonner'
-import { useAuthStore } from '@/store/authStore'
-import { storeToRefs } from 'pinia'
+import { useInteraction } from '@/composables/useInteraction'
 import CommentSection from '@/components/CommentSection.vue'
 
 const route = useRoute()
-const store = useAuthStore()
-const { isAuthenticated, user } = storeToRefs(store)
+const { showSuccess, handleFollow } = useInteraction()
 
 interface TutorialSection {
   title: string

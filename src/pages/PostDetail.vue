@@ -170,7 +170,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { toast } from 'vue-sonner'
+import { useInteraction } from '@/composables/useInteraction'
 import { useAuthStore } from '@/store/authStore'
 import { storeToRefs } from 'pinia'
 import CommentSection from '@/components/CommentSection.vue'
@@ -178,7 +178,8 @@ import ShareButton from '@/components/common/ShareButton.vue'
 
 const route = useRoute()
 const store = useAuthStore()
-const { isAuthenticated, user } = storeToRefs(store)
+const { isAuthenticated } = storeToRefs(store)
+const { showSuccess, showInfo, handleLike: composableLike, handleBookmark: composableBookmark, handleFollow: composableFollow } = useInteraction()
 
 interface Post {
   id: string
@@ -346,44 +347,50 @@ const formatRelativeTime = (dateString: string) => {
 
 const handleLike = () => {
   if (!isAuthenticated.value) {
-    toast.info('请先登录后再点赞')
+    showInfo('请先登录后再点赞')
     return
   }
   if (isLiked.value) {
     likes.value--
   } else {
     likes.value++
+    composableLike(post.value?.title)
   }
   isLiked.value = !isLiked.value
 }
 
 const handleBookmark = () => {
   if (!isAuthenticated.value) {
-    toast.info('请先登录后再收藏')
+    showInfo('请先登录后再收藏')
     return
   }
   isBookmarked.value = !isBookmarked.value
-  toast.success(isBookmarked.value ? '已取消收藏' : '收藏成功')
+  showSuccess(isBookmarked.value ? '收藏成功' : '已取消收藏')
+  if (isBookmarked.value) composableBookmark(post.value?.title)
 }
 
 const saveReadingProgress = () => {
   if (!isAuthenticated.value) {
-    toast.info('请先登录后再保存阅读进度')
+    showInfo('请先登录后再保存阅读进度')
     return
   }
   const scrollPosition = window.scrollY
   const bookmarkPositions = JSON.parse(localStorage.getItem('bookmarkPositions') || '{}')
   bookmarkPositions[post.value?.id] = scrollPosition
   localStorage.setItem('bookmarkPositions', JSON.stringify(bookmarkPositions))
-  toast.success('阅读进度已保存')
+  showSuccess('阅读进度已保存')
 }
 
 const toggleFollow = () => {
   if (!isAuthenticated.value) {
-    toast.info('请先登录后再关注作者')
+    showInfo('请先登录后再关注作者')
     return
   }
   isFollowing.value = !isFollowing.value
-  toast.success(isFollowing.value ? '已取消关注作者' : `已关注 ${post.value?.author.name}`)
+  if (isFollowing.value) {
+    composableFollow(post.value?.author.name)
+  } else {
+    showSuccess(`已取消关注 ${post.value?.author.name}`)
+  }
 }
 </script>

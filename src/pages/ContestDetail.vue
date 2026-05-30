@@ -187,6 +187,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { useInteraction } from '@/composables/useInteraction'
 import { useAuthStore } from '@/store/authStore'
 import { storeToRefs } from 'pinia'
 import CommentSection from '@/components/CommentSection.vue'
@@ -194,6 +195,7 @@ import CommentSection from '@/components/CommentSection.vue'
 const route = useRoute()
 const store = useAuthStore()
 const { isAuthenticated, user } = storeToRefs(store)
+const { handleJoin } = useInteraction()
 
 const mockContests = [
   {
@@ -260,6 +262,7 @@ const handleJoinContest = () => {
     window.location.href = '/login'
     return
   }
+  handleJoin()
   toast.success(`已成功参加 ${contest.value?.title}`)
 }
 

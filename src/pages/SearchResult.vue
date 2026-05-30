@@ -12,7 +12,7 @@
             <input type="text" v-model="searchTerm" placeholder="继续搜索..." class="w-full px-4 py-3 pl-12 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]" />
             <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B8C6D8]"></i>
           </div>
-          <select v-model="sortBy" class="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer">
+          <select v-model="sortBy" @change="showInfo(`排序方式：${sortBy === 'relevance' ? '相关度' : sortBy === 'date' ? '按日期' : '受欢迎度'}`)" class="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer">
             <option value="relevance">相关度</option>
             <option value="date">按日期</option>
             <option value="popularity">受欢迎度</option>
@@ -20,11 +20,11 @@
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <button @click="filterType = 'all'" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'all' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">全部</button>
-          <button @click="filterType = 'photos'" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'photos' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">作品</button>
-          <button @click="filterType = 'users'" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'users' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">用户</button>
-          <button @click="filterType = 'posts'" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'posts' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">帖子</button>
-          <button @click="filterType = 'equipment'" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'equipment' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">器材</button>
+          <button @click="filterType = 'all'; showInfo('显示全部结果')" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'all' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">全部</button>
+          <button @click="filterType = 'photos'; showInfo('筛选：作品')" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'photos' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">作品</button>
+          <button @click="filterType = 'users'; showInfo('筛选：用户')" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'users' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">用户</button>
+          <button @click="filterType = 'posts'; showInfo('筛选：帖子')" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'posts' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">帖子</button>
+          <button @click="filterType = 'equipment'; showInfo('筛选：器材')" class="px-4 py-2 rounded-lg border transition-colors" :class="filterType === 'equipment' ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'bg-[#2D3748] text-[#B8C6D8] border-[#4A5F8B] hover:bg-[#4A5F8B]/50'">器材</button>
         </div>
 
         <div class="space-y-6">
@@ -73,7 +73,7 @@
         <div class="bg-[#4A5F8B] rounded-xl p-6 shadow-sm border border-[#4A5F8B]">
           <h3 class="text-lg font-bold mb-4 text-[#F5F7FA]">热搜关键词</h3>
           <div class="flex flex-wrap gap-2">
-            <button v-for="keyword in hotKeywords" :key="keyword.id" @click="searchTerm = keyword.name; query = keyword.name" class="px-3 py-1 rounded-full text-sm transition-colors" :class="searchTerm === keyword.name ? 'bg-[#F5F7FA] text-[#4A5F8B]' : 'bg-[#6B7C93] text-[#F5F7FA] border border-[#6B7C93]'">#{{ keyword.name }} ({{ keyword.count }})</button>
+            <button v-for="keyword in hotKeywords" :key="keyword.id" @click="searchTerm = keyword.name; query = keyword.name; showInfo(`搜索：${keyword.name}`)" class="px-3 py-1 rounded-full text-sm transition-colors" :class="searchTerm === keyword.name ? 'bg-[#F5F7FA] text-[#4A5F8B]' : 'bg-[#6B7C93] text-[#F5F7FA] border border-[#6B7C93]'">#{{ keyword.name }} ({{ keyword.count }})</button>
           </div>
         </div>
 
@@ -90,7 +90,7 @@
         <div v-if="relatedSearches.length > 0" class="bg-[#2D3748] rounded-xl p-6 shadow-sm border border-[#4A5F8B]">
           <h3 class="text-lg font-bold mb-4 text-[#F5F7FA]">相关搜索</h3>
           <div class="flex flex-wrap gap-2">
-            <button v-for="(rs, idx) in relatedSearches" :key="idx" @click="searchTerm = rs; query = rs" class="px-3 py-2 bg-[#1E2A3A] text-[#B8C6D8] rounded-lg text-sm transition-colors border border-[#4A5F8B]">{{ rs }}</button>
+            <button v-for="(rs, idx) in relatedSearches" :key="idx" @click="searchTerm = rs; query = rs; showInfo(`搜索：${rs}`)" class="px-3 py-2 bg-[#1E2A3A] text-[#B8C6D8] rounded-lg text-sm transition-colors border border-[#4A5F8B]">{{ rs }}</button>
           </div>
         </div>
       </div>
@@ -101,8 +101,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 
 const route = useRoute();
+const { showInfo, handleLoadMore } = useInteraction();
 const query = ref(route.query.q as string || '');
 
 const searchTerm = ref('');
@@ -179,5 +181,5 @@ function getPageRange() {
   return range;
 }
 
-function handlePageChange(page: number) { currentPage.value = page; }
+function handlePageChange(page: number) { currentPage.value = page; handleLoadMore(); }
 </script>

@@ -10,7 +10,7 @@
           <button
             v-for="range in timeRanges"
             :key="range.value"
-            @click="timeRange = range.value"
+            @click="handleTimeRangeChange(range)"
             :class="[
               'px-3 py-2 text-sm transition-colors',
               timeRange === range.value
@@ -21,7 +21,7 @@
             {{ range.label }}
           </button>
         </div>
-        <button class="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg hover:bg-[#6B7C93] transition-colors text-sm flex items-center">
+        <button @click="handleDownload('分析报表')" class="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg hover:bg-[#6B7C93] transition-colors text-sm flex items-center">
           <i class="fa-solid fa-download mr-2"></i>
           导出报表
         </button>
@@ -38,31 +38,31 @@
     <div class="bg-[#2D3748] border border-[#4A5F8B] rounded-xl overflow-hidden">
       <div class="flex border-b border-[#4A5F8B] flex-wrap">
         <button
-          @click="activeTab = 'overview'"
+          @click="handleTabChange('overview')"
           :class="tabButtonClass('overview')"
         >
           <i class="fa-solid fa-chart-pie mr-2"></i> 概览
         </button>
         <button
-          @click="activeTab = 'users'"
+          @click="handleTabChange('users')"
           :class="tabButtonClass('users')"
         >
           <i class="fa-solid fa-users mr-2"></i> 用户分析
         </button>
         <button
-          @click="activeTab = 'content'"
+          @click="handleTabChange('content')"
           :class="tabButtonClass('content')"
         >
           <i class="fa-solid fa-images mr-2"></i> 内容分析
         </button>
         <button
-          @click="activeTab = 'revenue'"
+          @click="handleTabChange('revenue')"
           :class="tabButtonClass('revenue')"
         >
           <i class="fa-solid fa-chart-line mr-2"></i> 收入分析
         </button>
         <button
-          @click="activeTab = 'engagement'"
+          @click="handleTabChange('engagement')"
           :class="tabButtonClass('engagement')"
         >
           <i class="fa-solid fa-heart mr-2"></i> 互动分析
@@ -241,6 +241,9 @@
 import { ref, computed } from 'vue'
 import StatsCard from '../../components/common/StatsCard.vue'
 import ChartCanvas from '../../components/common/ChartCanvas.vue'
+import { useInteraction } from '../../composables/useInteraction'
+
+const { showInfo, handleDownload } = useInteraction()
 
 const timeRanges = [
   { value: 'day' as const, label: '日' },
@@ -303,6 +306,19 @@ function tabButtonClass(tab: string) {
   return activeTab.value === tab
     ? 'flex-1 py-4 px-4 text-center font-medium transition-colors bg-[#4A5F8B] text-[#F5F7FA]'
     : 'flex-1 py-4 px-4 text-center font-medium transition-colors bg-[#2D3748] text-[#B8C6D8] hover:text-[#F5F7FA]'
+}
+
+function handleTimeRangeChange(range: { value: string; label: string }) {
+  timeRange.value = range.value as 'day' | 'week' | 'month' | 'year'
+  showInfo(`已切换到${range.label}视图`)
+}
+
+function handleTabChange(tab: 'overview' | 'users' | 'content' | 'revenue' | 'engagement') {
+  activeTab.value = tab
+  const labels: Record<string, string> = {
+    overview: '概览', users: '用户分析', content: '内容分析', revenue: '收入分析', engagement: '互动分析'
+  }
+  showInfo(`已切换到${labels[tab]}标签页`)
 }
 
 const darkGrid = { grid: { color: '#4A5F8B', drawBorder: false }, ticks: { color: '#B8C6D8' } }

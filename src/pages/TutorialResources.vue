@@ -90,10 +90,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 
 const route = useRoute();
 const routeId = computed(() => route.params.id as string | undefined);
 const isDetailView = ref(false);
+const { handleDownload: composableDownload } = useInteraction();
 
 const searchQuery = ref('');
 const activeCategory = ref('全部');
@@ -156,7 +158,7 @@ const hasResults = computed(() =>
 );
 
 function handleDownload(id: string) { selectedDownloadId.value = id; showDownloadModal.value = true; }
-function handleStartDownload() { showDownloadModal.value = false; alert('下载完成'); }
+function handleStartDownload() { showDownloadModal.value = false; composableDownload('资源文件'); }
 </script>
 
 <style scoped>

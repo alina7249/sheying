@@ -73,6 +73,7 @@
         <div>
           <a
             href="#"
+            @click.prevent="handleForgotPassword"
             class="text-sm font-medium text-[#63B3ED] hover:text-[#63B3ED] transition-colors"
           >
             忘记密码？
@@ -102,6 +103,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import { useAuthStore } from '../../store/authStore';
+import { useInteraction } from '../../composables/useInteraction';
 import Captcha from './Captcha.vue';
 
 interface LoginFormData {
@@ -113,6 +115,7 @@ interface LoginFormData {
 
 const authStore = useAuthStore();
 const router = useRouter();
+const { showInfo } = useInteraction();
 
 const showPassword = ref(false);
 const showCaptcha = ref(false);
@@ -201,6 +204,10 @@ const validatePassword = () => {
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
+};
+
+const handleForgotPassword = () => {
+  showInfo('密码重置功能即将上线，请联系管理员');
 };
 
 const handleSubmit = async () => {

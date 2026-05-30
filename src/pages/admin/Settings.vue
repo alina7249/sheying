@@ -153,7 +153,7 @@
                 <label class="block text-sm font-medium text-[#B8C6D8] mb-2">API访问密钥</label>
                 <div class="flex items-center justify-between p-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg">
                   <span class="text-mono">***********</span>
-                  <button class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">
+                  <button @click="handleCopy" class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">
                     <i class="fa-solid fa-refresh"></i>
                   </button>
                 </div>
@@ -161,10 +161,10 @@
             </div>
 
             <div class="mt-8 flex justify-end space-x-3">
-              <Button variant="secondary">
+              <Button variant="secondary" @click="handleAction('生成新密钥')">
                 生成新密钥
               </Button>
-              <Button>
+              <Button @click="handleSave">
                 保存设置
               </Button>
             </div>
@@ -244,10 +244,10 @@
             </div>
 
             <div class="mt-8 flex justify-end space-x-3">
-              <Button variant="secondary">
+              <Button variant="secondary" @click="handleAction('强制登出所有用户')">
                 强制登出所有用户
               </Button>
-              <Button>
+              <Button @click="handleSave">
                 保存设置
               </Button>
             </div>
@@ -282,7 +282,7 @@
                       <input type="checkbox" :checked="row.operator" class="h-4 w-4 text-[#4A5F8B] focus:ring-[#4A5F8B] border-[#4A5F8B] rounded bg-[#1E2532]" />
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                      <button class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">配置</button>
+                      <button @click="showInfo('配置权限项')" class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">配置</button>
                     </td>
                   </tr>
                 </tbody>
@@ -312,7 +312,7 @@
                     <p class="text-xs text-[#6B7C93]">启用后系统将发送邮件通知给用户</p>
                   </div>
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="sr-only peer" />
+                    <input type="checkbox" v-model="emailNotificationsEnabled" class="sr-only peer" />
                     <div class="w-9 h-5 bg-[#4A5F8B] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#38B2AC]"></div>
                   </label>
                 </div>
@@ -320,30 +320,30 @@
 
               <div>
                 <label class="block text-sm font-medium text-[#B8C6D8] mb-2">SMTP服务器地址</label>
-                <input type="text" value="smtp.example.com" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
+                <input type="text" v-model="smtpServer" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-[#B8C6D8] mb-2">SMTP服务器端口</label>
-                <input type="number" value="587" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
+                <input type="number" v-model="smtpPort" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-[#B8C6D8] mb-2">用户名</label>
-                <input type="text" value="admin@example.com" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
+                <input type="text" v-model="smtpUsername" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-[#B8C6D8] mb-2">密码</label>
-                <input type="password" value="********" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
+                <input type="password" v-model="smtpPassword" class="w-full px-4 py-2 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" />
               </div>
             </div>
 
             <div class="mt-8 flex justify-end space-x-3">
-              <Button variant="secondary">
+              <Button variant="secondary" @click="handleAction('测试连接')">
                 测试连接
               </Button>
-              <Button>
+              <Button @click="handleSave">
                 保存设置
               </Button>
             </div>
@@ -359,15 +359,15 @@
                 <div class="p-4 bg-[#2D3748] rounded-lg border border-[#4A5F8B]">
                   <h3 class="font-medium text-[#F5F7FA] mb-3">创建新备份</h3>
                   <div class="flex flex-wrap gap-3">
-                    <Button>
+                    <Button @click="handleAction('备份数据库')">
                       <i class="fa-solid fa-database mr-2"></i>
                       备份数据库
                     </Button>
-                    <Button>
+                    <Button @click="handleAction('备份媒体文件')">
                       <i class="fa-solid fa-images mr-2"></i>
                       备份媒体文件
                     </Button>
-                    <Button>
+                    <Button @click="handleAction('完整备份')">
                       <i class="fa-solid fa-server mr-2"></i>
                       完整备份
                     </Button>
@@ -398,13 +398,13 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-[#B8C6D8]">{{ backup.time }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
                           <div class="flex justify-end space-x-2">
-                            <button class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">
+                            <button @click="handleDownload(backup.name)" class="text-[#4A5F8B] hover:text-[#6B7C93] transition-colors">
                               <i class="fa-solid fa-download"></i>
                             </button>
-                            <button class="text-[#38B2AC] hover:text-[#38A169] transition-colors">
+                            <button @click="handleAction('恢复', backup.name)" class="text-[#38B2AC] hover:text-[#38A169] transition-colors">
                               <i class="fa-solid fa-rotate-left"></i>
                             </button>
-                            <button class="text-[#F56565] hover:text-[#E53E3E] transition-colors">
+                            <button @click="handleDelete(backup.name)" class="text-[#F56565] hover:text-[#E53E3E] transition-colors">
                               <i class="fa-solid fa-trash"></i>
                             </button>
                           </div>
@@ -423,22 +423,22 @@
                       <label class="block text-sm font-medium text-[#B8C6D8] mb-1">启用自动备份</label>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" checked class="sr-only peer" />
+                      <input type="checkbox" v-model="autoBackupEnabled" class="sr-only peer" />
                       <div class="w-9 h-5 bg-[#4A5F8B] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#38B2AC]"></div>
                     </label>
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label class="block text-sm font-medium text-[#B8C6D8] mb-2">备份频率</label>
-                      <select class="w-full px-4 py-2 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none">
+                      <select v-model="backupFrequency" class="w-full px-4 py-2 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none">
                         <option value="daily">每天</option>
-                        <option value="weekly" selected>每周</option>
+                        <option value="weekly">每周</option>
                         <option value="monthly">每月</option>
                       </select>
                     </div>
                     <div>
                       <label class="block text-sm font-medium text-[#B8C6D8] mb-2">保留备份数量</label>
-                      <input type="number" value="7" class="w-full px-4 py-2 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" min="1" max="30" />
+                      <input type="number" v-model="backupRetentionCount" class="w-full px-4 py-2 bg-[#1E2532] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all" min="1" max="30" />
                     </div>
                   </div>
                 </div>
@@ -446,7 +446,7 @@
             </div>
 
             <div class="mt-8 flex justify-end">
-              <Button>
+              <Button @click="handleSave">
                 保存设置
               </Button>
             </div>
@@ -459,8 +459,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { toast } from '../../composables/useToast'
+import { useInteraction } from '../../composables/useInteraction'
 import Button from '../../components/common/Button.vue'
+
+const { showInfo, showSuccess, handleSave, handleDownload, handleUpload, handleDelete, handleAction, handleCopy } = useInteraction()
 
 const activeTab = ref<'system' | 'security' | 'permissions' | 'notifications' | 'backup'>('system')
 
@@ -474,6 +476,16 @@ const passwordComplexity = ref<'low' | 'medium' | 'high'>('medium')
 const loginAttempts = ref('5')
 const sessionTimeout = ref('30')
 const twoFactorAuth = ref(false)
+
+const emailNotificationsEnabled = ref(true)
+const smtpServer = ref('smtp.example.com')
+const smtpPort = ref('587')
+const smtpUsername = ref('admin@example.com')
+const smtpPassword = ref('********')
+
+const autoBackupEnabled = ref(true)
+const backupFrequency = ref('weekly')
+const backupRetentionCount = ref('7')
 
 const permissionRows = [
   { name: '用户管理', admin: true, operator: false },
@@ -490,10 +502,10 @@ const backupHistory = [
 ]
 
 function handleSaveSettings() {
-  toast.success('设置已保存')
+  handleSave()
 }
 
 function handleCancel() {
-  toast.info('已取消更改')
+  showInfo('已取消更改')
 }
 </script>

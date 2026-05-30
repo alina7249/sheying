@@ -263,6 +263,17 @@
               </div>
             </div>
             <div class="p-4 bg-[#1E2532] rounded-lg">
+              <h4 class="font-medium text-[#F5F7FA] mb-4">支付方式</h4>
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-sm text-[#B8C6D8]">管理您的支付方式</p>
+                </div>
+                <button @click="showInfo('添加支付方式功能即将上线')" class="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors border border-[#4A5F8B] text-sm">
+                  添加支付方式
+                </button>
+              </div>
+            </div>
+            <div class="p-4 bg-[#1E2532] rounded-lg">
               <h4 class="font-medium text-[#F5F7FA] mb-2">退出登录</h4>
               <p class="text-sm text-[#B8C6D8] mb-4">安全退出当前账号</p>
               <button @click="handleLogout" class="w-full py-2 bg-red-500/20 text-red-400 border border-red-500/40 rounded-lg font-medium hover:bg-red-500/40 transition-colors">退出登录</button>
@@ -307,9 +318,11 @@ import { ref, reactive, watch } from 'vue'
 import { useAuthStore } from '../store/authStore'
 import { storeToRefs } from 'pinia'
 import { toast } from 'vue-sonner'
+import { useInteraction } from '../composables/useInteraction'
 
 const store = useAuthStore()
 const { isAuthenticated, user } = storeToRefs(store)
+const { handleSave, handleUpload, showSuccess, showWarning, showInfo } = useInteraction()
 
 watch(() => user.value, (newUser) => {
   if (newUser) {
@@ -442,30 +455,27 @@ const handleNotificationChange = (field: keyof typeof preferences.notifications,
 
 const handleSaveAccount = () => {
   isEditing.value = false
-  showSuccessToast.value = true
-  setTimeout(() => showSuccessToast.value = false, 1500)
+  handleSave()
 }
 
 const handleSaveSettings = () => {
-  showSuccessToast.value = true
-  setTimeout(() => showSuccessToast.value = false, 1500)
+  handleSave()
 }
 
 const handleChangePassword = () => {
   if (!currentPassword.value || !newPassword.value || !confirmPassword.value) {
-    toast.warning('请填写所有密码字段')
+    showWarning('请填写所有密码字段')
     return
   }
   if (newPassword.value !== confirmPassword.value) {
-    toast.warning('新密码与确认密码不匹配')
+    showWarning('新密码与确认密码不匹配')
     return
   }
   currentPassword.value = ''
   newPassword.value = ''
   confirmPassword.value = ''
   showPasswordModal.value = false
-  showSuccessToast.value = true
-  setTimeout(() => showSuccessToast.value = false, 1500)
+  showSuccess('密码修改成功')
 }
 
 const closePasswordModal = () => {
@@ -485,11 +495,11 @@ const handleFileSelect = (type: 'avatar' | 'cover', event: Event) => {
   const file = target.files?.[0]
   if (!file) return
   if (!file.type.match('image.*')) {
-    toast.warning('请选择图片文件')
+    showWarning('请选择图片文件')
     return
   }
   if (file.size > 5 * 1024 * 1024) {
-    toast.warning('文件大小不能超过5MB')
+    showWarning('文件大小不能超过5MB')
     return
   }
   const reader = new FileReader()
@@ -516,6 +526,7 @@ const simulateUpload = (type: 'avatar' | 'cover') => {
       isUploading.value = false
       uploadProgress.value = null
       toast.success(`${type === 'avatar' ? '头像' : '封面'}更新成功`)
+      handleUpload()
     }
   }, 200)
 }
@@ -544,11 +555,11 @@ const selectAllNotifications = () => {
 }
 
 const markNotificationsAsRead = () => {
-  toast.success('已标记为已读')
+  showSuccess('已标记为已读')
 }
 
 const deleteSelectedNotifications = () => {
-  toast.success(`已删除 ${selectedNotificationIds.value.length} 条通知`)
+  showSuccess(`已删除 ${selectedNotificationIds.value.length} 条通知`)
   selectedNotificationIds.value = []
 }
 </script>

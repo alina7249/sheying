@@ -118,7 +118,7 @@
               </div>
             </div>
             <button class="w-full mt-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors border border-[#4A5F8B]"
-              @click="() => toast.info('管理订阅功能即将上线')">
+              @click="showInfo('管理订阅功能即将上线')">
               管理订阅
             </button>
           </div>
@@ -208,7 +208,7 @@
               </div>
             </div>
             <div class="mt-4 text-center">
-              <button class="inline-flex items-center text-sm text-[#4A5F8B] hover:underline transition-colors">
+              <button @click="showInfo('查看全部会员特权')" class="inline-flex items-center text-sm text-[#4A5F8B] hover:underline transition-colors">
                 <span>查看全部会员特权</span>
                 <i class="fa-solid fa-chevron-right ml-1 text-xs"></i>
               </button>
@@ -229,7 +229,7 @@
                   <h4 class="font-medium text-[#B8C6D8] mb-2">{{ content.title }}</h4>
                   <p class="text-sm text-[#B8C6D8] mb-3 line-clamp-2">{{ content.description }}</p>
                   <button class="w-full py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors text-sm"
-                    @click="() => toast.info('课程详情即将显示')">
+                    @click="showInfo('课程详情即将显示')">
                     了解详情
                   </button>
                 </div>
@@ -261,7 +261,7 @@
                       <span class="text-[#B8C6D8]">{{ feature }}</span>
                     </li>
                   </ul>
-                  <button
+                  <button @click="handleAction('订阅', plan.name)"
                     :class="['w-full py-2 rounded-lg font-medium transition-colors', plan.recommended ? 'bg-[#4A5F8B] text-[#F5F7FA] hover:bg-[#63B3ED]' : 'bg-[#4A5F8B] text-[#F5F7FA] hover:bg-[#63B3ED] border border-[#4A5F8B]']"
                   >
                     {{ plan.id === 2 ? '当前套餐' : '立即订阅' }}
@@ -288,7 +288,7 @@
                 <div class="flex justify-between items-center">
                   <span v-if="benefit.count" class="text-xs text-[#4A5F8B] font-medium">{{ benefit.count }}本月</span>
                   <button class="text-xs px-3 py-1 bg-[#4A5F8B] text-[#F5F7FA] rounded-full hover:bg-[#63B3ED] transition-colors"
-                    @click="() => toast.success(`已使用${benefit.name}`)">
+                    @click="handleAction('使用', benefit.name)">
                     立即使用
                   </button>
                 </div>
@@ -313,7 +313,7 @@
                 </div>
               </div>
               <p class="text-sm text-[#B8C6D8] mb-3">{{ benefit.description }}</p>
-              <button class="mt-auto py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors border border-[#4A5F8B] text-sm">
+              <button @click="showInfo('了解更多权益信息')" class="mt-auto py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors border border-[#4A5F8B] text-sm">
                 了解更多
               </button>
             </div>
@@ -407,7 +407,7 @@
                 </div>
               </div>
               <div class="mt-6 text-center">
-                <button class="px-6 py-3 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors shadow-md inline-flex items-center">
+                <button @click="showInfo('加速升级功能即将上线')" class="px-6 py-3 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors shadow-md inline-flex items-center">
                   <i class="fa-solid fa-rocket mr-2"></i>加速升级
                 </button>
               </div>
@@ -678,7 +678,7 @@
                     <div class="h-full bg-[#4A5F8B]" :style="{ width: `${(task.progress / task.total) * 100}%` }"></div>
                   </div>
                   <div class="mt-2 text-right">
-                    <button class="text-xs text-[#4A5F8B] hover:underline transition-colors">
+                    <button @click="showInfo('去完成任务')" class="text-xs text-[#4A5F8B] hover:underline transition-colors">
                       去完成 <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
                     </button>
                   </div>
@@ -797,7 +797,7 @@
                   <i class="fa-brands fa-qq"></i>
                 </button>
               </div>
-              <button class="w-full py-3 bg-gradient-to-r from-[#4A5F8B] to-[#6B7C93] text-white rounded-lg font-medium hover:from-[#6B7C93] hover:to-[#4A5F8B] transition-all shadow-md flex items-center justify-center">
+              <button @click="handleShare" class="w-full py-3 bg-gradient-to-r from-[#4A5F8B] to-[#6B7C93] text-white rounded-lg font-medium hover:from-[#6B7C93] hover:to-[#4A5F8B] transition-all shadow-md flex items-center justify-center">
                 <i class="fa-solid fa-share-alt mr-2"></i>立即分享邀请
               </button>
             </div>
@@ -810,7 +810,7 @@
         <div class="bg-[#2D3748] rounded-xl p-6 shadow-sm border border-[#4A5F8B]">
           <div class="flex items-center justify-between mb-6">
             <h3 class="text-lg font-bold text-[#B8C6D8]">支付方式</h3>
-            <button class="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors border border-[#4A5F8B] text-sm">
+            <button @click="showInfo('添加支付方式功能即将上线')" class="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#63B3ED] transition-colors border border-[#4A5F8B] text-sm">
               添加支付方式
             </button>
           </div>
@@ -944,7 +944,7 @@
               </div>
             </div>
             <div class="mt-4 text-center">
-              <button class="inline-flex items-center text-sm text-[#4A5F8B] hover:underline transition-colors">
+              <button @click="showInfo('查看全部活动')" class="inline-flex items-center text-sm text-[#4A5F8B] hover:underline transition-colors">
                 <span>查看全部活动</span>
                 <i class="fa-solid fa-chevron-right ml-1 text-xs"></i>
               </button>
@@ -998,13 +998,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { toast } from 'vue-sonner'
-import { useAuthStore } from '@/store/authStore'
-import { storeToRefs } from 'pinia'
+import { ref, computed } from 'vue'
+import { useInteraction } from '@/composables/useInteraction'
 
-const store = useAuthStore()
-const { isAuthenticated, user } = storeToRefs(store)
+const { showSuccess, showInfo, showWarning, handleCopy, handleAction, handleShare } = useInteraction()
 
 const mockMembershipData = {
   currentPlan: {
@@ -1194,12 +1191,12 @@ const pieOffsets = computed(() => {
 
 const copyReferralCode = () => {
   navigator.clipboard.writeText(mockMembershipData.growthSystem.referralProgram.currentUser.referralCode)
-  toast.success("邀请码已复制到剪贴板")
+  handleCopy()
 }
 
 const copyReferralLink = () => {
   navigator.clipboard.writeText(mockMembershipData.growthSystem.referralProgram.currentUser.referralLink)
-  toast.success("邀请链接已复制到剪贴板")
+  handleCopy()
 }
 
 const shareToSocial = (platform: string) => {
@@ -1207,7 +1204,7 @@ const shareToSocial = (platform: string) => {
   const text = `加入摄影社区，使用我的邀请码 ${mockMembershipData.growthSystem.referralProgram.currentUser.referralCode} 注册，我们都能获得奖励！`
   switch (platform) {
     case 'wechat':
-      toast.info("请手动分享到微信")
+      showInfo("请手动分享到微信")
       break
     case 'weibo':
       window.open(`https://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`, '_blank')
@@ -1220,20 +1217,20 @@ const shareToSocial = (platform: string) => {
 
 const sendChatMessage = () => {
   if (newNote.value.trim()) {
-    toast.success("消息已发送，客服将尽快回复")
+    showSuccess("消息已发送，客服将尽快回复")
     newNote.value = ""
   } else {
-    toast.warning("请输入您的问题")
+    showWarning("请输入您的问题")
   }
 }
 
 const handleRenew = () => {
-  toast.info("即将跳转到续费页面")
+  showInfo("即将跳转到续费页面")
   setTimeout(() => window.location.href = `/membership/pay?level=${mockMembershipData.currentPlan.level}`, 800)
 }
 
 const handleUpgrade = () => {
-  toast.info("即将跳转到升级页面")
+  showInfo("即将跳转到升级页面")
   setTimeout(() => window.location.href = `/membership/pay?level=${mockMembershipData.currentPlan.level}`, 800)
 }
 </script>

@@ -7,10 +7,10 @@
         抱歉，您访问的页面不存在或已被移除。
       </p>
       <div class="error-actions">
-        <router-link to="/" class="btn btn-primary">
+        <button @click="handleGoHome" class="btn btn-primary">
           <span>🏠</span>
           返回首页
-        </router-link>
+        </button>
         <button @click="goBack" class="btn btn-secondary">
           <span>←</span>
           返回上页
@@ -44,8 +44,15 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 
 const router = useRouter();
+const { showInfo } = useInteraction();
+
+const handleGoHome = () => {
+  showInfo('正在返回首页...');
+  router.push('/');
+};
 
 const goBack = () => {
   if (window.history.length > 1) {

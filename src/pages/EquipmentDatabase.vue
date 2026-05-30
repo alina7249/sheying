@@ -85,8 +85,9 @@
       <div v-if="selectedType === 'all' || selectedType === 'camera'" class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
         <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">相机机身</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-for="camera in filteredEquipment.filter(e => e.type === 'camera')" :key="camera.id"
-            class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] hover:-translate-y-1 hover:shadow-lg transition-all duration-200"
+          <div v-for="camera in paginatedEquipment.filter(e => e.type === 'camera')" :key="camera.id"
+            class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] hover:-translate-y-1 hover:shadow-lg transition-all duration-200 cursor-pointer"
+            @click="handleItemClick(camera)"
           >
             <div class="relative h-48 overflow-hidden">
               <img :src="camera.image" :alt="camera.name" class="w-full h-full object-cover" />
@@ -113,8 +114,9 @@
       <div v-if="selectedType === 'all' || selectedType === 'lens'" class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
         <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">镜头</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-for="lens in filteredEquipment.filter(e => e.type === 'lens')" :key="lens.id"
-            class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] hover:-translate-y-1 hover:shadow-lg transition-all duration-200"
+          <div v-for="lens in paginatedEquipment.filter(e => e.type === 'lens')" :key="lens.id"
+            class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] hover:-translate-y-1 hover:shadow-lg transition-all duration-200 cursor-pointer"
+            @click="handleItemClick(lens)"
           >
             <div class="relative h-48 overflow-hidden">
               <img :src="lens.image" :alt="lens.name" class="w-full h-full object-cover" />
@@ -139,8 +141,9 @@
       <div v-if="selectedType === 'all' || selectedType === 'accessory'" class="bg-[#2D3748] rounded-xl p-6 border border-[#4A5F8B]">
         <h2 class="text-xl font-bold text-[#F5F7FA] mb-4">配件</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-for="accessory in filteredEquipment.filter(e => e.type === 'accessory')" :key="accessory.id"
-            class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] hover:-translate-y-1 hover:shadow-lg transition-all duration-200"
+          <div v-for="accessory in paginatedEquipment.filter(e => e.type === 'accessory')" :key="accessory.id"
+            class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] hover:-translate-y-1 hover:shadow-lg transition-all duration-200 cursor-pointer"
+            @click="handleItemClick(accessory)"
           >
             <div class="relative h-48 overflow-hidden">
               <img :src="accessory.image" :alt="accessory.name" class="w-full h-full object-cover" />
@@ -162,6 +165,34 @@
       </div>
     </div>
 
+    <!-- 分页 -->
+    <div v-if="totalPages > 1" class="flex justify-center mt-8">
+      <nav class="flex items-center space-x-1 bg-[#2D3748] p-2 rounded-lg border border-[#4A5F8B]">
+        <button
+          @click="handlePageChange(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="handlePageChange(page)"
+          :class="['px-3 py-2 rounded border transition-colors', page === currentPage ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]']"
+        >
+          {{ page }}
+        </button>
+        <button
+          @click="handlePageChange(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+      </nav>
+    </div>
+
     <!-- 无结果提示 -->
     <div v-if="filteredEquipment.length === 0" class="p-16 text-center">
       <div class="w-20 h-20 bg-[#4A5F8B] rounded-full flex items-center justify-center mx-auto mb-6">
@@ -177,13 +208,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { toast } from 'vue-sonner'
-import { useAuthStore } from '@/store/authStore'
-import { storeToRefs } from 'pinia'
+import { ref, computed, watch } from 'vue'
+import { useInteraction } from '../composables/useInteraction'
 
-const store = useAuthStore()
-const { isAuthenticated, user } = storeToRefs(store)
+const { showInfo } = useInteraction()
 
 interface EquipmentItem {
   id: string
@@ -263,6 +291,8 @@ const allEquipment = [
 const searchQuery = ref('')
 const selectedType = ref('all')
 const selectedBrand = ref('all')
+const currentPage = ref(1)
+const pageSize = 6
 
 const brandCounts = computed(() => {
   const counts: Record<string, number> = {}
@@ -292,5 +322,27 @@ const filteredEquipment = computed(() => {
     )
   }
   return result
+})
+
+const paginatedEquipment = computed(() => {
+  const start = (currentPage.value - 1) * pageSize
+  return filteredEquipment.value.slice(start, start + pageSize)
+})
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredEquipment.value.length / pageSize)
+})
+
+function handleItemClick(item: EquipmentItem) {
+  showInfo(`正在查看「${item.name}」的详情`)
+}
+
+function handlePageChange(page: number) {
+  currentPage.value = page
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+watch([searchQuery, selectedType, selectedBrand], () => {
+  currentPage.value = 1
 })
 </script>

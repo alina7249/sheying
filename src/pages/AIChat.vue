@@ -16,10 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { useAuthStore } from '../store/authStore'
 import { useChatStore } from '../store/chatStore'
 import { storeToRefs } from 'pinia'
+import { useInteraction } from '../composables/useInteraction'
 import HistoryPanel from '../components/chat/HistoryPanel.vue'
 import ChatInterface from '../components/chat/ChatInterface.vue'
 
@@ -27,10 +28,12 @@ const authStore = useAuthStore()
 const chatStore = useChatStore()
 const { theme } = storeToRefs(authStore)
 const { chatHistories } = storeToRefs(chatStore)
+const { showSuccess } = useInteraction()
 
 onMounted(() => {
   if (chatHistories.value.length === 0) {
     chatStore.createNewChat()
+    showSuccess('已创建新对话')
   }
 
   if (chatHistories.value.length === 1 && chatHistories.value[0].messages.length === 0) {

@@ -42,13 +42,13 @@
           </div>
 
           <div class="flex flex-wrap gap-3">
-            <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
-              <i class="fa-solid fa-plus mr-1"></i> 关注
+            <button @click="toggleFollow" class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+              <i :class="['fa-solid mr-1', isFollowing ? 'fa-user-check' : 'fa-plus']"></i> {{ isFollowing ? '已关注' : '关注' }}
             </button>
-            <button class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
+            <button @click="showInfo('私信功能即将上线')" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
               <i class="fa-solid fa-message-circle mr-1"></i> 私信
             </button>
-            <button class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
+            <button @click="showInfo('更多操作')" class="px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
               <i class="fa-solid fa-ellipsis-h"></i>
             </button>
           </div>
@@ -89,7 +89,7 @@
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-bold text-white">我的作品</h2>
             <div class="flex items-center gap-3">
-              <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+              <button @click="handleCreate()" class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
                 <i class="fa-solid fa-plus mr-2"></i>发布作品
               </button>
               <div class="flex bg-[#1E2532] rounded-lg p-1">
@@ -120,10 +120,10 @@
                       <span><i class="fa-solid fa-eye mr-1"></i>{{ post.views }}</span>
                     </div>
                     <div class="flex items-center gap-2">
-                      <button class="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
+                      <button @click="handleAction('编辑', post.title)" class="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
                         <i class="fa-solid fa-pencil"></i>
                       </button>
-                      <button class="p-2 bg-red-500/20 rounded-full hover:bg-red-500/30 transition-colors">
+                      <button @click="handleDelete(post.title)" class="p-2 bg-red-500/20 rounded-full hover:bg-red-500/30 transition-colors">
                         <i class="fa-solid fa-trash"></i>
                       </button>
                     </div>
@@ -161,10 +161,10 @@
                     <span><i class="fa-solid fa-calendar mr-1"></i>{{ post.date }}</span>
                   </div>
                   <div class="flex items-center gap-2">
-                    <button class="px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
+                    <button @click="handleAction('编辑', post.title)" class="px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
                       <i class="fa-solid fa-pencil mr-1"></i>编辑
                     </button>
-                    <button class="px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/40 transition-colors">
+                    <button @click="handleDelete(post.title)" class="px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/40 transition-colors">
                       <i class="fa-solid fa-trash mr-1"></i>删除
                     </button>
                   </div>
@@ -236,7 +236,7 @@
         <div v-if="activeTab === 'collections'" class="space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-white">我的收藏集</h3>
-            <button class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+            <button @click="handleCreate()" class="px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
               <i class="fa-solid fa-plus mr-2"></i>新建收藏集
             </button>
           </div>
@@ -257,10 +257,10 @@
                   <span>{{ collection.date }}</span>
                 </div>
                 <div class="flex items-center gap-2 mt-3">
-                  <button class="flex-1 px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
+                  <button @click="handleAction('编辑', collection.name)" class="flex-1 px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
                     <i class="fa-solid fa-pencil mr-1"></i>编辑
                   </button>
-                  <button class="flex-1 px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/40 transition-colors">
+                  <button @click="handleDelete(collection.name)" class="flex-1 px-3 py-1 bg-red-500/20 text-red-400 rounded text-sm hover:bg-red-500/40 transition-colors">
                     <i class="fa-solid fa-trash mr-1"></i>删除
                   </button>
                 </div>
@@ -273,7 +273,7 @@
           <div class="bg-[#1E2532] rounded-lg p-6">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-lg font-semibold text-white">关于我</h3>
-              <button class="px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
+              <button @click="showInfo('编辑个人资料')" class="px-3 py-1 bg-[#4A5F8B] text-white rounded text-sm hover:bg-[#6B7C93] transition-colors">
                 <i class="fa-solid fa-pencil mr-1"></i>编辑
               </button>
             </div>
@@ -364,8 +364,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useInteraction } from '../composables/useInteraction';
 import ChartCanvas from '../components/common/ChartCanvas.vue';
 
+const { handleFollow, handleUnfollow, handleCreate, handleDelete, handleAction, showInfo } = useInteraction();
+
+const isFollowing = ref(false);
 const viewMode = ref<'grid' | 'list'>('grid');
 
 const mockUser = {
@@ -516,6 +520,15 @@ const tabs = [
 ];
 
 const activeTab = ref('works');
+
+const toggleFollow = () => {
+  isFollowing.value = !isFollowing.value;
+  if (isFollowing.value) {
+    handleFollow(mockUser.username);
+  } else {
+    handleUnfollow(mockUser.username);
+  }
+};
 
 const monthlyStatsChartData = computed(() => ({
   labels: monthlyStats.map(d => d.month),

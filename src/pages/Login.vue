@@ -26,15 +26,15 @@
       </div>
 
       <div class="mt-6 grid grid-cols-3 gap-3">
-        <button class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
+        <button @click="handleSocialLogin('微信')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
           <i class="fa-brands fa-weixin text-green-500"></i>
         </button>
 
-        <button class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
+        <button @click="handleSocialLogin('微博')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
           <i class="fa-brands fa-weibo text-red-500"></i>
         </button>
 
-        <button class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
+        <button @click="handleSocialLogin('QQ')" class="inline-flex justify-center items-center px-4 py-2 border border-[#4A5F8B] rounded-lg bg-[#1E2A3A] text-[#E2E8F0] hover:bg-[#4A5F8B] transition-colors">
           <i class="fa-brands fa-qq text-blue-400"></i>
         </button>
       </div>
@@ -57,14 +57,20 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 import LoginForm from '../components/common/LoginForm.vue';
 
 const router = useRouter();
+const { showInfo } = useInteraction();
 
 const isLoggedIn = ref(false);
 
 const checkAuthStatus = () => {
   return localStorage.getItem('user') !== null;
+};
+
+const handleSocialLogin = (platform: string) => {
+  showInfo(`正在跳转到${platform}登录...`);
 };
 
 onMounted(() => {

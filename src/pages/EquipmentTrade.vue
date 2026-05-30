@@ -8,7 +8,7 @@
 
     <div class="grid grid-cols-2 gap-4 mb-8">
       <button
-        @click="tradeType = 'used'"
+        @click="tradeType = 'used'; currentPage = 1; showInfo('已切换到二手器材')"
         class="py-4 rounded-xl flex items-center justify-center transition-all"
         :class="tradeType === 'used' ? 'bg-[#4A5F8B] border-2 border-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] border border-[#4A5F8B] text-[#B8C6D8]'"
       >
@@ -16,7 +16,7 @@
         <span class="font-medium">二手器材</span>
       </button>
       <button
-        @click="tradeType = 'new'"
+        @click="tradeType = 'new'; currentPage = 1; showInfo('已切换到全新器材')"
         class="py-4 rounded-xl flex items-center justify-center transition-all"
         :class="tradeType === 'new' ? 'bg-[#4A5F8B] border-2 border-[#4A5F8B] text-[#F5F7FA] shadow-md' : 'bg-[#2D3748] border border-[#4A5F8B] text-[#B8C6D8]'"
       >
@@ -64,6 +64,33 @@
         <h3 class="text-lg font-medium text-[#F5F7FA] mb-2">未找到相关器材</h3>
         <p class="text-[#B8C6D8]">请尝试调整筛选条件或搜索其他关键词</p>
       </div>
+    </div>
+
+    <div v-if="totalPages > 1" class="flex justify-center mt-8">
+      <nav class="flex items-center space-x-1 bg-[#2D3748] p-2 rounded-lg border border-[#4A5F8B]">
+        <button
+          @click="handlePageChange(currentPage - 1)"
+          :disabled="currentPage === 1"
+          class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <button
+          v-for="page in totalPages"
+          :key="page"
+          @click="handlePageChange(page)"
+          :class="['px-3 py-2 rounded border transition-colors', page === currentPage ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]']"
+        >
+          {{ page }}
+        </button>
+        <button
+          @click="handlePageChange(currentPage + 1)"
+          :disabled="currentPage === totalPages"
+          class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+      </nav>
     </div>
 
     <div class="mt-12 bg-[#2D3748] rounded-xl p-6 shadow-sm border border-[#4A5F8B]">
@@ -115,7 +142,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { toast } from 'vue-sonner';
+import { useInteraction } from '../composables/useInteraction';
 import { mockCameras, mockLenses, mockAccessories } from '../lib/equipmentData';
 import EquipmentDetail from '../components/EquipmentDetail.vue';
 import ContactSellerModal from '../components/ContactSellerModal.vue';
@@ -125,6 +152,7 @@ import FilterSection from '../components/FilterSection.vue';
 
 const route = useRoute();
 const routeId = computed(() => route.params.id);
+const { handleSubmit, showInfo } = useInteraction();
 
 const tradeType = ref<'used' | 'new'>('used');
 const selectedType = ref('全部');
@@ -136,6 +164,8 @@ const sortBy = ref('recommended');
 const selectedSeller = ref(null);
 const showPublishForm = ref(false);
 const showContactModal = ref(false);
+const currentPage = ref(1);
+const pageSize = 6;
 
 const equipmentTypes = ['全部', '相机', '镜头', '配件', '无人机', '三脚架', '滤镜', '闪光灯'];
 const priceRanges = ['全部', '0-5000元', '5000-10000元', '10000-20000元', '20000元以上'];
@@ -208,19 +238,34 @@ const filteredNewEquipment = computed(() => {
   return equipment;
 });
 
-const currentEquipment = computed(() => tradeType.value === 'used' ? filteredUsedEquipment.value : filteredNewEquipment.value);
+const currentEquipment = computed(() => {
+  const source = tradeType.value === 'used' ? filteredUsedEquipment.value : filteredNewEquipment.value;
+  const start = (currentPage.value - 1) * pageSize;
+  return source.slice(start, start + pageSize);
+});
+
+const totalPages = computed(() => {
+  const source = tradeType.value === 'used' ? filteredUsedEquipment.value : filteredNewEquipment.value;
+  return Math.ceil(source.length / pageSize);
+});
 
 const handleViewDetail = (item: EquipmentItem) => {
-  console.log('View detail:', item);
+  showInfo(`正在查看「${item.name}」的详细信息`);
 };
 
 function handleContactSeller(seller: any) {
   selectedSeller.value = seller;
   showContactModal.value = true;
+  showInfo(`正在联系卖家「${seller.name}」`);
 }
 
 function handlePublishEquipment(formData: any) {
-  toast.success('器材发布成功，等待审核');
+  handleSubmit();
+}
+
+function handlePageChange(page: number) {
+  currentPage.value = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 

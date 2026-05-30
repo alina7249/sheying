@@ -53,7 +53,7 @@
                     <p class="text-sm text-[#B8C6D8]">{{ item.duration }}</p>
                   </div>
                 </div>
-                <button class="text-[#B8C6D8] hover:text-[#4A5F8B] transition-colors">
+                <button @click="showSuccess(`正在跳转到「${item.title}」`)" class="text-[#B8C6D8] hover:text-[#4A5F8B] transition-colors">
                   <i class="fa-solid fa-link"></i>
                 </button>
               </div>
@@ -117,14 +117,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { toast } from 'vue-sonner'
-import { useAuthStore } from '@/store/authStore'
-import { storeToRefs } from 'pinia'
+import { useInteraction } from '@/composables/useInteraction'
 import CommentSection from '@/components/CommentSection.vue'
 
 const route = useRoute()
-const store = useAuthStore()
-const { isAuthenticated, user } = storeToRefs(store)
+const { showSuccess } = useInteraction()
 
 interface Chapter {
   title: string
@@ -239,7 +236,7 @@ const shareToSocial = (platform: string) => {
   const title = project.value?.title || ''
   switch (platform) {
     case 'wechat':
-      toast.info('请手动分享到微信')
+      showSuccess('请手动分享到微信')
       break
     case 'weibo':
       window.open(`https://service.weibo.com/share/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`, '_blank')

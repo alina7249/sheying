@@ -126,7 +126,7 @@
       </div>
       
       <div class="featured-topics fade-in-up" style="animation-delay: 0.4s;">
-        <div v-for="(topic, index) in featuredTopics" :key="topic.id" class="topic-card" :style="{ animationDelay: `${index * 0.1}s` }">
+        <div v-for="(topic, index) in featuredTopics" :key="topic.id" class="topic-card" :style="{ animationDelay: `${index * 0.1}s` }" @click="router.push(`/topics/${topic.id}`)">
           <LazyImage :src="topic.image" :alt="topic.title" class="topic-image" />
           <div class="topic-overlay">
             <div class="topic-content">
@@ -157,6 +157,7 @@
           :key="item.id"
           class="inspiration-card"
           :style="{ animationDelay: `${index * 0.1}s` }"
+          @click="router.push(`/inspiration/${item.id}`)"
         >
           <div class="inspiration-image-wrapper">
             <LazyImage :src="item.image" :alt="item.title" />
@@ -198,7 +199,7 @@
                 <span class="stat-label">天倒计时</span>
               </div>
             </div>
-            <Button variant="primary" class="promo-btn">
+            <Button variant="primary" class="promo-btn" @click="handleJoin">
               立即参与
               <i class="fa-solid fa-arrow-right ml-2"></i>
             </Button>
@@ -250,6 +251,7 @@
               <i class="fa-solid fa-search search-icon"></i>
               <input
                 type="text"
+                v-model="searchQuery"
                 placeholder="搜索作品、摄影师或风格..."
                 class="search-input"
               />
@@ -300,7 +302,7 @@
               推荐艺术家
             </h3>
             <div class="photographers-list">
-              <div v-for="photographer in featuredPhotographers" :key="photographer.id" class="photographer-item">
+              <div v-for="photographer in featuredPhotographers" :key="photographer.id" class="photographer-item" @click="router.push(`/profile/${photographer.id}`)">
                 <div class="photographer-info">
                   <img
                     :src="photographer.avatar"
@@ -315,7 +317,7 @@
                     </p>
                   </div>
                 </div>
-                <Button variant="primary" size="sm">
+                <Button variant="primary" size="sm" @click="handleFollow(photographer.name)">
                   关注
                 </Button>
               </div>
@@ -329,7 +331,7 @@
               <div class="special-image-wrapper">
                 <LazyImage src="https://picsum.photos/800/600?random=207" alt="黑白影像专题" />
               </div>
-              <Button variant="primary" class="special-btn">
+              <Button variant="primary" class="special-btn" @click="handleJoin">
                 探索专题
                 <i class="fa-solid fa-arrow-right ml-2"></i>
               </Button>
@@ -343,6 +345,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
 import Banner from '../components/Banner.vue';
 import Feature from '../components/Feature.vue';
 import PhotographyCard from '../components/PhotographyCard.vue';
@@ -579,6 +583,10 @@ const weeklyLeaders = [
   { id: '5', name: '自然探索者', avatar: 'https://picsum.photos/400/400?random=284', likes: 1567 }
 ];
 
+const router = useRouter();
+const { handleFollow, handleJoin, handleLoadMore: loadMore } = useInteraction();
+
+const searchQuery = ref('');
 const selectedCategory = ref('all');
 
 const filteredPosts = computed(() => {
@@ -589,7 +597,7 @@ const filteredPosts = computed(() => {
 });
 
 const handleLoadMore = () => {
-  console.log('加载更多作品');
+  loadMore();
 };
 </script>
 

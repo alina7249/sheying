@@ -134,7 +134,7 @@
 
           <!-- 加载更多 -->
           <div class="load-more fade-in-up" style="animation-delay: 0.5s;">
-            <Button variant="outline">
+            <Button variant="outline" @click="loadMore">
               <i class="fa-solid fa-spinner mr-2"></i>
               加载更多资源
             </Button>
@@ -167,7 +167,7 @@
                 </div>
               </div>
             </div>
-            <button class="view-all-btn">
+            <button class="view-all-btn" @click="showInfo('查看全部热门资源')">
               查看全部 <i class="fa-solid fa-arrow-right ml-2"></i>
             </button>
           </div>
@@ -234,7 +234,7 @@
                   <span>无广告体验</span>
                 </div>
               </div>
-              <Button class="vip-btn">
+              <Button class="vip-btn" @click="showInfo('VIP升级页面开发中')">
                 立即升级
                 <i class="fa-solid fa-arrow-right ml-2"></i>
               </Button>
@@ -248,7 +248,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useInteraction } from '../composables/useInteraction';
 import Button from '../components/common/Button.vue';
+
+const { showInfo, handleUpload: doUpload, handleDownload: doDownload, handleBookmark: doBookmark, handleLoadMore: loadMore } = useInteraction();
 
 const searchQuery = ref('');
 const activeCategory = ref('all');
@@ -419,15 +422,15 @@ const formatNumber = (num: number) => {
 };
 
 const handleUpload = () => {
-  console.log('Upload resource');
+  doUpload();
 };
 
 const handleDownload = (resource: any) => {
-  console.log('Download resource:', resource.id);
+  doDownload(resource.name);
 };
 
 const handleBookmark = (resource: any) => {
-  console.log('Bookmark resource:', resource.id);
+  doBookmark(resource.name);
 };
 </script>
 

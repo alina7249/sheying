@@ -51,13 +51,16 @@
                 <img v-for="(img, index) in post.images.slice(0, 2)" :key="index" :src="img" :alt="`${post.title} - ${index + 1}`" class="w-full h-40 object-cover rounded-lg" />
               </div>
               <div class="flex items-center gap-6 mt-4 text-sm text-[#6B7C93]">
-                <button class="flex items-center gap-1 hover:text-white transition-colors">
+                <button @click="handleLike('帖子')" class="flex items-center gap-1 hover:text-white transition-colors">
                   <i class="fa-solid fa-heart"></i>
                   <span>{{ post.likes }}</span>
                 </button>
-                <button class="flex items-center gap-1 hover:text-white transition-colors">
+                <button @click="showSuccess('评论功能开发中')" class="flex items-center gap-1 hover:text-white transition-colors">
                   <i class="fa-solid fa-comment"></i>
                   <span>{{ post.comments }}</span>
+                </button>
+                <button @click="handleShare" class="flex items-center gap-1 hover:text-white transition-colors">
+                  <i class="fa-solid fa-share"></i>
                 </button>
               </div>
             </div>
@@ -99,7 +102,7 @@
           <div class="bg-gradient-to-r from-orange-600/20 to-red-600/20 rounded-xl p-6 border border-orange-500/30">
             <h3 class="font-semibold text-white mb-2">发起活动</h3>
             <p class="text-sm text-[#B8C6D8] mb-4">组织线下摄影活动，增进成员交流</p>
-            <button class="w-full px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
+            <button @click="showSuccess('活动发起成功，等待审核')" class="w-full px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors">
               立即发起
             </button>
           </div>
@@ -111,6 +114,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useInteraction } from '../composables/useInteraction';
+
+const { showSuccess, handleLike, handleShare } = useInteraction();
 
 const activeTab = ref('posts');
 
@@ -165,5 +171,6 @@ const members = [
 
 const handleJoin = () => {
   isJoined.value = !isJoined.value;
+  showSuccess(isJoined.value ? `已加入「${group.name}」` : `已退出「${group.name}」`);
 };
 </script>

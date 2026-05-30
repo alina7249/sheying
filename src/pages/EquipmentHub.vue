@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useInteraction } from '../composables/useInteraction'
 import EquipmentDatabase from './EquipmentDatabase.vue'
 import EquipmentReview from './EquipmentReview.vue'
 import EquipmentTrade from './EquipmentTrade.vue'
@@ -39,6 +40,7 @@ import EquipmentLibrary from './EquipmentLibrary.vue'
 
 const route = useRoute()
 const router = useRouter()
+const { showInfo } = useInteraction()
 
 const tabs = [
   { id: 'database', name: '器材库', icon: 'fa-database' },
@@ -64,7 +66,9 @@ watch(
 )
 
 const handleTabChange = (tabId: string) => {
+  const tab = tabs.find(t => t.id === tabId)
   activeTab.value = tabId
+  showInfo(`已切换到「${tab?.name || tabId}」`)
   if (tabId === 'database') {
     router.push('/equipment')
   } else {

@@ -10,6 +10,7 @@
         <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <div class="relative flex-1"><input type="text" v-model="searchTerm" placeholder="搜索器材评测..." class="w-full px-4 py-3 pl-12 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all placeholder:text-[#B8C6D8]" /><i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B8C6D8]"></i></div>
           <select v-model="sortBy" class="px-4 py-3 bg-[#2D3748] border border-[#4A5F8B] text-[#F5F7FA] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer"><option value="latest">最新</option><option value="popular">最热门</option><option value="rated">最高评分</option></select>
+          <button @click="handleWriteReview" class="px-6 py-3 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors flex items-center whitespace-nowrap border border-[#4A5F8B]"><i class="fa-solid fa-pen mr-2"></i>写评测</button>
         </div>
 
         <div class="flex flex-wrap gap-2 mb-6">
@@ -17,7 +18,7 @@
         </div>
 
         <div class="space-y-8">
-          <div v-for="review in sortedReviews" :key="review.id" class="bg-[#2D3748] rounded-xl border border-[#4A5F8B] overflow-hidden transition-all cursor-pointer shadow-sm">
+          <div v-for="review in paginatedReviews" :key="review.id" class="bg-[#2D3748] rounded-xl border border-[#4A5F8B] overflow-hidden transition-all cursor-pointer shadow-sm" @click="showInfo(`正在查看「${review.name}」的评测`)">
             <div class="relative"><img :src="review.image" :alt="review.name" class="w-full h-64 object-cover" /><div class="absolute top-4 left-4 flex space-x-2"><span class="px-3 py-1 bg-[#2D3748] text-[#F5F7FA] rounded-full text-sm">{{ review.type }}</span><span class="px-3 py-1 bg-[#4A5F8B] text-[#F5F7FA] rounded-full text-sm">评分: {{ review.rating }}</span></div></div>
             <div class="p-6">
               <div class="flex items-center justify-between mb-4"><div class="flex items-center"><img :src="review.reviewer.avatar" :alt="review.reviewer.name" class="w-8 h-8 rounded-full mr-2 object-cover border border-[#B8C6D8]" /><div><p class="font-medium text-[#F5F7FA]">{{ review.reviewer.name }}</p><p class="text-xs text-[#6B7C93]">{{ review.reviewer.title }}</p></div></div><span class="text-sm text-[#6B7C93]">{{ review.date }}</span></div>
@@ -35,16 +36,16 @@
                 <div class="bg-[#1E2532] p-3 rounded"><h4 class="font-medium text-[#4A5F8B] mb-1 text-sm">优点</h4><p class="text-sm text-[#B8C6D8]">{{ review.pros }}</p></div>
                 <div class="bg-[#1E2532] p-3 rounded"><h4 class="font-medium text-[#6B7C93] mb-1 text-sm">缺点</h4><p class="text-sm text-[#B8C6D8]">{{ review.cons }}</p></div>
               </div>
-              <div class="flex space-x-3"><router-link :to="`/equipment-review/${review.id}`" class="flex-1 py-2 text-center bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors">查看完整评测</router-link><button @click="handleCompare(review.id)" class="px-4 py-2 bg-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#4A5F8B] transition-colors border border-[#4A5F8B]"><i class="fa-solid fa-scale-balanced"></i></button></div>
+              <div class="flex space-x-3"><router-link :to="`/equipment-review/${review.id}`" @click.stop class="flex-1 py-2 text-center bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors">查看完整评测</router-link><button @click.stop="handleCompare(review.id)" class="px-4 py-2 bg-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#4A5F8B] transition-colors border border-[#4A5F8B]"><i class="fa-solid fa-scale-balanced"></i></button></div>
             </div>
           </div>
         </div>
 
         <div v-if="sortedReviews.length > 0" class="flex justify-center">
           <nav class="flex items-center space-x-1 bg-[#2D3748] p-2 rounded-lg border border-[#4A5F8B]">
-            <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-            <button class="px-3 py-2 rounded bg-[#4A5F8B] text-[#F5F7FA]">1</button><span class="px-2 text-[#B8C6D8]">...</span><button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">5</button>
-            <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+            <button @click="handlePageChange(currentPage - 1)" :disabled="currentPage === 1" class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+            <button v-for="page in totalPages" :key="page" @click="handlePageChange(page)" :class="['px-3 py-2 rounded border transition-colors', page === currentPage ? 'bg-[#4A5F8B] text-[#F5F7FA] border-[#4A5F8B]' : 'border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]']">{{ page }}</button>
+            <button @click="handlePageChange(currentPage + 1)" :disabled="currentPage === totalPages" class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"><i class="fa-solid fa-chevron-right text-xs"></i></button>
           </nav>
         </div>
       </div>
@@ -70,11 +71,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { useInteraction } from '../composables/useInteraction';
+
+const { showInfo, handleAction } = useInteraction();
 
 const searchTerm = ref('');
 const sortBy = ref('latest');
 const activeType = ref('全部');
+const currentPage = ref(1);
+const pageSize = 2;
 const equipmentTypes = ['全部', '相机', '镜头', '配件'];
 
 const compareData = [
@@ -145,5 +151,29 @@ const sortedReviews = computed(() => {
   return reviews;
 });
 
-function handleCompare(id: string) { console.log('对比:', id); }
+const paginatedReviews = computed(() => {
+  const start = (currentPage.value - 1) * pageSize;
+  return sortedReviews.value.slice(start, start + pageSize);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(sortedReviews.value.length / pageSize);
+});
+
+function handleCompare(id: string) {
+  handleAction('对比', id);
+}
+
+function handleWriteReview() {
+  handleAction('写评测');
+}
+
+function handlePageChange(page: number) {
+  currentPage.value = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+watch([searchTerm, sortBy, activeType], () => {
+  currentPage.value = 1;
+})
 </script>

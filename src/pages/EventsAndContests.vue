@@ -68,7 +68,7 @@
 
         <div class="flex justify-center space-x-4">
           <button @click="handleJoin" class="px-6 py-4 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors text-lg"><i class="fa-solid fa-calendar-check mr-2"></i>立即参加</button>
-          <button class="px-6 py-4 bg-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#4A5F8B] transition-colors border border-[#4A5F8B] text-lg"><i class="fa-solid fa-share-alt mr-2"></i>分享</button>
+          <button class="px-6 py-4 bg-[#2D3748] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#4A5F8B] transition-colors border border-[#4A5F8B] text-lg" @click="handleShare"><i class="fa-solid fa-share-alt mr-2"></i>分享</button>
         </div>
       </template>
     </div>
@@ -120,8 +120,8 @@
             </div>
             <div class="flex space-x-2">
               <router-link :to="`/events/${event.id}`" class="flex-1 py-2 text-center bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors">查看详情</router-link>
-              <button v-if="activeTab === '活动'" class="text-[#4A5F8B] border border-[#4A5F8B] px-4 py-2 rounded-lg hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-calendar-plus"></i></button>
-              <button v-else class="text-[#4A5F8B] border border-[#4A5F8B] px-4 py-2 rounded-lg hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-trophy"></i></button>
+              <button v-if="activeTab === '活动'" class="text-[#4A5F8B] border border-[#4A5F8B] px-4 py-2 rounded-lg hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors" @click="handleJoin"><i class="fa-solid fa-calendar-plus"></i></button>
+              <button v-else class="text-[#4A5F8B] border border-[#4A5F8B] px-4 py-2 rounded-lg hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors" @click="handleJoin"><i class="fa-solid fa-trophy"></i></button>
             </div>
           </div>
         </div>
@@ -133,11 +133,11 @@
 
     <div v-if="filteredEvents.length > 0" class="flex justify-center mt-8">
       <nav class="flex items-center space-x-1 bg-[#2D3748] p-2 rounded-lg border border-[#4A5F8B]">
-        <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-        <button class="px-3 py-2 rounded bg-[#4A5F8B] text-[#F5F7FA]">1</button>
+        <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors" @click="currentPage = Math.max(1, currentPage - 1)"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+        <button class="px-3 py-2 rounded bg-[#4A5F8B] text-[#F5F7FA]">{{ currentPage }}</button>
         <span class="px-2 text-[#B8C6D8]">...</span>
-        <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors">5</button>
-        <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+        <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors" @click="currentPage = 5">5</button>
+        <button class="px-3 py-2 rounded border border-[#4A5F8B] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors" @click="currentPage = Math.min(5, currentPage + 1)"><i class="fa-solid fa-chevron-right text-xs"></i></button>
       </nav>
     </div>
   </div>
@@ -146,11 +146,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { toast } from 'vue-sonner';
+import { useInteraction } from '../composables/useInteraction';
 
 const route = useRoute();
 const router = useRouter();
 const routeId = computed(() => route.params.id as string | undefined);
+
+const { handleJoin, handleShare } = useInteraction();
+
+const currentPage = ref(1);
 
 const activeTab = ref('全部');
 const searchTerm = ref('');
@@ -214,6 +218,4 @@ const filteredEvents = computed(() => {
 });
 
 const selectedEvent = computed(() => allEvents.find(e => e.id === routeId.value));
-
-function handleJoin() { toast.success('报名成功'); }
 </script>

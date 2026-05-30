@@ -28,7 +28,7 @@
                   <p class="text-sm text-[#6B7C93]">{{ mockPhotoPost.author.followers }} 粉丝 · {{ mockPhotoPost.author.posts }} 作品</p>
                 </div>
                 <button 
-                  @click="isFollowing = !isFollowing"
+                  @click="isFollowing = !isFollowing; showSuccess(isFollowing ? `已关注 @${mockPhotoPost.author.name}` : `已取消关注 @${mockPhotoPost.author.name}`)"
                   :class="['ml-auto px-4 py-2 rounded-lg transition-colors', isFollowing ? 'bg-[#1E2532] border border-[#4A5F8B] text-[#4A5F8B]' : 'bg-[#4A5F8B] text-white hover:bg-[#6B7C93]']"
                 >
                   {{ isFollowing ? '已关注' : '+ 关注' }}
@@ -102,13 +102,13 @@
 
             <div class="mt-4 pt-4 border-t border-[#4A5F8B]/30">
               <div class="flex gap-2">
-                <button class="flex-1 px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors flex items-center justify-center gap-2">
+                <button @click="handleShare" class="flex-1 px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors flex items-center justify-center gap-2">
                   <i class="fa-solid fa-share"></i>
                   <span>分享</span>
                 </button>
-                <button @click="showDonationModal = true" class="flex-1 px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-coffee"></i>
-                  <span>打赏</span>
+                <button @click="handleDownload(mockPhotoPost.title)" class="flex-1 px-4 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-download"></i>
+                  <span>下载</span>
                 </button>
               </div>
             </div>
@@ -124,7 +124,7 @@
                 <p class="text-sm text-[#B8C6D8]">获取独家摄影教程和技巧</p>
               </div>
               <button 
-                @click="isSubscribed = !isSubscribed"
+                @click="isSubscribed = !isSubscribed; showSuccess(isSubscribed ? '订阅成功' : '已取消订阅')"
                 :class="['px-4 py-2 rounded-lg transition-colors', isSubscribed ? 'bg-[#1E2532] border border-[#4A5F8B] text-[#4A5F8B]' : 'bg-purple-500 text-white hover:bg-purple-600']"
               >
                 {{ isSubscribed ? '已订阅' : `¥${mockPhotoPost.author.专栏价格}/年` }}
@@ -152,6 +152,7 @@
             </div>
             <button 
               v-if="selectedLicense"
+              @click="showSuccess(`已购买「${selectedLicense.name}」授权，金额 ¥${selectedLicense.price}`)"
               class="w-full mt-4 px-4 py-2 bg-[#4A5F8B] text-white rounded-lg hover:bg-[#6B7C93] transition-colors"
             >
               立即购买授权
@@ -211,7 +212,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useInteraction } from '../composables/useInteraction';
 import CommentSection from '../components/CommentSection.vue';
+
+const { showSuccess, handleLike: composableLike, handleBookmark: composableBookmark, handleShare, handleDownload } = useInteraction();
 
 const mockPhotoPost = {
   id: '1',
@@ -283,16 +287,19 @@ const canDonate = computed(() => {
 const handleLike = () => {
   isLiked.value = !isLiked.value;
   likes.value += isLiked.value ? 1 : -1;
+  if (isLiked.value) composableLike(mockPhotoPost.title);
 };
 
 const handleBookmark = () => {
   isBookmarked.value = !isBookmarked.value;
   collections.value += isBookmarked.value ? 1 : -1;
+  if (isBookmarked.value) composableBookmark(mockPhotoPost.title);
+  showSuccess(isBookmarked.value ? '收藏成功' : '已取消收藏');
 };
 
 const handleDonate = () => {
   const amount = selectedDonation.value?.id === 'custom' ? customDonationAmount.value : selectedDonation.value?.amount;
-  alert(`已向作者打赏 ¥${amount}`);
+  showSuccess(`已向作者打赏 ¥${amount}`);
   showDonationModal.value = false;
 };
 </script>

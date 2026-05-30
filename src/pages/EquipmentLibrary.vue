@@ -85,7 +85,8 @@
             <div
               v-for="product in sortedProducts.filter(p => p.category === category)"
               :key="product.id"
-              class="bg-[#2D3748] border border-[#4A5F8B] rounded-xl overflow-hidden group hover:-translate-y-1 hover:shadow-lg hover:border-[#4A5F8B] transition-all duration-300"
+              class="bg-[#2D3748] border border-[#4A5F8B] rounded-xl overflow-hidden group hover:-translate-y-1 hover:shadow-lg hover:border-[#4A5F8B] transition-all duration-300 cursor-pointer"
+              @click="handleCardClick(product)"
             >
               <div class="relative h-48 overflow-hidden">
                 <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -95,6 +96,7 @@
                 <button
                   class="absolute top-3 right-3 w-9 h-9 bg-[#2D3748]/90 rounded-full flex items-center justify-center text-[#F56565] hover:bg-[#F56565]/20 transition-colors"
                   :title="product.isFav ? '取消收藏' : '加入收藏'"
+                  @click.stop="handleToggleFavorite(product)"
                 >
                   <i :class="['fa-heart', product.isFav ? 'fa-solid' : 'fa-regular']"></i>
                 </button>
@@ -118,6 +120,7 @@
                   </div>
                   <button
                     class="px-4 py-2 bg-[#4A5F8B] text-[#F5F7FA] rounded-lg font-medium hover:bg-[#6B7C93] transition-colors text-sm flex items-center border border-[#4A5F8B] active:scale-95 transition-transform"
+                    @click.stop="handleBuy(product)"
                   >
                     <i class="fa-solid fa-cart-shopping mr-1"></i> 购买
                   </button>
@@ -145,12 +148,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { toast } from 'vue-sonner'
-import { useAuthStore } from '@/store/authStore'
-import { storeToRefs } from 'pinia'
+import { useInteraction } from '../composables/useInteraction'
 
-const store = useAuthStore()
-const { isAuthenticated, user } = storeToRefs(store)
+const { showSuccess, handleAction, handleBookmark, showInfo } = useInteraction()
 
 interface Product {
   id: string
@@ -291,6 +291,23 @@ const resetFilters = () => {
   selectedCategory.value = 'all'
   selectedBrand.value = 'all'
   sortOrder.value = 'recommended'
-  toast.success('筛选条件已重置')
+  showSuccess('筛选条件已重置')
+}
+
+function handleBuy(product: Product) {
+  handleAction('购买', product.name)
+}
+
+function handleToggleFavorite(product: Product) {
+  product.isFav = !product.isFav
+  if (product.isFav) {
+    handleBookmark(product.name)
+  } else {
+    showSuccess(`已取消收藏「${product.name}」`)
+  }
+}
+
+function handleCardClick(product: Product) {
+  showInfo(`正在查看「${product.name}」的详情`)
 }
 </script>
