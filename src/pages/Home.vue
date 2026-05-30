@@ -179,7 +179,7 @@
       </div>
 
       <!-- 活跃活动横幅 -->
-      <div class="promo-banner fade-in-up" style="animation-delay: 0.7s;">
+      <div class="promo-banner fade-in-up cursor-pointer" style="animation-delay: 0.7s;" @click="router.push('/membership')">
         <div class="promo-content">
           <div class="promo-text">
             <span class="promo-badge">🎉 热门活动</span>
@@ -199,7 +199,7 @@
                 <span class="stat-label">天倒计时</span>
               </div>
             </div>
-            <Button variant="primary" class="promo-btn" @click="handleJoin">
+            <Button variant="primary" class="promo-btn" @click.stop="handleJoin">
               立即参与
               <i class="fa-solid fa-arrow-right ml-2"></i>
             </Button>

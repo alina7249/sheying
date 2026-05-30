@@ -247,7 +247,21 @@ const handleShareMessage = async (message: Message) => {
 };
 
 const handleQuickQuestion = (question: string) => {
-  toast.info(`已选择问题: ${question}`);
+  if (!currentChatId.value) return
+  chatStore.addMessage(currentChatId.value, {
+    content: question,
+    sender: 'user'
+  })
+  chatStore.setIsTyping(true)
+  setTimeout(() => {
+    if (currentChatId.value) {
+      chatStore.addMessage(currentChatId.value, {
+        content: `收到您的问题：「${question}」。让我来为您详细解答...\n\n这是一个很好的摄影问题！不同的摄影题材需要不同的处理方式。建议您先从基础技术入手，掌握曝光三要素（光圈、快门、ISO），然后根据具体拍摄场景灵活运用。如果您能提供更多细节，我可以给出更有针对性的建议。`,
+        sender: 'ai'
+      })
+      chatStore.setIsTyping(false)
+    }
+  }, 1500)
 };
 
 const toggleMessageFavorite = (chatId: string, messageId: string) => {

@@ -1,19 +1,25 @@
 <template>
-  <div class="lazy-image-wrapper" :class="{ loading: isLoading, loaded: isLoaded, error: hasError }">
-    <div v-if="isLoading" class="image-skeleton">
+  <div
+    ref="wrapperRef"
+    class="lazy-image-wrapper"
+    :class="{ loading: isLoading, loaded: isLoaded, error: hasError, rounded: rounded }"
+    :style="{ borderRadius: rounded ? '0.75rem' : '0' }"
+  >
+    <div v-if="isLoading" class="image-skeleton" :style="{ backgroundColor: placeholderColor }">
       <div class="shimmer"></div>
     </div>
     <img
-      v-if="!hasError"
+      v-if="!hasError && shouldLoad"
       ref="imgRef"
-      :src="src"
+      :src="shouldLoad ? src : ''"
       :alt="alt"
-      :class="['lazy-image', { visible: isLoaded }]"
+      :class="['lazy-image', { visible: isLoaded, rounded: rounded }]"
+      :style="{ objectFit: objectFit, borderRadius: rounded ? '0.75rem' : '0' }"
       :loading="lazy ? 'lazy' : 'eager'"
       @load="onLoad"
       @error="onError"
     />
-    <div v-if="hasError" class="error-placeholder">
+    <div v-if="hasError" class="error-placeholder" :style="{ borderRadius: rounded ? '0.75rem' : '0' }">
       <i class="fa-solid fa-image text-4xl text-[#4A5F8B]"></i>
       <p class="text-sm text-[#6B7C93] mt-2">图片加载失败</p>
     </div>
@@ -21,16 +27,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue';
 
 interface Props {
   src: string;
   alt: string;
   lazy?: boolean;
+  rounded?: boolean;
+  objectFit?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  lazy: true
+  lazy: true,
+  rounded: false,
+  objectFit: 'cover'
 });
 
 const emit = defineEmits<{
@@ -39,9 +49,26 @@ const emit = defineEmits<{
 }>();
 
 const imgRef = ref<HTMLImageElement | null>(null);
+const wrapperRef = ref<HTMLElement | null>(null);
 const isLoading = ref(true);
 const isLoaded = ref(false);
 const hasError = ref(false);
+const shouldLoad = ref(!props.lazy);
+let observer: IntersectionObserver | null = null;
+
+const PLACEHOLDER_COLORS = [
+  '#1a2332', '#1e2a3a', '#1e2532', '#2d3748',
+  '#1a1f2e', '#1c2435', '#202a38', '#1f2937',
+  '#1a2330', '#1d2738', '#1c2230', '#212d40'
+];
+
+const placeholderColor = computed(() => {
+  let hash = 0;
+  for (let i = 0; i < props.src.length; i++) {
+    hash = props.src.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return PLACEHOLDER_COLORS[Math.abs(hash) % PLACEHOLDER_COLORS.length];
+});
 
 const onLoad = () => {
   isLoading.value = false;
@@ -59,12 +86,60 @@ watch(() => props.src, () => {
   isLoading.value = true;
   isLoaded.value = false;
   hasError.value = false;
+  shouldLoad.value = !props.lazy;
+  if (props.lazy) {
+    setupObserver();
+  }
 });
 
+watch(() => props.lazy, (newVal) => {
+  if (!newVal) {
+    shouldLoad.value = true;
+    disconnectObserver();
+  } else if (!shouldLoad.value) {
+    setupObserver();
+  }
+});
+
+const setupObserver = () => {
+  disconnectObserver();
+  if (!wrapperRef.value || !props.lazy) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          shouldLoad.value = true;
+          disconnectObserver();
+        }
+      });
+    },
+    {
+      rootMargin: '200px',
+      threshold: 0
+    }
+  );
+  observer.observe(wrapperRef.value);
+};
+
+const disconnectObserver = () => {
+  if (observer) {
+    observer.disconnect();
+    observer = null;
+  }
+};
+
 onMounted(() => {
-  if (imgRef.value && imgRef.value.complete) {
+  if (props.lazy) {
+    setupObserver();
+  }
+  if (imgRef.value && imgRef.value.complete && shouldLoad.value) {
     onLoad();
   }
+});
+
+onBeforeUnmount(() => {
+  disconnectObserver();
 });
 </script>
 
@@ -76,17 +151,29 @@ onMounted(() => {
   overflow: hidden;
 }
 
+.lazy-image-wrapper.rounded {
+  border-radius: 0.75rem;
+}
+
 .image-skeleton {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #2D3748 25%, #3A4B6F 50%, #2D3748 75%);
+  background: #2D3748;
   background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
+  animation: shimmer 1.8s ease-in-out infinite;
 }
 
 .shimmer {
   position: absolute;
   inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmerSlide 1.8s ease-in-out infinite;
 }
 
 .lazy-image {
@@ -94,13 +181,17 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(1.03);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .lazy-image.visible {
   opacity: 1;
   transform: scale(1);
+}
+
+.lazy-image.rounded {
+  border-radius: 0.75rem;
 }
 
 .error-placeholder {
@@ -114,11 +205,20 @@ onMounted(() => {
 }
 
 @keyframes shimmer {
-  0% {
+  0%, 100% {
     background-position: 200% 0;
   }
-  100% {
+  50% {
     background-position: -200% 0;
+  }
+}
+
+@keyframes shimmerSlide {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
 }
 </style>

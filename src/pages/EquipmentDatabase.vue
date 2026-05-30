@@ -209,8 +209,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useInteraction } from '../composables/useInteraction'
 
+const router = useRouter()
 const { showInfo } = useInteraction()
 
 interface EquipmentItem {
@@ -335,6 +337,7 @@ const totalPages = computed(() => {
 
 function handleItemClick(item: EquipmentItem) {
   showInfo(`正在查看「${item.name}」的详情`)
+  router.push(`/equipment-review/${item.id}`)
 }
 
 function handlePageChange(page: number) {

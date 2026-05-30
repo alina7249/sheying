@@ -39,6 +39,16 @@
             ]">
             管理后台
           </router-link>
+          <router-link
+            to="/membership"
+            :class="[
+              'font-medium transition-colors relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg',
+              route.path === '/membership'
+                ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA]'
+                : 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#63B3ED] hover:from-[#4A5F8B]/30 hover:to-[#63B3ED]/30'
+            ]">
+            <i class="fa-solid fa-crown text-xs"></i>开通会员
+          </router-link>
 
           <div v-if="isAuthenticated" class="relative">
             <button
@@ -120,13 +130,13 @@
                 <i class="fa-solid fa-image mb-1"></i>作品
               </router-link>
               <router-link
-                to="#"
+                :to="isAuthenticated ? '/profile/1' : '/login'"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
                 @click="isMobileMenuOpen = false">
                 <i class="fa-solid fa-heart mb-1"></i>收藏
               </router-link>
               <router-link
-                to="#"
+                :to="isAuthenticated ? '/profile-settings' : '/login'"
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
                 @click="isMobileMenuOpen = false">
                 <i class="fa-solid fa-cog mb-1"></i>设置
@@ -136,6 +146,12 @@
                 :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#4A5F8B]/20 text-[#4A5F8B] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-[#63B3ED]/10 text-[#63B3ED] hover:bg-[#63B3ED]/20 hover:text-[#4299E1]']"
                 @click="isMobileMenuOpen = false">
                 <i class="fa-solid fa-user-shield mb-1"></i>管理后台
+              </router-link>
+              <router-link
+                to="/membership"
+                :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#63B3ED] hover:from-[#4A5F8B]/30 hover:to-[#63B3ED]/30']"
+                @click="isMobileMenuOpen = false">
+                <i class="fa-solid fa-crown mb-1"></i>开通会员
               </router-link>
             </div>
             <button

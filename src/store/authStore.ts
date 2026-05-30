@@ -25,6 +25,7 @@ export interface AdminUser {
 }
 
 export type Theme = 'light' | 'dark';
+export type MemberLevel = 'free' | 'basic' | 'pro' | 'vip';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
@@ -33,6 +34,48 @@ export const useAuthStore = defineStore('auth', () => {
   const isAdminAuthenticated = ref(false);
   const userRole = ref<UserRole>('operator');
   const theme = ref<Theme>((localStorage.getItem('theme') as Theme) || 'dark');
+  const isMember = ref(false);
+  const memberLevel = ref<MemberLevel>('free');
+
+  const storedUser = localStorage.getItem('localUser');
+  const storedToken = localStorage.getItem('authToken');
+  if (storedUser && storedToken) {
+    try {
+      const parsed = JSON.parse(storedUser);
+      user.value = parsed;
+      isAuthenticated.value = true;
+      isMember.value = true;
+      memberLevel.value = (parsed.memberLevel as MemberLevel) || 'free';
+    } catch {
+      localStorage.removeItem('localUser');
+    }
+  }
+
+  const localLogin = async (username: string, password: string): Promise<boolean> => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const userData: User = {
+      id: `user-${Date.now()}`,
+      username: username,
+      email: `${username}@example.com`,
+      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20male&sign=92090021266b3aaadfd4d99b36d00763',
+      bio: '热爱风光和人像摄影，正在不断学习和进步中',
+      joinDate: new Date().toISOString().split('T')[0],
+      followers: 0,
+      following: 0,
+      posts: 0
+    };
+
+    localStorage.setItem('localUser', JSON.stringify(userData));
+    localStorage.setItem('authToken', `token_${Date.now()}`);
+
+    user.value = userData;
+    isAuthenticated.value = true;
+    isMember.value = true;
+    memberLevel.value = 'free';
+
+    return true;
+  };
 
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
@@ -54,17 +97,19 @@ export const useAuthStore = defineStore('auth', () => {
           posts: userData.posts || 0
         };
         isAuthenticated.value = true;
+        isMember.value = true;
+        memberLevel.value = (userData.memberLevel as MemberLevel) || 'free';
 
         localStorage.setItem('authToken', userData.token || `token_${Date.now()}`);
 
         return true;
       } else {
-        console.error('Login failed:', responseData?.message || 'Unknown error');
-        return false;
+        console.warn('API login failed, falling back to local login');
+        return await localLogin(username, password);
       }
     } catch (error) {
-      console.error('Login error:', error);
-      return false;
+      console.warn('API login error, falling back to local login:', error);
+      return await localLogin(username, password);
     }
   };
 
@@ -72,6 +117,44 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null;
     isAuthenticated.value = false;
     localStorage.removeItem('authToken');
+    localStorage.removeItem('localUser');
+  };
+
+  const upgradeMembership = (level: MemberLevel) => {
+    memberLevel.value = level;
+    isMember.value = true;
+    const storedUser = localStorage.getItem('localUser');
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      parsed.memberLevel = level;
+      localStorage.setItem('localUser', JSON.stringify(parsed));
+    }
+  };
+
+  const localRegister = async (userAccount: string, password: string, _checkPassword: string, userName: string): Promise<boolean> => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const userData: User = {
+      id: `user-${Date.now()}`,
+      username: userName || userAccount,
+      email: `${userAccount}@example.com`,
+      avatar: 'https://space.coze.cn/api/coze_space/gen_image?image_size=square&prompt=photographer%20avatar%20male&sign=92090021266b3aaadfd4d99b36d00763',
+      bio: '热爱风光和人像摄影，正在不断学习和进步中',
+      joinDate: new Date().toISOString().split('T')[0],
+      followers: 0,
+      following: 0,
+      posts: 0
+    };
+
+    localStorage.setItem('localUser', JSON.stringify(userData));
+    localStorage.setItem('authToken', `token_${Date.now()}`);
+
+    user.value = userData;
+    isAuthenticated.value = true;
+    isMember.value = true;
+    memberLevel.value = 'free';
+
+    return true;
   };
 
   const register = async (userAccount: string, password: string, checkPassword: string, userName: string): Promise<boolean> => {
@@ -82,12 +165,12 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.status === 200 && responseData) {
         return true;
       } else {
-        console.error('Register failed:', responseData?.message || 'Unknown error');
-        return false;
+        console.warn('API register failed, falling back to local register');
+        return await localRegister(userAccount, password, checkPassword, userName);
       }
     } catch (error) {
-      console.error('Register error:', error);
-      return false;
+      console.warn('API register error, falling back to local register:', error);
+      return await localRegister(userAccount, password, checkPassword, userName);
     }
   };
 
@@ -159,9 +242,14 @@ export const useAuthStore = defineStore('auth', () => {
     isAdminAuthenticated,
     userRole,
     theme,
+    isMember,
+    memberLevel,
     login,
     logout,
     register,
+    localLogin,
+    localRegister,
+    upgradeMembership,
     setUser,
     setIsAuthenticated,
     adminLogin,

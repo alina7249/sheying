@@ -132,6 +132,7 @@
                 v-for="topic in trendingTopics"
                 :key="topic.id"
                 class="topic-item"
+                @click="handleTopicClick(topic)"
               >
                 <span class="topic-emoji">{{ topic.emoji }}</span>
                 <div class="topic-info">
@@ -275,8 +276,13 @@ const handleJoinChallenge = () => {
   handleJoin();
 };
 
+const handleTopicClick = (topic: { id: string; name: string }) => {
+  showInfo(`查看话题：${topic.name}`);
+  router.push(`/community/topic/${topic.id}`);
+};
+
 const handlePostClick = (post: PostItem) => {
-  router.push(`/community/post/${post.id}`);
+  router.push(`/post-detail/${post.id}`);
 };
 
 const communityPosts: PostItem[] = [

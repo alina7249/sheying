@@ -28,7 +28,7 @@
               <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">新用户首月会员，立享全部课程</h2>
               <p class="text-[#B8C6D8] mb-6">现在加入会员，解锁平台所有优质课程，无限次学习，持续更新中</p>
               <div class="flex flex-wrap gap-3">
-                <button class="px-6 py-3 bg-gradient-to-r from-[#4A5F8B] to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all">
+                <button @click="router.push('/membership')" class="px-6 py-3 bg-gradient-to-r from-[#4A5F8B] to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all">
                   立即开通
                 </button>
                 <button class="px-6 py-3 bg-[#1E2532] text-white rounded-xl font-medium border border-[#4A5F8B] hover:bg-[#2D3748] transition-all">
@@ -68,10 +68,11 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div 
+        <router-link
           v-for="course in filteredCourses" 
           :key="course.id"
-          class="bg-[#1E2532] rounded-2xl overflow-hidden border border-[#4A5F8B]/30 hover:border-[#4A5F8B] hover:shadow-xl hover:shadow-[#4A5F8B]/20 transition-all duration-300 cursor-pointer group"
+          :to="'/course-detail/' + course.id"
+          class="bg-[#1E2532] rounded-2xl overflow-hidden border border-[#4A5F8B]/30 hover:border-[#4A5F8B] hover:shadow-xl hover:shadow-[#4A5F8B]/20 transition-all duration-300 cursor-pointer group block"
         >
           <div class="relative">
             <img :src="course.cover" :alt="course.title" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -81,8 +82,8 @@
               <span v-if="course.isHot" class="px-3 py-1 bg-orange-500 text-white text-xs rounded-full font-medium">🔥 热门</span>
             </div>
             <div class="absolute top-4 right-4">
-              <button class="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
-                <i class="fa-regular fa-heart"></i>
+              <button @click.stop="handleFavorite(course)" class="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+                <i :class="['fa-heart', favoriteIds.has(course.id) ? 'fa-solid text-red-400' : 'fa-regular']"></i>
               </button>
             </div>
             <div class="absolute bottom-4 right-4 bg-black/60 px-3 py-1 rounded-full text-white text-sm">
@@ -119,7 +120,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
 
       <div v-if="filteredCourses.length === 0" class="text-center py-16">
@@ -151,10 +152,26 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useInteraction } from '../composables/useInteraction';
+
+const router = useRouter();
+const { handleLike } = useInteraction();
 
 const activeTab = ref('all');
 const searchTerm = ref('');
 const sortBy = ref('popular');
+const favoriteIds = ref(new Set<string>());
+
+const handleFavorite = (course: any) => {
+  if (favoriteIds.value.has(course.id)) {
+    favoriteIds.value.delete(course.id);
+  } else {
+    favoriteIds.value.add(course.id);
+    handleLike(course.title);
+  }
+  favoriteIds.value = new Set(favoriteIds.value);
+};
 
 const tabs = [
   { id: 'all', name: '全部' },

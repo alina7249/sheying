@@ -999,7 +999,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useInteraction } from '@/composables/useInteraction'
+
+const router = useRouter()
 
 const { showSuccess, showInfo, showWarning, handleCopy, handleAction, handleShare } = useInteraction()
 
@@ -1225,12 +1228,10 @@ const sendChatMessage = () => {
 }
 
 const handleRenew = () => {
-  showInfo("即将跳转到续费页面")
-  setTimeout(() => window.location.href = `/membership/pay?level=${mockMembershipData.currentPlan.level}`, 800)
+  router.push('/membership')
 }
 
 const handleUpgrade = () => {
-  showInfo("即将跳转到升级页面")
-  setTimeout(() => window.location.href = `/membership/pay?level=${mockMembershipData.currentPlan.level}`, 800)
+  router.push('/membership')
 }
 </script>

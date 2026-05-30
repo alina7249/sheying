@@ -161,31 +161,12 @@ const resetLoginAttempts = () => {
   localStorage.setItem('loginAttempts', '0');
 };
 
-const validateRegularPassword = (value: string) => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8}$/;
-  if (!value) return '请输入密码';
-  if (value.length !== 8) return '密码必须是8个字符';
-  if (!passwordRegex.test(value))
-    return '密码必须包含大小写字母和特殊符号';
-  return '';
-};
-
-const validateAdminPassword = (value: string) => {
-  if (!value) return '请输入密码';
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8}$/;
-  if (value.length !== 8) return '密码必须是8个字符';
-  if (!passwordRegex.test(value))
-    return '密码必须包含大小写字母和特殊符号';
-  return '';
-};
-
 const validateUsername = () => {
   const value = formData.username;
-  const usernameRegex = /^[a-zA-Z0-9]{4,16}$/;
   if (!value) {
     errors.username = '请输入用户名';
-  } else if (!usernameRegex.test(value)) {
-    errors.username = '用户名必须是4-16位字母数字组合';
+  } else if (value.length < 4) {
+    errors.username = '用户名至少需要4个字符';
   } else {
     errors.username = '';
   }
@@ -193,12 +174,12 @@ const validateUsername = () => {
 
 const validatePassword = () => {
   const value = formData.password;
-  const isAdminUsername = ['admin', 'editor', 'operator'].includes(formData.username.toLowerCase());
-  
-  if (isAdminUsername) {
-    errors.password = validateAdminPassword(value);
+  if (!value) {
+    errors.password = '请输入密码';
+  } else if (value.length < 4) {
+    errors.password = '密码至少需要4个字符';
   } else {
-    errors.password = validateRegularPassword(value);
+    errors.password = '';
   }
 };
 

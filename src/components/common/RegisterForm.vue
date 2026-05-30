@@ -60,7 +60,7 @@
               errors.password ? 'border-red-500' : 'border-[#4A5568]',
               theme === 'dark' ? 'bg-[#4A5568] text-[#FFFFFF]' : 'bg-white text-[#1E2532]'
             ]"
-            placeholder="至少8个字符"
+            placeholder="至少4个字符"
           />
           <button
             type="button"
@@ -192,11 +192,10 @@ const theme = ref('dark');
 
 const validateUsername = () => {
   const value = formData.username;
-  const usernameRegex = /^[a-zA-Z0-9]{4,16}$/;
   if (!value) {
     errors.username = '请输入用户名';
-  } else if (!usernameRegex.test(value)) {
-    errors.username = '用户名必须是4-16位字母数字组合';
+  } else if (value.length < 4) {
+    errors.username = '用户名至少需要4个字符';
   } else {
     errors.username = '';
   }
@@ -216,13 +215,10 @@ const validatePhone = () => {
 
 const validatePassword = () => {
   const value = formData.password;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8}$/;
   if (!value) {
     errors.password = '请输入密码';
-  } else if (value.length !== 8) {
-    errors.password = '密码必须是8个字符';
-  } else if (!passwordRegex.test(value)) {
-    errors.password = '密码必须包含大小写字母和特殊符号';
+  } else if (value.length < 4) {
+    errors.password = '密码至少需要4个字符';
   } else {
     errors.password = '';
   }
@@ -268,8 +264,9 @@ const handleSubmit = async () => {
     const success = await authStore.register(formData.username, formData.password, formData.confirmPassword, formData.username);
 
     if (success) {
-      toast.success('注册成功，请登录！');
-      router.push('/login');
+      toast.success('注册成功，正在自动登录...');
+      await authStore.localLogin(formData.username, formData.password);
+      router.push('/');
     } else {
       toast.error('注册失败，请稍后重试');
     }

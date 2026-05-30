@@ -6,7 +6,7 @@
     @mouseleave="isHovered = false"
   >
     <div class="card-image-wrapper">
-      <router-link :to="`/photo/${post.id}`" class="card-image-link">
+      <router-link :to="`/photo-detail/${post.id}`" class="card-image-link">
         <LazyImage :src="post.image" :alt="post.title" />
         <div class="image-overlay">
           <div class="overlay-content">
@@ -71,7 +71,7 @@
         </div>
       </div>
 
-      <router-link :to="`/photo/${post.id}`" class="card-title-link">
+      <router-link :to="`/photo-detail/${post.id}`" class="card-title-link">
         <h3 class="card-title">{{ post.title }}</h3>
       </router-link>
 

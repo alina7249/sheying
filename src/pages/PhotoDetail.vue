@@ -3,8 +3,8 @@
     <div class="max-w-6xl mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-          <div class="bg-[#1E2532] rounded-xl overflow-hidden">
-            <img :src="mockPhotoPost.image" :alt="mockPhotoPost.title" class="w-full" />
+          <div class="bg-[#1E2532] rounded-xl overflow-hidden aspect-[16/9]">
+            <LazyImage :src="mockPhotoPost.image" :alt="mockPhotoPost.title" :lazy="false" rounded />
           </div>
 
           <div class="mt-6">
@@ -22,7 +22,7 @@
 
             <div class="bg-[#1E2532] rounded-xl p-6">
               <div class="flex items-center gap-4 mb-4">
-                <img :src="mockPhotoPost.author.avatar" :alt="mockPhotoPost.author.name" class="w-12 h-12 rounded-full object-cover" />
+                <div class="w-12 h-12 rounded-full overflow-hidden"><LazyImage :src="mockPhotoPost.author.avatar" :alt="mockPhotoPost.author.name" :lazy="false" /></div>
                 <div>
                   <h3 class="font-medium text-white">{{ mockPhotoPost.author.name }}</h3>
                   <p class="text-sm text-[#6B7C93]">{{ mockPhotoPost.author.followers }} 粉丝 · {{ mockPhotoPost.author.posts }} 作品</p>
@@ -214,6 +214,7 @@
 import { ref, computed } from 'vue';
 import { useInteraction } from '../composables/useInteraction';
 import CommentSection from '../components/CommentSection.vue';
+import LazyImage from '../components/LazyImage.vue';
 
 const { showSuccess, handleLike: composableLike, handleBookmark: composableBookmark, handleShare, handleDownload } = useInteraction();
 

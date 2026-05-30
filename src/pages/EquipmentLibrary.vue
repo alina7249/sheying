@@ -148,8 +148,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useInteraction } from '../composables/useInteraction'
 
+const router = useRouter()
 const { showSuccess, handleAction, handleBookmark, showInfo } = useInteraction()
 
 interface Product {
@@ -309,5 +311,6 @@ function handleToggleFavorite(product: Product) {
 
 function handleCardClick(product: Product) {
   showInfo(`正在查看「${product.name}」的详情`)
+  router.push(`/equipment-review/${product.id}`)
 }
 </script>

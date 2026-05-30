@@ -41,6 +41,7 @@ const routes = [
   { path: '/batch-manage-photos', name: 'BatchManagePhotos', component: () => import('../pages/BatchManagePhotos.vue') },
   { path: '/profile-settings', name: 'ProfileSettings', component: () => import('../pages/ProfileSettings.vue') },
   { path: '/profile-benefits', name: 'ProfileBenefits', component: () => import('../pages/ProfileBenefits.vue') },
+  { path: '/membership', name: 'Membership', component: () => import('../pages/Membership.vue') },
   { path: '/search-result', name: 'SearchResult', component: () => import('../pages/SearchResult.vue') },
 
   { path: '/admin/dashboard', name: 'AdminDashboard', component: () => import('../pages/admin/Dashboard.vue') },

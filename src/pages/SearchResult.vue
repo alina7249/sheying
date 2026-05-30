@@ -34,7 +34,7 @@
             <p class="text-[#B8C6D8]">请尝试调整搜索条件或使用不同的关键词</p>
           </div>
 
-          <div v-for="item in filteredResults" :key="item.id" class="bg-[#2D3748] rounded-xl overflow-hidden border border-[#4A5F8B] transition-all cursor-pointer">
+          <div v-for="item in paginatedResults" :key="item.id" class="bg-[#2D3748] rounded-xl overflow-hidden border border-[#4A5F8B] transition-all cursor-pointer" @click="router.push(item.link)">
             <div class="md:flex">
               <div class="md:w-1/3"><img :src="item.image" :alt="item.title" class="w-full h-48 md:h-full object-cover" /></div>
               <div class="p-5 md:w-2/3">
@@ -100,10 +100,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useInteraction } from '../composables/useInteraction';
 
 const route = useRoute();
+const router = useRouter();
 const { showInfo, handleLoadMore } = useInteraction();
 const query = ref(route.query.q as string || '');
 

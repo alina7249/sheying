@@ -141,7 +141,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useInteraction } from '../composables/useInteraction';
 import { mockCameras, mockLenses, mockAccessories } from '../lib/equipmentData';
 import EquipmentDetail from '../components/EquipmentDetail.vue';
@@ -151,6 +151,7 @@ import EquipmentCard, { type EquipmentItem } from '../components/EquipmentCard.v
 import FilterSection from '../components/FilterSection.vue';
 
 const route = useRoute();
+const router = useRouter();
 const routeId = computed(() => route.params.id);
 const { handleSubmit, showInfo } = useInteraction();
 
@@ -251,6 +252,7 @@ const totalPages = computed(() => {
 
 const handleViewDetail = (item: EquipmentItem) => {
   showInfo(`正在查看「${item.name}」的详细信息`);
+  router.push(`/equipment-review/${item.id}`)
 };
 
 function handleContactSeller(seller: any) {

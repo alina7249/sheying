@@ -29,7 +29,9 @@
               <h1 class="text-2xl font-bold text-[#F5F7FA] mb-4">{{ post.title }}</h1>
               <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center">
-                  <img :src="post.author.avatar" :alt="post.author.name" class="w-10 h-10 rounded-full object-cover mr-3" />
+                  <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
+                    <LazyImage :src="post.author.avatar" :alt="post.author.name" :lazy="false" />
+                  </div>
                   <div>
                     <div class="flex items-center">
                       <router-link :to="`/profile/${post.author.id}`" class="font-medium text-[#F5F7FA] hover:text-[#4A5F8B] transition-colors">

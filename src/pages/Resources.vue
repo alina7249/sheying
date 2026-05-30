@@ -126,7 +126,7 @@
                   下载
                 </Button>
                 <button class="bookmark-btn" @click="handleBookmark(resource)">
-                  <i class="fa-regular fa-bookmark"></i>
+                  <i :class="['fa-bookmark', bookmarkedIds.has(resource.id) ? 'fa-solid text-[#4A5F8B]' : 'fa-regular']"></i>
                 </button>
               </div>
             </div>
@@ -234,7 +234,7 @@
                   <span>无广告体验</span>
                 </div>
               </div>
-              <Button class="vip-btn" @click="showInfo('VIP升级页面开发中')">
+              <Button class="vip-btn" @click="router.push('/membership')">
                 立即升级
                 <i class="fa-solid fa-arrow-right ml-2"></i>
               </Button>
@@ -248,13 +248,16 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useInteraction } from '../composables/useInteraction';
 import Button from '../components/common/Button.vue';
 
+const router = useRouter();
 const { showInfo, handleUpload: doUpload, handleDownload: doDownload, handleBookmark: doBookmark, handleLoadMore: loadMore } = useInteraction();
 
 const searchQuery = ref('');
 const activeCategory = ref('all');
+const bookmarkedIds = ref(new Set<string>());
 
 const categories = [
   { id: 'all', name: '全部', icon: 'fa-layer-group' },
@@ -431,6 +434,12 @@ const handleDownload = (resource: any) => {
 
 const handleBookmark = (resource: any) => {
   doBookmark(resource.name);
+  if (bookmarkedIds.value.has(resource.id)) {
+    bookmarkedIds.value.delete(resource.id);
+  } else {
+    bookmarkedIds.value.add(resource.id);
+  }
+  bookmarkedIds.value = new Set(bookmarkedIds.value);
 };
 </script>
 

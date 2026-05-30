@@ -18,7 +18,7 @@
         </div>
 
         <div class="space-y-8">
-          <div v-for="review in paginatedReviews" :key="review.id" class="bg-[#2D3748] rounded-xl border border-[#4A5F8B] overflow-hidden transition-all cursor-pointer shadow-sm" @click="showInfo(`正在查看「${review.name}」的评测`)">
+          <div v-for="review in paginatedReviews" :key="review.id" class="bg-[#2D3748] rounded-xl border border-[#4A5F8B] overflow-hidden transition-all cursor-pointer shadow-sm" @click="handleCardClick(review)">
             <div class="relative"><img :src="review.image" :alt="review.name" class="w-full h-64 object-cover" /><div class="absolute top-4 left-4 flex space-x-2"><span class="px-3 py-1 bg-[#2D3748] text-[#F5F7FA] rounded-full text-sm">{{ review.type }}</span><span class="px-3 py-1 bg-[#4A5F8B] text-[#F5F7FA] rounded-full text-sm">评分: {{ review.rating }}</span></div></div>
             <div class="p-6">
               <div class="flex items-center justify-between mb-4"><div class="flex items-center"><img :src="review.reviewer.avatar" :alt="review.reviewer.name" class="w-8 h-8 rounded-full mr-2 object-cover border border-[#B8C6D8]" /><div><p class="font-medium text-[#F5F7FA]">{{ review.reviewer.name }}</p><p class="text-xs text-[#6B7C93]">{{ review.reviewer.title }}</p></div></div><span class="text-sm text-[#6B7C93]">{{ review.date }}</span></div>
@@ -72,8 +72,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useInteraction } from '../composables/useInteraction';
 
+const router = useRouter();
 const { showInfo, handleAction } = useInteraction();
 
 const searchTerm = ref('');
@@ -162,6 +164,11 @@ const totalPages = computed(() => {
 
 function handleCompare(id: string) {
   handleAction('对比', id);
+}
+
+function handleCardClick(review: any) {
+  showInfo(`正在查看「${review.name}」的评测`)
+  router.push(`/equipment-review/${review.id}`)
 }
 
 function handleWriteReview() {
