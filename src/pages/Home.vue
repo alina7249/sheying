@@ -5,6 +5,7 @@
     <div class="container mx-auto px-4 py-8">
       <Banner />
 
+      <!-- 摄影天气与摄影建议 -->
       <div class="weather-widget fade-in-up" style="animation-delay: 0.2s;">
         <div class="weather-header">
           <div class="location-info">
@@ -112,9 +113,37 @@
         </div>
       </div>
 
+      <!-- 特色功能区 -->
       <Feature />
 
-      <div class="section-header fade-in-up" style="animation-delay: 0.4s;">
+      <!-- 精选专题 -->
+      <div class="section-header fade-in-up" style="animation-delay: 0.35s;">
+        <div class="section-title-wrapper">
+          <h2 class="section-title">精选专题</h2>
+          <div class="title-line"></div>
+        </div>
+        <p class="section-subtitle">探索精心策划的摄影主题</p>
+      </div>
+      
+      <div class="featured-topics fade-in-up" style="animation-delay: 0.4s;">
+        <div v-for="(topic, index) in featuredTopics" :key="topic.id" class="topic-card" :style="{ animationDelay: `${index * 0.1}s` }">
+          <LazyImage :src="topic.image" :alt="topic.title" class="topic-image" />
+          <div class="topic-overlay">
+            <div class="topic-content">
+              <span class="topic-badge">{{ topic.badge }}</span>
+              <h3 class="topic-title">{{ topic.title }}</h3>
+              <p class="topic-desc">{{ topic.description }}</p>
+              <div class="topic-meta">
+                <span><i class="fa-solid fa-images"></i> {{ topic.photos }} 作品</span>
+                <span><i class="fa-solid fa-users"></i> {{ topic.photographers }} 摄影师</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 灵感专栏 -->
+      <div class="section-header fade-in-up" style="animation-delay: 0.5s;">
         <div class="section-title-wrapper">
           <h2 class="section-title">灵感专栏</h2>
           <div class="title-line"></div>
@@ -122,7 +151,7 @@
         <p class="section-subtitle">探索来自全球摄影师的创意灵感</p>
       </div>
 
-      <div class="inspiration-scroll fade-in-up" style="animation-delay: 0.5s;">
+      <div class="inspiration-scroll fade-in-up" style="animation-delay: 0.6s;">
         <div
           v-for="(item, index) in inspirationItems"
           :key="item.id"
@@ -148,9 +177,41 @@
         </div>
       </div>
 
+      <!-- 活跃活动横幅 -->
+      <div class="promo-banner fade-in-up" style="animation-delay: 0.7s;">
+        <div class="promo-content">
+          <div class="promo-text">
+            <span class="promo-badge">🎉 热门活动</span>
+            <h2 class="promo-title">2023秋季风光摄影大赛</h2>
+            <p class="promo-desc">参与大赛赢取丰厚奖金和专业摄影器材，展示你的摄影才华</p>
+            <div class="promo-stats">
+              <div class="stat">
+                <span class="stat-num">1,256</span>
+                <span class="stat-label">参赛者</span>
+              </div>
+              <div class="stat">
+                <span class="stat-num">¥5,000</span>
+                <span class="stat-label">一等奖</span>
+              </div>
+              <div class="stat">
+                <span class="stat-num">15</span>
+                <span class="stat-label">天倒计时</span>
+              </div>
+            </div>
+            <Button variant="primary" class="promo-btn">
+              立即参与
+              <i class="fa-solid fa-arrow-right ml-2"></i>
+            </Button>
+          </div>
+          <div class="promo-image">
+            <LazyImage src="https://picsum.photos/800/600?random=300" alt="摄影大赛" />
+          </div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2">
-          <div class="filter-section fade-in-up" style="animation-delay: 0.6s;">
+          <div class="filter-section fade-in-up" style="animation-delay: 0.8s;">
             <div class="filter-buttons">
               <button
                 v-for="(category, index) in categories"
@@ -169,13 +230,13 @@
               v-for="(post, index) in filteredPosts"
               :key="post.id"
               class="photo-card-wrapper fade-in-up"
-              :style="{ animationDelay: `${0.7 + index * 0.1}s` }"
+              :style="{ animationDelay: `${0.9 + index * 0.1}s` }"
             >
               <PhotographyCard :post="post" />
             </div>
           </div>
 
-          <div class="load-more-section fade-in-up" style="animation-delay: 1.2s;">
+          <div class="load-more-section fade-in-up" style="animation-delay: 1.4s;">
             <Button variant="outline" @click="handleLoadMore" ariaLabel="加载更多摄影作品">
               <i class="fa-solid fa-inbox mr-2"></i>
               加载更多作品
@@ -184,7 +245,7 @@
         </div>
 
         <div class="lg:col-span-1 space-y-8">
-          <div class="search-section fade-in-up" style="animation-delay: 0.8s;">
+          <div class="search-section fade-in-up" style="animation-delay: 1s;">
             <div class="search-wrapper">
               <i class="fa-solid fa-search search-icon"></i>
               <input
@@ -195,7 +256,7 @@
             </div>
           </div>
 
-          <div class="sidebar-card fade-in-up" style="animation-delay: 0.9s;">
+          <div class="sidebar-card fade-in-up" style="animation-delay: 1.1s;">
             <h3 class="sidebar-title">
               <i class="fa-solid fa-fire mr-2"></i>
               热门风格
@@ -213,7 +274,27 @@
             </div>
           </div>
 
-          <div class="sidebar-card fade-in-up" style="animation-delay: 1s;">
+          <div class="sidebar-card fade-in-up" style="animation-delay: 1.2s;">
+            <h3 class="sidebar-title">
+              <i class="fa-solid fa-trophy mr-2"></i>
+              本周新星
+            </h3>
+            <div class="leaderboard">
+              <div v-for="(user, index) in weeklyLeaders" :key="user.id" class="leader-item">
+                <div class="leader-rank" :class="{'top-three': index < 3}">
+                  <span v-if="index < 3">{{ index + 1 }}</span>
+                  <i v-else class="fa-solid fa-user"></i>
+                </div>
+                <img :src="user.avatar" :alt="user.name" class="leader-avatar" />
+                <div class="leader-info">
+                  <p class="leader-name">{{ user.name }}</p>
+                  <p class="leader-stats">{{ user.likes }} 获赞</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-card fade-in-up" style="animation-delay: 1.3s;">
             <h3 class="sidebar-title">
               <i class="fa-solid fa-users mr-2"></i>
               推荐艺术家
@@ -241,7 +322,7 @@
             </div>
           </div>
 
-          <div class="sidebar-card special-card fade-in-up" style="animation-delay: 1.1s;">
+          <div class="sidebar-card special-card fade-in-up" style="animation-delay: 1.4s;">
             <div class="special-content">
               <h3 class="special-title">黑白影像专题</h3>
               <p class="special-desc">探索黑白摄影的艺术魅力，感受光影交织的视觉语言和情感表达</p>
@@ -280,7 +361,7 @@ const categories = [
 const photoRatings = [
   { label: '风光摄影', value: 4 },
   { label: '人像摄影', value: 5 },
-  { label: '街拍摄影', value: 4 },
+  { label: '街拍', value: 4 },
   { label: '夜景摄影', value: 3 }
 ];
 
@@ -458,6 +539,44 @@ const dailyForecast = [
   { day: '周二', weather: '晴转多云', temp: '9°/18°', icon: 'fa-cloud-sun' },
   { day: '周三', weather: '小雨', temp: '8°/15°', icon: 'fa-cloud-rain' },
   { day: '周四', weather: '阴', temp: '7°/14°', icon: 'fa-cloud' }
+];
+
+const featuredTopics = [
+  {
+    id: '1',
+    title: '城市风光摄影',
+    description: '捕捉都市天际线的独特魅力',
+    badge: '热门专题',
+    photos: 2847,
+    photographers: 456,
+    image: 'https://picsum.photos/800/600?random=250'
+  },
+  {
+    id: '2',
+    title: '自然生态',
+    description: '探索大自然的奇妙生灵',
+    badge: '精选',
+    photos: 1923,
+    photographers: 312,
+    image: 'https://picsum.photos/800/600?random=251'
+  },
+  {
+    id: '3',
+    title: '人像艺术',
+    description: '用镜头讲述人物故事',
+    badge: '精选',
+    photos: 3456,
+    photographers: 567,
+    image: 'https://picsum.photos/800/600?random=252'
+  }
+];
+
+const weeklyLeaders = [
+  { id: '1', name: '光影魔法师', avatar: 'https://picsum.photos/400/400?random=280', likes: 3456 },
+  { id: '2', name: '瞬间捕手', avatar: 'https://picsum.photos/400/400?random=281', likes: 2890 },
+  { id: '3', name: '色彩大师', avatar: 'https://picsum.photos/400/400?random=282', likes: 2456 },
+  { id: '4', name: '城市漫步者', avatar: 'https://picsum.photos/400/400?random=283', likes: 1890 },
+  { id: '5', name: '自然探索者', avatar: 'https://picsum.photos/400/400?random=284', likes: 1567 }
 ];
 
 const selectedCategory = ref('all');
@@ -811,6 +930,82 @@ const handleLoadMore = () => {
   margin: 0;
 }
 
+.featured-topics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.topic-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  height: 280px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.topic-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -12px rgba(74, 95, 139, 0.4);
+}
+
+.topic-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.topic-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(30, 37, 50, 0.95) 0%, rgba(30, 37, 50, 0.3) 50%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+}
+
+.topic-content {
+  width: 100%;
+}
+
+.topic-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #4A5F8B;
+  color: #F5F7FA;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.topic-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 8px 0;
+}
+
+.topic-desc {
+  font-size: 13px;
+  color: #B8C6D8;
+  margin: 0 0 12px 0;
+}
+
+.topic-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #B8C6D8;
+}
+
+.topic-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .inspiration-scroll {
   display: flex;
   gap: 24px;
@@ -912,6 +1107,80 @@ const handleLoadMore = () => {
 
 .inspiration-card:hover .inspiration-footer i {
   transform: translateX(4px);
+}
+
+.promo-banner {
+  background: linear-gradient(135deg, rgba(74, 95, 139, 0.2) 0%, rgba(138, 80, 255, 0.2) 100%);
+  border: 1px solid rgba(74, 95, 139, 0.3);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.promo-content {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.promo-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #4A5F8B, #8a50ff);
+  color: #F5F7FA;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.promo-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #F5F7FA;
+  margin: 0 0 12px 0;
+}
+
+.promo-desc {
+  font-size: 15px;
+  color: #B8C6D8;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.promo-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.promo-stats .stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4A5F8B;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #B8C6D8;
+}
+
+.promo-btn {
+  background: linear-gradient(135deg, #4A5F8B, #8a50ff);
+  border: none;
+}
+
+.promo-image {
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
 }
 
 .filter-section {
@@ -1039,6 +1308,70 @@ const handleLoadMore = () => {
 .tag-count {
   color: #6B7C93;
   margin-left: 2px;
+}
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leader-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #1E2532;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.leader-item:hover {
+  background: rgba(74, 95, 139, 0.2);
+}
+
+.leader-rank {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(74, 95, 139, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B8C6D8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.leader-rank.top-three {
+  background: linear-gradient(135deg, #4A5F8B, #8a50ff);
+  color: #F5F7FA;
+}
+
+.leader-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4A5F8B;
+}
+
+.leader-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.leader-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0 0 2px 0;
+}
+
+.leader-stats {
+  font-size: 12px;
+  color: #B8C6D8;
+  margin: 0;
 }
 
 .photographers-list {
