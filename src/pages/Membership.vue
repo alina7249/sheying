@@ -1,545 +1,272 @@
 <template>
-  <div class="min-h-screen bg-[#0F1C2D]">
-    <section class="relative overflow-hidden py-20 md:py-28">
-      <div class="absolute inset-0 bg-gradient-to-b from-[#4A5F8B]/25 via-[#0F1C2D]/50 to-[#0F1C2D]"></div>
-      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-radial from-[#4A5F8B]/30 via-[#0F1C2D]/10 to-transparent rounded-full blur-3xl"></div>
-      <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-[#63B3ED]/8 rounded-full blur-3xl"></div>
-      <div class="absolute inset-0 membership-hero-grid opacity-[0.03]"></div>
-      <div class="container mx-auto px-4 relative z-10">
-        <div class="text-center max-w-3xl mx-auto">
-          <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-[#4A5F8B]/15 border border-[#4A5F8B]/25 text-[#63B3ED] text-sm font-medium mb-8 tracking-wide">
-            <i class="fa-solid fa-crown mr-2" aria-hidden="true"></i>影研社会员
+  <div class="min-h-screen bg-[#0a0f1a] text-white">
+    <!-- Premium Background Effects -->
+    <div class="fixed inset-0 bg-gradient-to-br from-[#0a0f1a] via-[#0F1C2D] to-[#050810] pointer-events-none z-0"></div>
+    <div class="fixed inset-0 opacity-[0.02] pointer-events-none z-0" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;);"></div>
+    
+    <div class="relative z-10">
+      <div class="max-w-7xl mx-auto px-4 py-16">
+        <!-- Page Header -->
+        <div class="text-center mb-16">
+          <div class="flex items-center justify-center gap-3 mb-5">
+            <span class="w-1 h-8 bg-gradient-to-b from-[#4A5F8B] to-[#63B3ED] rounded-full"></span>
+            <span class="text-sm font-medium text-[#63B3ED] tracking-widest uppercase">会员订阅</span>
+            <span class="w-1 h-8 bg-gradient-to-b from-[#4A5F8B] to-[#63B3ED] rounded-full"></span>
           </div>
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#F5F7FA] mb-6 leading-tight" style="text-wrap: balance">
-            解锁<span class="hero-accent-text">无限创意</span>可能
-          </h1>
-          <p class="text-lg text-[#B8C6D8] mb-10 max-w-2xl mx-auto leading-relaxed" style="text-wrap: balance">
-            选择适合您的会员方案，享受高清原图下载、专属预设包、优先赛事报名等专属特权
-          </p>
-          <div class="flex items-center justify-center gap-2">
-            <div class="flex items-center bg-[#1E2532] rounded-xl p-1.5 border border-[#4A5F8B]/30">
-              <button
-                @click="billingCycle = 'monthly'"
-                :class="[
-                  'px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300',
-                  billingCycle === 'monthly' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-lg' : 'text-[#B8C6D8] hover:text-[#F5F7FA]'
-                ]">
-                月付
-              </button>
-              <button
-                @click="billingCycle = 'yearly'"
-                :class="[
-                  'px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2',
-                  billingCycle === 'yearly' ? 'bg-[#4A5F8B] text-[#F5F7FA] shadow-lg' : 'text-[#B8C6D8] hover:text-[#F5F7FA]'
-                ]">
-                年付
-                <span class="px-1.5 py-0.5 text-xs rounded-full bg-[#48BB78] text-white font-bold">省2个月</span>
-              </button>
-            </div>
-          </div>
+          <h1 class="text-5xl md:text-6xl font-bold text-white mb-5 bg-gradient-to-r from-white via-[#63B3ED] to-white bg-clip-text text-transparent">选择你的会员方案</h1>
+          <p class="text-[#B8C6D8] text-lg max-w-3xl mx-auto">解锁完整功能，开启专业摄影学习之旅，提升你的摄影技能</p>
         </div>
-      </div>
-    </section>
 
-    <section class="container mx-auto px-4 pb-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div
-          v-for="tier in tiers"
-          :key="tier.id"
-          :class="[
-            'relative rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-2 tier-card',
-            tier.recommended
-              ? 'border-[#4A5F8B] bg-[#1E2532] tier-card-glow'
-              : 'border-[#4A5F8B]/20 bg-[#1E2532] hover:border-[#4A5F8B]/50'
-          ]">
-          <div v-if="tier.recommended" class="absolute -top-3 left-1/2 -translate-x-1/2">
-            <span class="px-4 py-1 bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] text-xs font-bold rounded-full shadow-lg">
-              <i class="fa-solid fa-star mr-1" aria-hidden="true"></i>推荐
-            </span>
-          </div>
-
-          <div class="text-center mb-6">
-            <div class="w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-4"
-              :class="tier.recommended ? 'bg-[#4A5F8B]/20' : 'bg-[#2D3748]'">
-              <i :class="['fa-solid text-2xl', tier.icon, tier.recommended ? 'text-[#63B3ED]' : 'text-[#6B7C93]']" aria-hidden="true"></i>
-            </div>
-            <h3 class="text-xl font-bold text-[#F5F7FA] mb-1">{{ tier.name }}</h3>
-            <p class="text-sm text-[#6B7C93]">{{ tier.description }}</p>
-          </div>
-
-          <div class="text-center mb-6">
-            <div class="flex items-baseline justify-center">
-              <span class="text-4xl font-bold text-[#F5F7FA] pricing-number">¥{{ billingCycle === 'monthly' ? tier.monthlyPrice : tier.yearlyPrice }}</span>
-              <span class="text-[#6B7C93] ml-1">/{{ billingCycle === 'monthly' ? '月' : '年' }}</span>
-            </div>
-            <p v-if="billingCycle === 'yearly' && tier.id !== 'free'" class="text-xs text-[#48BB78] mt-1">
-              月均仅 ¥{{ Math.round(tier.yearlyPrice / 12) }}
-            </p>
-          </div>
-
-          <ul class="space-y-3 mb-8 flex-1">
-            <li v-for="feature in tier.features" :key="feature" class="flex items-start text-sm">
-              <i :class="[
-                'fa-solid mr-2 mt-0.5 flex-shrink-0',
-                tier.recommended ? 'fa-check text-[#63B3ED]' : 'fa-check text-[#4A5F8B]'
-              ]" aria-hidden="true"></i>
-              <span class="text-[#B8C6D8]">{{ feature }}</span>
-            </li>
-            <li v-for="feature in tier.unavailableFeatures" :key="feature" class="flex items-start text-sm">
-              <i class="fa-solid fa-times mr-2 mt-0.5 flex-shrink-0 text-[#6B7C93]/40" aria-hidden="true"></i>
-              <span class="text-[#6B7C93]/40 line-through">{{ feature }}</span>
-            </li>
-          </ul>
-
-          <button
-            v-if="tier.id === 'free'"
-            class="w-full py-3 rounded-xl font-medium transition-all duration-300 bg-[#2D3748] text-[#B8C6D8] border border-[#4A5F8B]/20 cursor-default">
-            当前方案
+        <!-- Billing Toggle -->
+        <div class="flex items-center justify-center gap-5 mb-16">
+          <span :class="['text-xl', !isAnnual ? 'text-white font-semibold' : 'text-[#6B7C93]']">月付</span>
+          <button @click="isAnnual = !isAnnual" :class="['w-20 h-10 rounded-full p-1 transition-all duration-500', isAnnual ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED]' : 'bg-[#1E2532]']">
+            <div :class="['w-8 h-8 bg-white rounded-full shadow-lg transition-transform duration-500', isAnnual ? 'translate-x-10' : 'translate-x-0']"></div>
           </button>
-          <button
-            v-else
-            @click="handleSubscribe(tier)"
-            :class="[
-              'w-full py-3 rounded-xl font-medium transition-all duration-300',
-              tier.recommended
-                ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] shadow-lg shadow-[#4A5F8B]/25 hover:shadow-[#4A5F8B]/40'
-                : 'bg-[#2D3748] text-[#F5F7FA] border border-[#4A5F8B]/30 hover:bg-[#4A5F8B]/20'
-            ]">
-            立即开通
-          </button>
+          <span :class="['text-xl', isAnnual ? 'text-white font-semibold' : 'text-[#6B7C93]']">年付</span>
+          <span class="px-4 py-2 bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white text-sm font-semibold rounded-full">省2个月</span>
         </div>
-      </div>
-    </section>
 
-    <section class="container mx-auto px-4 pb-16">
-      <div class="bg-[#1E2532] rounded-2xl border border-[#4A5F8B]/20 p-8 md:p-12">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 class="text-2xl md:text-3xl font-bold text-[#F5F7FA] mb-4">全功能对比</h2>
-            <p class="text-[#B8C6D8] mb-8">一目了然地了解每个会员等级提供的功能，选择最适合您的方案</p>
-            <div class="overflow-x-auto compare-table-wrapper">
-              <table class="w-full border-collapse">
-                <thead>
-                  <tr class="border-b border-[#4A5F8B]/20">
-                    <th class="py-3.5 text-left text-sm font-medium text-[#B8C6D8] pl-4">功能</th>
-                    <th class="py-3.5 text-center text-sm font-medium text-[#6B7C93]">免费</th>
-                    <th class="py-3.5 text-center text-sm font-medium text-[#B8C6D8]">Basic</th>
-                    <th class="py-3.5 text-center text-sm font-medium text-[#63B3ED] compare-pro-col">Pro</th>
-                    <th class="py-3.5 text-center text-sm font-medium text-[#B8C6D8] pr-4">VIP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(row, i) in comparisonRows" :key="row.name" class="border-b border-[#4A5F8B]/8 transition-colors duration-150" :class="i % 2 === 0 ? 'bg-[#0F1C2D]/40' : ''">
-                    <td class="py-3.5 text-sm text-[#B8C6D8] pl-4 font-medium">{{ row.name }}</td>
-                    <td class="py-3.5 text-center">
-                      <i v-if="row.free" class="fa-solid fa-check text-[#4A5F8B] text-sm" aria-hidden="true"></i>
-                      <i v-else class="fa-solid fa-minus text-[#6B7C93]/30 text-sm" aria-hidden="true"></i>
-                    </td>
-                    <td class="py-3.5 text-center">
-                      <span v-if="row.basic === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#4A5F8B] text-sm" aria-hidden="true"></i></span>
-                      <span v-else class="text-sm text-[#B8C6D8]">{{ row.basic }}</span>
-                    </td>
-                    <td class="py-3.5 text-center compare-pro-col">
-                      <span v-if="row.pro === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#63B3ED] text-sm" aria-hidden="true"></i></span>
-                      <span v-else class="text-sm text-[#63B3ED]">{{ row.pro }}</span>
-                    </td>
-                    <td class="py-3.5 text-center pr-4">
-                      <span v-if="row.vip === 'check'" class="inline-flex"><i class="fa-solid fa-check text-[#4A5F8B] text-sm" aria-hidden="true"></i></span>
-                      <span v-else class="text-sm text-[#B8C6D8]">{{ row.vip }}</span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+        <!-- Pricing Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <div v-for="plan in plans" :key="plan.id" :class="['relative bg-gradient-to-br from-[#1E2532] to-[#2D3748] rounded-3xl p-10 border transition-all duration-500 hover:-translate-y-4 hover:shadow-2xl', plan.isPopular ? 'border-2 border-[#63B3ED] shadow-2xl shadow-[#4A5F8B]/30' : 'border border-[#4A5F8B]/20']">
+            <!-- Popular Badge -->
+            <div v-if="plan.isPopular" class="absolute -top-5 left-1/2 transform -translate-x-1/2">
+              <span class="px-6 py-2 bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white text-sm font-semibold rounded-full shadow-lg shadow-[#4A5F8B]/30">最受欢迎</span>
             </div>
-          </div>
-          <div class="space-y-6">
-            <h3 class="text-xl font-bold text-[#F5F7FA] mb-6">常见问题</h3>
-            <div class="space-y-3">
-              <details v-for="faq in faqs" :key="faq.q" class="faq-details bg-[#0F1C2D] rounded-xl border border-[#4A5F8B]/10 group">
-                <summary class="flex items-center justify-between p-5 cursor-pointer list-none marker:content-none">
-                  <span class="font-medium text-[#F5F7FA] pr-4">{{ faq.q }}</span>
-                  <span class="faq-chevron flex-shrink-0 w-6 h-6 rounded-full bg-[#4A5F8B]/15 flex items-center justify-center text-[#63B3ED] text-xs transition-transform duration-300">
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </span>
-                </summary>
-                <div class="px-5 pb-5">
-                  <p class="text-sm text-[#B8C6D8] leading-relaxed">{{ faq.a }}</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="showPaymentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showPaymentModal = false">
-          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-          <div class="relative bg-[#1E2532] rounded-2xl border border-[#4A5F8B] w-full max-w-md shadow-2xl">
-            <div class="flex items-center justify-between p-6 border-b border-[#4A5F8B]/20">
-              <h3 class="text-lg font-bold text-[#F5F7FA]">确认开通</h3>
-              <button @click="showPaymentModal = false" class="w-8 h-8 rounded-lg bg-[#2D3748] flex items-center justify-center text-[#B8C6D8] hover:text-[#F5F7FA] hover:bg-[#4A5F8B]/30 transition-colors" aria-label="关闭">
-                <i class="fa-solid fa-times" aria-hidden="true"></i>
-              </button>
-            </div>
-            <div class="p-6 space-y-5">
-              <div class="bg-[#0F1C2D] rounded-xl p-4 space-y-3">
-                <div class="flex justify-between">
-                  <span class="text-[#B8C6D8]">套餐</span>
-                  <span class="text-[#F5F7FA] font-medium">{{ selectedTier?.name }}</span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[#B8C6D8]">周期</span>
-                  <span class="text-[#F5F7FA]">{{ billingCycle === 'monthly' ? '月付' : '年付（含2个月赠送）' }}</span>
-                </div>
-                <div class="flex justify-between border-t border-[#4A5F8B]/20 pt-3">
-                  <span class="text-[#B8C6D8]">金额</span>
-                  <span class="text-[#63B3ED] text-xl font-bold">¥{{ billingCycle === 'monthly' ? selectedTier?.monthlyPrice : selectedTier?.yearlyPrice }}</span>
-                </div>
+            
+            <div class="text-center mb-8">
+              <div :class="['w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6', plan.isPopular ? 'bg-gradient-to-br from-[#4A5F8B] to-[#63B3ED]' : 'bg-[#4A5F8B]/20']">
+                <i :class="['fa-solid text-3xl', plan.icon, plan.isPopular ? 'text-white' : 'text-[#63B3ED]']"></i>
               </div>
-
-              <div>
-                <label class="block text-sm font-medium text-[#B8C6D8] mb-3">支付方式</label>
-                <div class="grid grid-cols-2 gap-3">
-                  <button
-                    @click="paymentMethod = 'alipay'"
-                    :class="[
-                      'flex items-center justify-center gap-2 p-4 rounded-xl border transition-all duration-300',
-                      paymentMethod === 'alipay'
-                        ? 'border-[#4A5F8B] bg-[#4A5F8B]/10 text-[#63B3ED]'
-                        : 'border-[#4A5F8B]/20 bg-[#0F1C2D] text-[#B8C6D8] hover:border-[#4A5F8B]/50'
-                    ]">
-                    <i class="fa-brands fa-alipay text-2xl" aria-hidden="true"></i>
-                    <span class="font-medium">支付宝</span>
-                  </button>
-                  <button
-                    @click="paymentMethod = 'wechat'"
-                    :class="[
-                      'flex items-center justify-center gap-2 p-4 rounded-xl border transition-all duration-300',
-                      paymentMethod === 'wechat'
-                        ? 'border-[#4A5F8B] bg-[#4A5F8B]/10 text-[#63B3ED]'
-                        : 'border-[#4A5F8B]/20 bg-[#0F1C2D] text-[#B8C6D8] hover:border-[#4A5F8B]/50'
-                    ]">
-                    <i class="fa-brands fa-weixin text-2xl" aria-hidden="true"></i>
-                    <span class="font-medium">微信支付</span>
-                  </button>
+              <h3 class="text-2xl font-bold text-white mb-3">{{ plan.name }}</h3>
+              <p class="text-[#B8C6D8] text-sm mb-5">{{ plan.description }}</p>
+              <div class="mt-6">
+                <div class="flex items-baseline justify-center gap-2">
+                  <span class="text-4xl md:text-5xl font-bold text-white">¥{{ isAnnual ? plan.annualPrice : plan.monthlyPrice }}</span>
+                  <span class="text-[#6B7C93]">/月</span>
                 </div>
+                <p v-if="isAnnual" class="text-[#6B7C93] text-sm mt-2">年付 ¥{{ plan.annualPrice * 12 }}</p>
               </div>
             </div>
-            <div class="p-6 border-t border-[#4A5F8B]/20">
-              <button
-                @click="confirmPayment"
-                :disabled="isProcessing"
-                class="w-full py-3.5 rounded-xl font-medium bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] hover:shadow-lg hover:shadow-[#4A5F8B]/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                <span v-if="!isProcessing">确认支付 ¥{{ billingCycle === 'monthly' ? selectedTier?.monthlyPrice : selectedTier?.yearlyPrice }}</span>
-                <span v-else><i class="fa-solid fa-spinner fa-spin mr-2" aria-hidden="true"></i>处理中…</span>
+            
+            <div class="space-y-4 mb-10">
+              <div v-for="(feature, idx) in plan.features" :key="idx" class="flex items-center gap-4">
+                <i :class="['fa-check-circle text-xl', feature.included ? 'text-green-400' : 'text-[#6B7C93]']"></i>
+                <span :class="['text-sm leading-relaxed', feature.included ? 'text-[#B8C6D8]' : 'text-[#6B7C93] line-through']">{{ feature.text }}</span>
+              </div>
+            </div>
+            
+            <button @click="handleSubscribe(plan)" :class="['w-full py-4 rounded-2xl font-semibold transition-all duration-300', plan.isPopular ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white shadow-lg shadow-[#4A5F8B]/30 hover:shadow-xl hover:shadow-[#4A5F8B]/40' : 'bg-[#1E2532] text-white border border-[#4A5F8B]/30 hover:bg-[#2D3748] hover:border-[#4A5F8B]/60']">
+              {{ plan.buttonText }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Features Comparison -->
+        <div class="mb-16">
+          <h2 class="text-3xl font-bold text-white text-center mb-10">功能对比</h2>
+          <div class="overflow-x-auto rounded-3xl border border-[#4A5F8B]/20 bg-[#1E2532]">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b border-[#4A5F8B]/20">
+                  <th class="px-8 py-6 text-left text-white font-semibold">功能</th>
+                  <th class="px-8 py-6 text-center text-white font-semibold">免费版</th>
+                  <th class="px-8 py-6 text-center text-white font-semibold">基础版</th>
+                  <th class="px-8 py-6 text-center text-white font-semibold">专业版</th>
+                  <th class="px-8 py-6 text-center text-white font-semibold">VIP版</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#4A5F8B]/20">
+                <tr>
+                  <td class="px-8 py-5 text-[#B8C6D8]">浏览作品</td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 text-[#B8C6D8]">上传作品</td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 text-[#B8C6D8]">免费课程</td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 text-[#B8C6D8]">付费课程</td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 text-[#B8C6D8]">优先客服</td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                </tr>
+                <tr>
+                  <td class="px-8 py-5 text-[#B8C6D8]">1对1指导</td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-[#6B7C93]"><i class="fa-solid fa-times text-xl"></i></td>
+                  <td class="px-8 py-5 text-center text-green-400"><i class="fa-solid fa-check text-xl"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div>
+          <h2 class="text-3xl font-bold text-white text-center mb-10">常见问题</h2>
+          <div class="space-y-6 max-w-4xl mx-auto">
+            <div v-for="(faq, idx) in faqs" :key="idx" class="bg-[#1E2532] rounded-2xl border border-[#4A5F8B]/20 overflow-hidden">
+              <button @click="toggleFaq(idx)" class="w-full px-8 py-6 text-left flex items-center justify-between text-white font-semibold hover:bg-[#2D3748] transition-all duration-300">
+                <span class="text-lg">{{ faq.question }}</span>
+                <i :class="['fa-solid text-[#63B3ED] text-xl transition-transform duration-300', openFaq === idx ? 'rotate-180' : '']">
+                  {{ openFaq === idx ? 'fa-chevron-up' : 'fa-chevron-down' }}
+                </i>
               </button>
+              <div v-show="openFaq === idx" class="px-8 pb-6 text-[#B8C6D8] leading-relaxed">
+                {{ faq.answer }}
+              </div>
             </div>
           </div>
         </div>
-      </Transition>
-    </Teleport>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '../store/authStore'
-import { useInteraction } from '../composables/useInteraction'
-import type { MemberLevel } from '../store/authStore'
+import { ref } from 'vue';
+import { useInteraction } from '../composables/useInteraction';
 
-const router = useRouter()
-const authStore = useAuthStore()
-const { showSuccess, showError, showLoading, dismissToast } = useInteraction()
+const { showSuccess, showInfo } = useInteraction();
+const isAnnual = ref(true);
+const openFaq = ref<number | null>(null);
 
-const billingCycle = ref<'monthly' | 'yearly'>('monthly')
-const showPaymentModal = ref(false)
-const paymentMethod = ref<'alipay' | 'wechat'>('alipay')
-const isProcessing = ref(false)
-const selectedTier = ref<Tier | null>(null)
+const toggleFaq = (idx: number) => {
+  openFaq.value = openFaq.value === idx ? null : idx;
+};
 
-interface Tier {
-  id: string
-  name: string
-  description: string
-  icon: string
-  monthlyPrice: number
-  yearlyPrice: number
-  recommended: boolean
-  features: string[]
-  unavailableFeatures: string[]
-}
+const handleSubscribe = (plan: any) => {
+  if (plan.id === 'free') {
+    showInfo('免费版无需订阅，直接使用');
+  } else {
+    showSuccess(`已选择「${plan.name}」${isAnnual.value ? '年付' : '月付'}方案`);
+  }
+};
 
-const tiers: Tier[] = [
+const plans = [
   {
     id: 'free',
-    name: '免费',
-    description: '基础功能体验',
+    name: '免费版',
+    description: '适合初次体验的用户',
     icon: 'fa-user',
     monthlyPrice: 0,
-    yearlyPrice: 0,
-    recommended: false,
+    annualPrice: 0,
+    buttonText: '当前方案',
+    isPopular: false,
     features: [
-      '每日3次原图下载',
-      '基础滤镜预设',
-      '社区浏览互动',
-      '参与公开赛事',
-      '基础存储空间'
-    ],
-    unavailableFeatures: [
-      '高清原图下载',
-      '专属预设包',
-      '优先赛事报名',
-      '无水印导出'
+      { text: '浏览所有作品', included: true },
+      { text: '点赞和收藏', included: true },
+      { text: '参与社区讨论', included: true },
+      { text: '学习免费课程', included: true },
+      { text: '上传作品', included: false },
+      { text: '付费课程', included: false },
+      { text: '专属徽章', included: false }
     ]
   },
   {
     id: 'basic',
-    name: 'Basic',
-    description: '进阶创作体验',
-    icon: 'fa-user-plus',
-    monthlyPrice: 19,
-    yearlyPrice: 199,
-    recommended: false,
+    name: '基础版',
+    description: '适合摄影爱好者',
+    icon: 'fa-star',
+    monthlyPrice: 29,
+    annualPrice: 19,
+    buttonText: '立即订阅',
+    isPopular: false,
     features: [
-      '每日10次原图下载',
-      '10个专业预设包',
-      '高清原图下载',
-      '优先客服支持',
-      '20GB云存储空间',
-      '无水印导出'
-    ],
-    unavailableFeatures: [
-      '优先赛事报名',
-      '会员专属课程'
+      { text: '浏览所有作品', included: true },
+      { text: '点赞和收藏', included: true },
+      { text: '参与社区讨论', included: true },
+      { text: '学习免费课程', included: true },
+      { text: '上传作品', included: true },
+      { text: '付费课程', included: false },
+      { text: '专属徽章', included: true }
     ]
   },
   {
     id: 'pro',
-    name: 'Pro',
-    description: '专业摄影师首选',
-    icon: 'fa-user-tie',
-    monthlyPrice: 39,
-    yearlyPrice: 399,
-    recommended: true,
+    name: '专业版',
+    description: '适合专业摄影师',
+    icon: 'fa-crown',
+    monthlyPrice: 99,
+    annualPrice: 69,
+    buttonText: '立即订阅',
+    isPopular: true,
     features: [
-      '每日30次原图下载',
-      '50个专业预设包',
-      '高清原图下载',
-      '优先赛事报名',
-      '会员专属课程',
-      '专属客服通道',
-      '无水印导出',
-      '100GB云存储空间'
-    ],
-    unavailableFeatures: []
+      { text: '浏览所有作品', included: true },
+      { text: '点赞和收藏', included: true },
+      { text: '参与社区讨论', included: true },
+      { text: '学习免费课程', included: true },
+      { text: '上传作品', included: true },
+      { text: '付费课程', included: true },
+      { text: '专属徽章', included: true }
+    ]
   },
   {
     id: 'vip',
-    name: 'VIP',
-    description: '全方位大师体验',
-    icon: 'fa-crown',
-    monthlyPrice: 99,
-    yearlyPrice: 999,
-    recommended: false,
+    name: 'VIP版',
+    description: '尊享极致体验',
+    icon: 'fa-gem',
+    monthlyPrice: 299,
+    annualPrice: 199,
+    buttonText: '立即订阅',
+    isPopular: false,
     features: [
-      '无限原图下载',
-      '全部专业预设包',
-      'RAW素材下载',
-      '优先赛事报名',
-      '全部专属课程',
-      '1对1专属客服',
-      '无水印导出',
-      '300GB云存储空间',
-      '线下活动免费参与',
-      '器材租赁8折优惠'
-    ],
-    unavailableFeatures: []
+      { text: '浏览所有作品', included: true },
+      { text: '点赞和收藏', included: true },
+      { text: '参与社区讨论', included: true },
+      { text: '学习免费课程', included: true },
+      { text: '上传作品', included: true },
+      { text: '付费课程', included: true },
+      { text: '专属徽章', included: true },
+      { text: '1对1指导', included: true }
+    ]
   }
-]
-
-const comparisonRows = [
-  { name: '原图下载', free: false, basic: '10次/日', pro: '30次/日', vip: '无限' },
-  { name: '专业预设包', free: false, basic: '10个', pro: '50个', vip: '全部' },
-  { name: 'RAW素材下载', free: false, basic: false, pro: false, vip: 'check' },
-  { name: '优先赛事报名', free: false, basic: false, pro: 'check', vip: 'check' },
-  { name: '会员专属课程', free: false, basic: false, pro: 'check', vip: '全部' },
-  { name: '专属客服', free: false, basic: '普通', pro: '优先', vip: '1对1' },
-  { name: '无水印导出', free: false, basic: 'check', pro: 'check', vip: 'check' },
-  { name: '云存储空间', free: '5GB', basic: '20GB', pro: '100GB', vip: '300GB' },
-  { name: '线下活动参与', free: false, basic: false, pro: false, vip: 'check' },
-  { name: '器材租赁优惠', free: false, basic: false, pro: false, vip: '8折' }
-]
+];
 
 const faqs = [
   {
-    q: '年付方案真的送2个月吗？',
-    a: '是的！选择年付方案，您只需支付10个月的费用即可享受12个月的会员服务，相当于免费获得2个月的会员时长，非常划算。'
+    question: '如何取消订阅？',
+    answer: '你可以随时在账户设置中取消订阅，取消后服务将持续到当前计费周期结束。'
   },
   {
-    q: '可以随时升级或降级套餐吗？',
-    a: '当然可以！您可以随时升级到更高等级的套餐，差价将按剩余天数折算。降级将在当前周期结束后生效。'
+    question: '支持哪些支付方式？',
+    answer: '我们支持微信支付、支付宝、银行卡等多种支付方式，方便快捷。'
   },
   {
-    q: '支持哪些支付方式？',
-    a: '目前支持支付宝和微信支付两种方式，未来将支持更多支付渠道。'
+    question: '可以退款吗？',
+    answer: '我们提供7天无理由退款保证，如果你在7天内对服务不满意，可以申请全额退款。'
   },
   {
-    q: '会员到期后会怎样？',
-    a: '会员到期后，您的权益将恢复为免费方案。已上传的作品和数据不会丢失，但部分高级功能将暂时无法使用。'
+    question: '如何升级或降级会员方案？',
+    answer: '你可以随时在会员页面更改方案，差价将按比例计算并在下一次计费时调整。'
+  },
+  {
+    question: '会员特权可以分享吗？',
+    answer: '会员账户仅限个人使用，不支持分享或转让给他人使用。'
   }
-]
-
-function handleSubscribe(tier: Tier) {
-  selectedTier.value = tier
-  showPaymentModal.value = true
-}
-
-async function confirmPayment() {
-  if (!selectedTier.value) return
-
-  isProcessing.value = true
-  const loadingId = showLoading('正在处理支付…')
-
-  await new Promise(resolve => setTimeout(resolve, 1500))
-
-  dismissToast(loadingId)
-
-  try {
-    const tierMap: Record<string, MemberLevel> = {
-      basic: 'basic',
-      pro: 'pro',
-      vip: 'vip'
-    }
-    const storeTier = tierMap[selectedTier.value.id]
-    if (storeTier) {
-      authStore.upgradeMembership(storeTier)
-    }
-
-    showSuccess(`恭喜！您已成功开通${selectedTier.value.name}会员`)
-    showPaymentModal.value = false
-    isProcessing.value = false
-
-    setTimeout(() => {
-      router.push('/profile-benefits')
-    }, 1000)
-  } catch {
-    dismissToast(loadingId)
-    showError('支付失败，请稍后重试')
-    isProcessing.value = false
-  }
-}
+];
 </script>
-
-<style scoped>
-.hero-accent-text {
-  background: linear-gradient(135deg, #63B3ED 0%, #8a50ff 50%, #63B3ED 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: accentShift 6s ease-in-out infinite;
-}
-
-@keyframes accentShift {
-  0%, 100% { background-position: 0% center; }
-  50% { background-position: 200% center; }
-}
-
-.membership-hero-grid {
-  background-image:
-    linear-gradient(rgba(74, 95, 139, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(74, 95, 139, 0.15) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-.pricing-number {
-  font-variant-numeric: tabular-nums;
-}
-
-.tier-card-glow {
-  box-shadow:
-    0 0 40px rgba(74, 95, 139, 0.2),
-    0 0 80px rgba(74, 95, 139, 0.08),
-    inset 0 1px 0 rgba(99, 179, 237, 0.1);
-  position: relative;
-}
-
-.tier-card-glow::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 18px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(74, 95, 139, 0.5), rgba(99, 179, 237, 0.3), rgba(74, 95, 139, 0.5));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.faq-details[open] .faq-chevron {
-  transform: rotate(180deg);
-}
-
-.faq-details summary::-webkit-details-marker {
-  display: none;
-}
-
-.compare-table-wrapper::-webkit-scrollbar {
-  height: 6px;
-}
-
-.compare-table-wrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.compare-table-wrapper::-webkit-scrollbar-thumb {
-  background: rgba(74, 95, 139, 0.3);
-  border-radius: 3px;
-}
-
-.compare-pro-col {
-  background: rgba(74, 95, 139, 0.06);
-}
-
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-
-.modal-enter-from > div:last-child,
-.modal-leave-to > div:last-child {
-  transform: scale(0.95) translateY(-20px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tier-card {
-    transition: none;
-  }
-
-  .hero-accent-text {
-    animation: none;
-  }
-
-  .modal-enter-active,
-  .modal-leave-active {
-    transition: none;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-</style>
