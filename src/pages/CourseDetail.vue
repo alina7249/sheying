@@ -223,9 +223,9 @@ const paymentMethods = [
 const courses = [
   {
     id: 'vt1', title: '风光摄影基础入门', description: '从零开始学习风光摄影的基本技巧和构图方法。本课程涵盖相机设置、曝光控制、滤镜使用、经典构图法则等内容，帮助您打好风光摄影的坚实基础。',
-    thumbnail: 'https://picsum.photos/1280/720?random=108',
+    thumbnail: '/branded/风光摄影.jpg',
     duration: '45:20', level: '初级', views: 12000, rating: 4.8, price: 299,
-    instructor: { name: '张明', avatar: 'https://picsum.photos/400/400?random=109', title: '国家地理摄影师', experience: '10年摄影经验', bio: '国家地理签约摄影师，拥有超过10年的风光摄影经验。作品曾发表于《中国国家地理》《摄影之友》等知名杂志，擅长将复杂的光影理论转化为简单易懂的实战技巧。', coursesCount: 5, studentsCount: 35800, rating: 4.9 },
+    instructor: { name: '张明', avatar: '/branded/风光摄影.jpg', title: '国家地理摄影师', experience: '10年摄影经验', bio: '国家地理签约摄影师，拥有超过10年的风光摄影经验。作品曾发表于《中国国家地理》《摄影之友》等知名杂志，擅长将复杂的光影理论转化为简单易懂的实战技巧。', coursesCount: 5, studentsCount: 35800, rating: 4.9 },
     tags: ['风光', '基础', '入门'],
     chapters: [
       { title: '课程导论', duration: '10分钟', lessons: [
@@ -245,15 +245,15 @@ const courses = [
       ]}
     ],
     reviews: [
-      { id: 'r1', name: '摄影爱好者小王', avatar: 'https://picsum.photos/400/400?random=110', rating: 5, date: '2023-11-15', comment: '非常棒的课程，讲解非常详细，适合初学者。从最基础的知识开始，循序渐进，让我对风光摄影有了全新的认识。' },
-      { id: 'r3', name: '摄影初学者小张', avatar: 'https://picsum.photos/400/400?random=111', rating: 5, date: '2023-12-01', comment: '课程非常实用，学到了很多实用的技巧。特别是关于光线运用的部分，让我在拍摄时有了更多的想法。' }
+      { id: 'r1', name: '摄影爱好者小王', avatar: '/branded/品牌封面.jpg', rating: 5, date: '2023-11-15', comment: '非常棒的课程，讲解非常详细，适合初学者。从最基础的知识开始，循序渐进，让我对风光摄影有了全新的认识。' },
+      { id: 'r3', name: '摄影初学者小张', avatar: '/branded/品牌封面.jpg', rating: 5, date: '2023-12-01', comment: '课程非常实用，学到了很多实用的技巧。特别是关于光线运用的部分，让我在拍摄时有了更多的想法。' }
     ]
   },
   {
     id: 'vt2', title: '人像摄影用光技巧', description: '掌握人像摄影中光线运用的技巧，拍出自然生动的人像作品。',
-    thumbnail: 'https://picsum.photos/1280/720?random=112',
+    thumbnail: '/branded/人像摄影.jpg',
     duration: '38:15', level: '中级', views: 8500, rating: 4.7, price: 399,
-    instructor: { name: '李华', avatar: 'https://picsum.photos/400/400?random=113', title: '人像摄影师', experience: '15年人像摄影经验', bio: '拥有15年专业人像摄影经验，曾为多位知名艺人及品牌拍摄人像作品。专注于自然光人像和情绪风人像，作品以细腻的光影和自然的情绪表达著称。', coursesCount: 3, studentsCount: 22400, rating: 4.8 },
+    instructor: { name: '李华', avatar: '/branded/人像摄影.jpg', title: '人像摄影师', experience: '15年人像摄影经验', bio: '拥有15年专业人像摄影经验，曾为多位知名艺人及品牌拍摄人像作品。专注于自然光人像和情绪风人像，作品以细腻的光影和自然的情绪表达著称。', coursesCount: 3, studentsCount: 22400, rating: 4.8 },
     tags: ['人像', '光线', '技巧'],
     chapters: [
       { title: '导论', duration: '10分钟', lessons: [
@@ -267,14 +267,14 @@ const courses = [
       ]}
     ],
     reviews: [
-      { id: 'r1', name: '摄影爱好者小李', avatar: 'https://picsum.photos/400/400?random=114', rating: 4, date: '2023-11-15', comment: '光线运用的讲解非常细致，学到了很多实用技巧。' }
+      { id: 'r1', name: '摄影爱好者小李', avatar: '/branded/品牌封面.jpg', rating: 4, date: '2023-11-15', comment: '光线运用的讲解非常细致，学到了很多实用技巧。' }
     ]
   },
   {
     id: 'vt3', title: '后期修图大师班 - Lightroom & Photoshop', description: '从入门到精通，系统学习Lightroom和Photoshop的后期处理技巧。本课程涵盖RAW文件处理、色彩管理、图层与蒙版、人像精修、风光调色、创意合成等全流程内容，帮助你建立完整的后期工作流。',
-    thumbnail: 'https://picsum.photos/1280/720?random=115',
+    thumbnail: '/branded/后期调色.jpg',
     duration: '120:00', level: '高级', views: 15200, rating: 4.9, price: 599,
-    instructor: { name: '后期专家王磊', avatar: 'https://picsum.photos/400/400?random=116', title: 'Adobe认证讲师', experience: '12年后期处理与教学经验', bio: 'Adobe认证讲师，拥有12年后期处理与教学经验。曾为多家知名摄影机构和电商平台提供后期培训，累计培养学员超过5万人。授课程风格深入浅出，注重实战。', coursesCount: 8, studentsCount: 52000, rating: 4.9 },
+    instructor: { name: '后期专家王磊', avatar: '/branded/后期调色.jpg', title: 'Adobe认证讲师', experience: '12年后期处理与教学经验', bio: 'Adobe认证讲师，拥有12年后期处理与教学经验。曾为多家知名摄影机构和电商平台提供后期培训，累计培养学员超过5万人。授课程风格深入浅出，注重实战。', coursesCount: 8, studentsCount: 52000, rating: 4.9 },
     tags: ['后期', 'Lightroom', 'Photoshop', '调色', '精修'],
     chapters: [
       { title: '后期基础与工作流', duration: '25分钟', lessons: [
@@ -297,9 +297,9 @@ const courses = [
       ]}
     ],
     reviews: [
-      { id: 'r1', name: '摄影师小赵', avatar: 'https://picsum.photos/400/400?random=117', rating: 5, date: '2023-12-10', comment: '非常系统的后期课程，从基础到进阶都有覆盖。王磊老师讲解非常细致，每个操作都有演示，跟着学下来进步非常大！' },
-      { id: 'r2', name: '风光摄影师阿杰', avatar: 'https://picsum.photos/400/400?random=118', rating: 5, date: '2023-12-18', comment: '学会了用Photoshop精修风光照片，调色效果大幅度提升。强烈推荐给想要提升后期水平的朋友。' },
-      { id: 'r3', name: '人像摄影师小林', avatar: 'https://picsum.photos/400/400?random=119', rating: 4, date: '2024-01-05', comment: '人像精修部分非常实用，尤其是皮肤处理和液化技巧，效果自然不假。' }
+      { id: 'r1', name: '摄影师小赵', avatar: '/branded/品牌封面.jpg', rating: 5, date: '2023-12-10', comment: '非常系统的后期课程，从基础到进阶都有覆盖。王磊老师讲解非常细致，每个操作都有演示，跟着学下来进步非常大！' },
+      { id: 'r2', name: '风光摄影师阿杰', avatar: '/branded/品牌封面.jpg', rating: 5, date: '2023-12-18', comment: '学会了用Photoshop精修风光照片，调色效果大幅度提升。强烈推荐给想要提升后期水平的朋友。' },
+      { id: 'r3', name: '人像摄影师小林', avatar: '/branded/品牌封面.jpg', rating: 4, date: '2024-01-05', comment: '人像精修部分非常实用，尤其是皮肤处理和液化技巧，效果自然不假。' }
     ]
   }
 ];

@@ -64,7 +64,7 @@ const features: FeatureItem[] = [
     description: '探索最新的艺术摄影作品，感受创作者的独特视角',
     icon: 'fa-images',
     link: '/new-artworks',
-    image: 'https://picsum.photos/800/600?random=321'
+    image: '/branded/风光摄影.jpg'
   },
   {
     id: '2',
@@ -72,7 +72,7 @@ const features: FeatureItem[] = [
     description: '专注黑白摄影作品，欣赏光影、线条与质感的艺术表达',
     icon: 'fa-monochrome',
     link: '/black-white',
-    image: 'https://picsum.photos/800/600?random=322'
+    image: '/branded/黑白光影.jpg'
   },
   {
     id: '3',
@@ -80,7 +80,7 @@ const features: FeatureItem[] = [
     description: '浏览专业摄影师的商业摄影作品，获取创作灵感',
     icon: 'fa-briefcase',
     link: '/commercial',
-    image: 'https://picsum.photos/800/600?random=323'
+    image: '/branded/人像摄影.jpg'
   }
 ];
 

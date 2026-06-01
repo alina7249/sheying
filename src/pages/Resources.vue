@@ -389,11 +389,11 @@ const popularTags = [
 ];
 
 const recentContributors = [
-  { id: '1', name: '设计达人', avatar: 'https://picsum.photos/400/400?random=301', resources: 45 },
-  { id: '2', name: '光影大师', avatar: 'https://picsum.photos/400/400?random=302', resources: 38 },
-  { id: '3', name: '创意工作室', avatar: 'https://picsum.photos/400/400?random=303', resources: 32 },
-  { id: '4', name: '调色专家', avatar: 'https://picsum.photos/400/400?random=304', resources: 28 },
-  { id: '5', name: '字体爱好者', avatar: 'https://picsum.photos/400/400?random=305', resources: 24 }
+  { id: '1', name: '设计达人', avatar: '/branded/品牌封面.jpg', resources: 45 },
+  { id: '2', name: '光影大师', avatar: '/branded/风光摄影.jpg', resources: 38 },
+  { id: '3', name: '创意工作室', avatar: '/branded/后期调色.jpg', resources: 32 },
+  { id: '4', name: '调色专家', avatar: '/branded/后期调色.jpg', resources: 28 },
+  { id: '5', name: '字体爱好者', avatar: '/branded/品牌封面.jpg', resources: 24 }
 ];
 
 const filteredResources = computed(() => {

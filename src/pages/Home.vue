@@ -335,7 +335,7 @@
               <h3 class="special-title">黑白影像专题</h3>
               <p class="special-desc">探索黑白摄影的艺术魅力，感受光影交织的视觉语言和情感表达</p>
               <div class="special-image-wrapper">
-                <LazyImage src="https://picsum.photos/800/600?random=207" alt="黑白影像专题" />
+                <LazyImage src="/branded/黑白光影.jpg" alt="黑白影像专题" />
               </div>
               <Button variant="primary" class="special-btn" @click="handleJoin">
                 探索专题
@@ -380,11 +380,11 @@ const photographyPosts = [
     id: '1',
     title: '黑白光影',
     description: 'Leica Q2 Monochrom | 光圈: f/2.8 | 快门: 1/125s | ISO: 800\n极简主义黑白摄影，通过光影对比展现建筑的几何美感。',
-    image: 'https://picsum.photos/1280/720?random=208',
+    image: '/branded/黑白光影.jpg',
     author: {
       id: '1',
       name: '极简摄影师林风',
-      avatar: 'https://picsum.photos/400/400?random=209'
+      avatar: '/branded/品牌封面.jpg'
     },
     likes: 342,
     comments: 42,
@@ -396,11 +396,11 @@ const photographyPosts = [
     id: '2',
     title: '胶片质感人像',
     description: 'Canon AE-1 + 50mm f/1.4 | 光圈: f/2.0 | 快门: 1/125s | ISO: 400\n使用复古胶片相机拍摄的人像作品，自然柔和的色调与颗粒感。',
-    image: 'https://picsum.photos/600/800?random=210',
+    image: '/branded/胶片人像.jpg',
     author: {
       id: '2',
       name: '胶片摄影师安娜',
-      avatar: 'https://picsum.photos/400/400?random=211'
+      avatar: '/branded/人像摄影.jpg'
     },
     likes: 412,
     comments: 56,
@@ -412,11 +412,11 @@ const photographyPosts = [
     id: '3',
     title: '暗调氛围',
     description: 'Sony A7R IV + 35mm f/1.4 GM | 光圈: f/2.8 | 快门: 1/60s | ISO: 1600\n营造神秘而富有故事感的暗调氛围人像，强调光影层次与情绪表达。',
-    image: 'https://picsum.photos/800/600?random=212',
+    image: '/branded/暗调氛围.jpg',
     author: {
       id: '3',
       name: '情绪摄影师李明',
-      avatar: 'https://picsum.photos/400/400?random=213'
+      avatar: '/branded/品牌封面.jpg'
     },
     likes: 389,
     comments: 49,
@@ -428,11 +428,11 @@ const photographyPosts = [
     id: '4',
     title: '极简静物',
     description: 'Fujifilm GFX 100S + 120mm f/4 Macro | 光圈: f/5.6 | 快门: 1/125s | ISO: 200\n通过简洁的构图和柔和的光线，展现日常物品的质感与美感。',
-    image: 'https://picsum.photos/400/400?random=214',
+    image: '/branded/极简静物.jpg',
     author: {
       id: '4',
       name: '静物摄影师王静',
-      avatar: 'https://picsum.photos/400/400?random=215'
+      avatar: '/branded/品牌封面.jpg'
     },
     likes: 276,
     comments: 32,
@@ -444,11 +444,11 @@ const photographyPosts = [
     id: '5',
     title: '城市几何',
     description: 'iPhone 15 Pro + 原生相机 | 光圈: f/2.2 | 快门: 1/1000s | ISO: 25\n从独特视角发现城市中的几何美感，手机摄影也能创造艺术作品。',
-    image: 'https://picsum.photos/1280/720?random=216',
+    image: '/branded/城市几何.jpg',
     author: {
       id: '5',
       name: '手机摄影师张强',
-      avatar: 'https://picsum.photos/400/400?random=217'
+      avatar: '/branded/品牌封面.jpg'
     },
     likes: 321,
     comments: 41,
@@ -460,11 +460,11 @@ const photographyPosts = [
     id: '6',
     title: '黑白纪实',
     description: 'Canon EOS R6 + 24-70mm f/2.8 | 光圈: f/4 | 快门: 1/250s | ISO: 800\n用黑白影像记录城市中的人文瞬间，展现生活的真实与温度。',
-    image: 'https://picsum.photos/1280/720?random=218',
+    image: '/branded/黑白纪实.jpg',
     author: {
       id: '6',
       name: '纪实摄影师陈默',
-      avatar: 'https://picsum.photos/400/400?random=219'
+      avatar: '/branded/品牌封面.jpg'
     },
     likes: 398,
     comments: 52,
@@ -489,7 +489,7 @@ const featuredPhotographers = [
   {
     id: '101',
     name: '黑白影像达人',
-    avatar: 'https://picsum.photos/400/400?random=220',
+    avatar: '/branded/品牌封面.jpg',
     followers: 12543,
     posts: 324,
     level: '新锐艺术家'
@@ -497,7 +497,7 @@ const featuredPhotographers = [
   {
     id: '102',
     name: '胶片艺术师',
-    avatar: 'https://picsum.photos/400/400?random=221',
+    avatar: '/branded/胶片人像.jpg',
     followers: 8765,
     posts: 213,
     level: '资深摄影师'
@@ -505,7 +505,7 @@ const featuredPhotographers = [
   {
     id: '103',
     name: '建筑几何控',
-    avatar: 'https://picsum.photos/400/400?random=222',
+    avatar: '/branded/城市几何.jpg',
     followers: 6543,
     posts: 187,
     level: '创意摄影师'
@@ -518,28 +518,28 @@ const inspirationItems = [
     title: '黑白摄影的光影艺术',
     author: '林风',
     description: '探索如何通过光影对比创造出富有情感和深度的黑白影像作品...',
-    image: 'https://picsum.photos/600/800?random=223'
+    image: '/branded/黑白光影.jpg'
   },
   {
     id: '2',
     title: '胶片摄影的复兴与现代应用',
     author: '安娜',
     description: '探讨胶片摄影在数字时代的独特魅力和应用场景，以及如何将传统技术融入现代创作...',
-    image: 'https://picsum.photos/600/800?random=224'
+    image: '/branded/胶片人像.jpg'
   },
   {
     id: '3',
     title: '极简主义摄影的构图法则',
     author: '李明',
     description: '解析极简主义摄影的核心构图原则，帮助你创造简洁而有力的视觉表达...',
-    image: 'https://picsum.photos/600/800?random=225'
+    image: '/branded/极简静物.jpg'
   },
   {
     id: '4',
     title: '暗房技术与现代数字暗房',
     author: '张强',
     description: '比较传统暗房技术与现代数字暗房的异同，以及如何在后期制作中保留胶片质感...',
-    image: 'https://picsum.photos/600/800?random=226'
+    image: '/branded/后期调色.jpg'
   }
 ];
 
@@ -559,7 +559,7 @@ const featuredTopics = [
     badge: '热门专题',
     photos: 2847,
     photographers: 456,
-    image: 'https://picsum.photos/800/600?random=250'
+    image: '/branded/城市几何.jpg'
   },
   {
     id: '2',
@@ -568,7 +568,7 @@ const featuredTopics = [
     badge: '精选',
     photos: 1923,
     photographers: 312,
-    image: 'https://picsum.photos/800/600?random=251'
+    image: '/branded/风光摄影.jpg'
   },
   {
     id: '3',
@@ -577,16 +577,16 @@ const featuredTopics = [
     badge: '精选',
     photos: 3456,
     photographers: 567,
-    image: 'https://picsum.photos/800/600?random=252'
+    image: '/branded/人像摄影.jpg'
   }
 ];
 
 const weeklyLeaders = [
-  { id: '1', name: '光影魔法师', avatar: 'https://picsum.photos/400/400?random=280', likes: 3456 },
-  { id: '2', name: '瞬间捕手', avatar: 'https://picsum.photos/400/400?random=281', likes: 2890 },
-  { id: '3', name: '色彩大师', avatar: 'https://picsum.photos/400/400?random=282', likes: 2456 },
-  { id: '4', name: '城市漫步者', avatar: 'https://picsum.photos/400/400?random=283', likes: 1890 },
-  { id: '5', name: '自然探索者', avatar: 'https://picsum.photos/400/400?random=284', likes: 1567 }
+  { id: '1', name: '光影魔法师', avatar: '/branded/品牌封面.jpg', likes: 3456 },
+  { id: '2', name: '瞬间捕手', avatar: '/branded/品牌封面.jpg', likes: 2890 },
+  { id: '3', name: '色彩大师', avatar: '/branded/品牌封面.jpg', likes: 2456 },
+  { id: '4', name: '城市漫步者', avatar: '/branded/品牌封面.jpg', likes: 1890 },
+  { id: '5', name: '自然探索者', avatar: '/branded/品牌封面.jpg', likes: 1567 }
 ];
 
 const router = useRouter();
