@@ -164,11 +164,11 @@ const tabs = ['全部', '活动', '赛事'];
 const allEvents = [
   {
     id: 'e1', title: '2023秋季风光摄影大赛', type: '大赛', category: '风光',
-    image: '/branded/摄影大赛.jpg',
+    image: 'https://picsum.photos/1280/720?random=88',
     date: '2023-10-25 15:00', location: '线上', participants: 1256, status: 'active',
     deadline: '2023-11-10',
     description: '2023秋季风光摄影大赛正式启动！参赛者需提交3-5张秋季风光摄影作品，题材不限，要求原创。评委由业内知名摄影师组成，评选标准包括创意性、技术性和艺术性。',
-    organizer: { id: 'org1', name: '光影捕手平台', avatar: '/branded/品牌封面.jpg' },
+    organizer: { id: 'org1', name: '光影捕手平台', avatar: 'https://picsum.photos/400/400?random=89' },
     prizes: [
       { name: '一等奖', reward: '¥5000 + 专业摄影器材包 + 平台专属勋章' },
       { name: '二等奖', reward: '¥3000 + 摄影配件套装' },
@@ -181,25 +181,25 @@ const allEvents = [
       { title: '结果公布', date: '2023年12月1日' }
     ],
     judges: [
-      { id: 'j1', name: '张明', avatar: '/branded/风光摄影.jpg', title: '国家地理摄影师' },
-      { id: 'j2', name: '李华', avatar: '/branded/人像摄影.jpg', title: '纪实摄影师' }
+      { id: 'j1', name: '张明', avatar: 'https://picsum.photos/400/400?random=90', title: '国家地理摄影师' },
+      { id: 'j2', name: '李华', avatar: 'https://picsum.photos/400/400?random=91', title: '纪实摄影师' }
     ],
     tags: ['风光', '大赛', '秋季', '线上', '丰厚奖金']
   },
   {
     id: 'cv2', title: '城市建筑摄影大赛', type: '大赛', category: '建筑',
-    image: '/branded/城市几何.jpg',
+    image: 'https://picsum.photos/1280/720?random=92',
     date: '2023-12-01 - 2023-12-31', location: '线上', participants: 892, status: 'ended',
     description: '城市建筑摄影大赛，捕捉都市建筑的独特魅力。参赛者需提交建筑摄影作品，展现城市的现代建筑风采。',
-    organizer: { id: 'org1', name: '光影捕手平台', avatar: '/branded/品牌封面.jpg' },
+    organizer: { id: 'org1', name: '光影捕手平台', avatar: 'https://picsum.photos/400/400?random=93' },
     tags: ['建筑', '城市', '摄影大赛', '线上']
   },
   {
     id: 'ev1', title: '上海城市摄影线下活动', type: '活动', category: '城市',
-    image: '/branded/线下活动.jpg',
+    image: 'https://picsum.photos/1280/720?random=94',
     date: '2023-11-15', location: '上海·外滩', participants: 45, status: 'active',
     description: '组织摄影爱好者在上海外滩进行城市风光和人像拍摄，资深摄影师带队指导。',
-    organizer: { id: 'org2', name: '上海摄影俱乐部', avatar: '/branded/品牌封面.jpg' },
+    organizer: { id: 'org2', name: '上海摄影俱乐部', avatar: 'https://picsum.photos/400/400?random=95' },
     tags: ['上海', '城市', '线下', '交流']
   }
 ];

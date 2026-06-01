@@ -191,7 +191,7 @@ const courses = ref([
     id: '1',
     title: '摄影入门：从零开始学摄影',
     description: '适合完全零基础的摄影爱好者，从相机操作开始学起，掌握基础构图和曝光知识',
-    cover: '/branded/摄影器材.jpg',
+    cover: 'https://picsum.photos/1280/720?random=227',
     category: '入门',
     isFree: true,
     price: 0,
@@ -203,13 +203,13 @@ const courses = ref([
     reviewCount: 1256,
     isNew: true,
     isHot: false,
-    instructor: { name: '摄影老师小王', avatar: '/branded/品牌封面.jpg', title: '资深讲师' }
+    instructor: { name: '摄影老师小王', avatar: 'https://picsum.photos/400/400?random=228', title: '资深讲师' }
   },
   {
     id: '2',
     title: '人像摄影技巧与实践',
     description: '深入学习人像摄影的光线运用、构图技巧和模特引导，拍出专业级人像作品',
-    cover: '/branded/人像摄影.jpg',
+    cover: 'https://picsum.photos/1280/720?random=229',
     category: '进阶',
     isFree: false,
     price: 199,
@@ -221,13 +221,13 @@ const courses = ref([
     reviewCount: 892,
     isNew: false,
     isHot: true,
-    instructor: { name: '人像摄影师Lisa', avatar: '/branded/人像摄影.jpg', title: '国际人像摄影大师' }
+    instructor: { name: '人像摄影师Lisa', avatar: 'https://picsum.photos/400/400?random=230', title: '国际人像摄影大师' }
   },
   {
     id: '3',
     title: '风光摄影大师班',
     description: '掌握风光摄影的黄金时段、构图法则和后期处理技巧，拍出震撼风光作品',
-    cover: '/branded/风光摄影.jpg',
+    cover: 'https://picsum.photos/1280/720?random=231',
     category: '专业',
     isFree: false,
     price: 399,
@@ -239,13 +239,13 @@ const courses = ref([
     reviewCount: 678,
     isNew: false,
     isHot: true,
-    instructor: { name: '风光摄影大师', avatar: '/branded/风光摄影.jpg', title: '国家地理签约摄影师' }
+    instructor: { name: '风光摄影大师', avatar: 'https://picsum.photos/400/400?random=232', title: '国家地理签约摄影师' }
   },
   {
     id: '4',
     title: '后期修图：Lightroom完全指南',
     description: '系统学习Lightroom的使用，掌握专业后期修图技巧，让你的作品更出色',
-    cover: '/branded/后期调色.jpg',
+    cover: 'https://picsum.photos/1280/720?random=233',
     category: '进阶',
     isFree: false,
     price: 299,
@@ -257,13 +257,13 @@ const courses = ref([
     reviewCount: 567,
     isNew: false,
     isHot: false,
-    instructor: { name: '后期达人阿杰', avatar: '/branded/后期调色.jpg', title: '资深后期师' }
+    instructor: { name: '后期达人阿杰', avatar: 'https://picsum.photos/400/400?random=234', title: '资深后期师' }
   },
   {
     id: '5',
     title: '街头摄影：捕捉城市瞬间',
     description: '学习街头摄影的观察技巧、构图方法和抓拍技巧，记录城市的精彩瞬间',
-    cover: '/branded/街头摄影.jpg',
+    cover: 'https://picsum.photos/1280/720?random=235',
     category: '进阶',
     isFree: true,
     price: 0,
@@ -275,13 +275,13 @@ const courses = ref([
     reviewCount: 432,
     isNew: false,
     isHot: false,
-    instructor: { name: '街头摄影师阿强', avatar: '/branded/街头摄影.jpg', title: '人文纪实摄影师' }
+    instructor: { name: '街头摄影师阿强', avatar: 'https://picsum.photos/400/400?random=236', title: '人文纪实摄影师' }
   },
   {
     id: '6',
     title: '商业摄影实战课程',
     description: '从布光到后期，全面掌握商业产品摄影技巧，开启商业摄影之路',
-    cover: '/branded/Lightroom预设.jpg',
+    cover: 'https://picsum.photos/1280/720?random=237',
     category: '专业',
     isFree: false,
     price: 599,
@@ -293,13 +293,13 @@ const courses = ref([
     reviewCount: 345,
     isNew: true,
     isHot: true,
-    instructor: { name: '商业摄影总监', avatar: '/branded/品牌封面.jpg', title: '4A广告公司总监' }
+    instructor: { name: '商业摄影总监', avatar: 'https://picsum.photos/400/400?random=238', title: '4A广告公司总监' }
   },
   {
     id: '7',
     title: '无人机摄影与航拍',
     description: '学习无人机操作和航拍技巧，从空中视角捕捉独特的风景',
-    cover: '/branded/风光摄影.jpg',
+    cover: 'https://picsum.photos/1280/720?random=239',
     category: '专业',
     isFree: false,
     price: 449,
@@ -311,13 +311,13 @@ const courses = ref([
     reviewCount: 234,
     isNew: true,
     isHot: false,
-    instructor: { name: '航拍专家', avatar: '/branded/品牌封面.jpg', title: '职业航拍师' }
+    instructor: { name: '航拍专家', avatar: 'https://picsum.photos/400/400?random=240', title: '职业航拍师' }
   },
   {
     id: '8',
     title: '静物摄影入门到精通',
     description: '系统学习静物摄影的布光、构图和拍摄技巧，适合电商和产品摄影师',
-    cover: '/branded/极简静物.jpg',
+    cover: 'https://picsum.photos/1280/720?random=241',
     category: '进阶',
     isFree: false,
     price: 249,
@@ -329,13 +329,13 @@ const courses = ref([
     reviewCount: 345,
     isNew: false,
     isHot: false,
-    instructor: { name: '静物摄影大师', avatar: '/branded/品牌封面.jpg', title: '电商摄影专家' }
+    instructor: { name: '静物摄影大师', avatar: 'https://picsum.photos/400/400?random=242', title: '电商摄影专家' }
   },
   {
     id: '9',
     title: '手机摄影入门',
     description: '用手机也能拍出大片！学习手机摄影的构图、光线和后期技巧',
-    cover: '/branded/摄影器材.jpg',
+    cover: 'https://picsum.photos/1280/720?random=243',
     category: '入门',
     isFree: true,
     price: 0,
@@ -347,7 +347,7 @@ const courses = ref([
     reviewCount: 890,
     isNew: false,
     isHot: true,
-    instructor: { name: '手机摄影达人', avatar: '/branded/品牌封面.jpg', title: '华为合作摄影师' }
+    instructor: { name: '手机摄影达人', avatar: 'https://picsum.photos/400/400?random=244', title: '华为合作摄影师' }
   }
 ]);
 

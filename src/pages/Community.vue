@@ -294,13 +294,13 @@ const communityPosts: PostItem[] = [
     content: '最近在城市里拍了一些街头摄影作品，尝试了不同的构图和光影效果。想听听大家的意见和建议。',
     category: '摄影作品',
     images: [
-      '/branded/街头摄影.jpg',
-      '/branded/城市几何.jpg',
-      '/branded/夜景摄影.jpg'
+      'https://picsum.photos/1280/720?random=264',
+      'https://picsum.photos/1280/720?random=265',
+      'https://picsum.photos/1280/720?random=266'
     ],
     author: {
       name: '街头摄影师阿杰',
-      avatar: '/branded/街头摄影.jpg'
+      avatar: 'https://picsum.photos/400/400?random=267'
     },
     date: '2小时前',
     likes: 342,
@@ -315,7 +315,7 @@ const communityPosts: PostItem[] = [
     images: [],
     author: {
       name: '摄影新手小李',
-      avatar: '/branded/品牌封面.jpg'
+      avatar: 'https://picsum.photos/400/400?random=268'
     },
     date: '5小时前',
     likes: 89,
@@ -328,12 +328,12 @@ const communityPosts: PostItem[] = [
     content: '分享这次新疆摄影之旅的一些感悟和作品。新疆真的太美了，每一处都是大片！',
     category: '摄影作品',
     images: [
-      '/branded/风光摄影.jpg',
-      '/branded/风光摄影.jpg'
+      'https://picsum.photos/1280/720?random=269',
+      'https://picsum.photos/1280/720?random=270'
     ],
     author: {
       name: '风光摄影达人',
-      avatar: '/branded/风光摄影.jpg'
+      avatar: 'https://picsum.photos/400/400?random=271'
     },
     date: '昨天',
     likes: 856,
@@ -346,11 +346,11 @@ const communityPosts: PostItem[] = [
     content: '入手富士X-T5已经半年了，今天来跟大家分享一下使用体验。从画质到对焦，从机身设计到续航表现...',
     category: '器材讨论',
     images: [
-      '/branded/摄影器材.jpg'
+      'https://picsum.photos/800/600?random=272'
     ],
     author: {
       name: '器材评测师',
-      avatar: '/branded/品牌封面.jpg'
+      avatar: 'https://picsum.photos/400/400?random=273'
     },
     date: '2天前',
     likes: 423,
@@ -363,12 +363,12 @@ const communityPosts: PostItem[] = [
     content: '今天来给大家详细讲解夜景摄影的长曝光技巧，包括器材准备、参数设置、构图要点等...',
     category: '教程技巧',
     images: [
-      '/branded/夜景摄影.jpg',
-      '/branded/暗调氛围.jpg'
+      'https://picsum.photos/800/400?random=274',
+      'https://picsum.photos/800/400?random=275'
     ],
     author: {
       name: '夜景大师',
-      avatar: '/branded/夜景摄影.jpg'
+      avatar: 'https://picsum.photos/400/400?random=276'
     },
     date: '3天前',
     likes: 1245,
@@ -387,11 +387,11 @@ const trendingTopics = [
 ];
 
 const activeUsers: UserItem[] = [
-  { id: '1', name: '风光摄影大师', avatar: '/branded/风光摄影.jpg', posts: 567 },
-  { id: '2', name: '人像摄影师小雅', avatar: '/branded/人像摄影.jpg', posts: 432 },
-  { id: '3', name: '旅行摄影玩家', avatar: '/branded/风光摄影.jpg', posts: 389 },
-  { id: '4', name: '街头扫街客', avatar: '/branded/街头摄影.jpg', posts: 321 },
-  { id: '5', name: '自然探索者', avatar: '/branded/品牌封面.jpg', posts: 278 }
+  { id: '1', name: '风光摄影大师', avatar: 'https://picsum.photos/400/400?random=280', posts: 567 },
+  { id: '2', name: '人像摄影师小雅', avatar: 'https://picsum.photos/400/400?random=281', posts: 432 },
+  { id: '3', name: '旅行摄影玩家', avatar: 'https://picsum.photos/400/400?random=282', posts: 389 },
+  { id: '4', name: '街头扫街客', avatar: 'https://picsum.photos/400/400?random=283', posts: 321 },
+  { id: '5', name: '自然探索者', avatar: 'https://picsum.photos/400/400?random=284', posts: 278 }
 ];
 </script>
 

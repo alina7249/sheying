@@ -81,29 +81,29 @@ let timer: number | null = null;
 const slides: BannerSlide[] = [
   {
     id: '1',
-    image: '/branded/城市几何.jpg',
+    image: 'https://picsum.photos/1280/720?random=324',
     title: '极简黑白建筑摄影展',
     description: '探索建筑中的几何美感与光影艺术',
     author: '林风',
-    avatar: '/branded/品牌封面.jpg',
+    avatar: 'https://picsum.photos/400/400?random=325',
     link: '/exhibition/minimalist-architecture'
   },
   {
     id: '2',
-    image: '/branded/胶片人像.jpg',
+    image: 'https://picsum.photos/1280/720?random=326',
     title: '胶片摄影的永恒魅力',
     description: '专访胶片摄影师安娜，探讨传统摄影的现代意义',
     author: '安娜',
-    avatar: '/branded/人像摄影.jpg',
+    avatar: 'https://picsum.photos/400/400?random=327',
     link: '/interview/film-photography'
   },
   {
     id: '3',
-    image: '/branded/暗调氛围.jpg',
+    image: 'https://picsum.photos/1280/720?random=328',
     title: '暗调摄影的情绪表达',
     description: '如何通过暗调摄影传达深沉的情感与故事',
     author: '李明',
-    avatar: '/branded/品牌封面.jpg',
+    avatar: 'https://picsum.photos/400/400?random=329',
     link: '/tutorial/moody-photography'
   }
 ];
