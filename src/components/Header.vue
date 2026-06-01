@@ -1,107 +1,112 @@
 <template>
   <header
-    :class="['sticky top-0 z-50 w-full border-b border-[#4A5F8B] transition-colors transition-[backdrop-filter,box-shadow] duration-300', getBgClass()]">
+    :class="['sticky top-0 z-50 w-full transition-all duration-500', getHeaderClass()]">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
-          <router-link to="/" class="flex items-center">
-            <div
-              class="mr-2 text-2xl transition-transform hover:rotate-10"
-              :class="theme === 'dark' ? 'text-[#63B3ED]' : 'text-[#4A5F8B]'">
-              <i class="fa-solid fa-camera" aria-hidden="true"></i>
+          <router-link to="/" class="flex items-center group">
+            <div class="relative mr-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#4A5F8B] to-[#63B3ED] flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                <i class="fa-solid fa-camera text-white text-lg" aria-hidden="true"></i>
+              </div>
+              <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-[#4A5F8B] to-[#63B3ED] opacity-50 blur-lg group-hover:opacity-80 transition-opacity duration-300"></div>
             </div>
-            <span
-              :class="['text-xl font-bold', theme === 'dark' ? 'text-[#F5F7FA]' : 'text-[#1E2532]']">影研社
-            </span>
+            <div class="flex flex-col">
+              <span class="text-xl font-bold gold-gradient tracking-tight">光影视界</span>
+              <span class="text-[10px] text-[#6B7C93] -mt-1 tracking-widest uppercase">Light Vision</span>
+            </div>
           </router-link>
         </div>
 
-        <nav class="hidden md:flex items-center space-x-8" style="overscroll-behavior: contain">
+        <nav class="hidden md:flex items-center space-x-1">
           <router-link
             v-for="link in navLinks"
             :key="link.path"
             :to="link.path"
             :class="[
-              'font-medium transition-colors relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#63B3ED]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E2532] rounded',
-              getTextClass(route.path === link.path)
-            ]"
-            :style="route.path === link.path ? {
-              borderBottom: `2px solid ${theme === 'dark' ? '#4A5F8B' : '#63B3ED'}`,
-              paddingBottom: '4px'
-            } : {}">
+              'relative px-4 py-2 font-medium rounded-lg transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A962]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F1C2D]',
+              getNavLinkClass(route.path === link.path)
+            ]">
             {{ link.name }}
+            <span v-if="route.path === link.path" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-[#C9A962] to-[#D4B97A] rounded-full"></span>
           </router-link>
+          <div class="w-px h-8 bg-[#4A5F8B] mx-2"></div>
           <router-link
             to="/admin"
             :class="[
-              'font-medium transition-colors relative',
-              getTextClass(route.path.startsWith('/admin'))
+              'relative px-4 py-2 font-medium rounded-lg transition-all duration-300',
+              getNavLinkClass(route.path.startsWith('/admin'))
             ]">
             管理后台
           </router-link>
           <router-link
             to="/membership"
             :class="[
-              'font-medium transition-colors relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg',
+              'relative px-5 py-2.5 font-semibold rounded-xl transition-all duration-300 flex items-center gap-2 overflow-hidden',
               route.path === '/membership'
-                ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA]'
-                : 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#63B3ED] hover:from-[#4A5F8B]/30 hover:to-[#63B3ED]/30'
+                ? 'bg-gradient-to-r from-[#C9A962] to-[#D4B97A] text-[#0F1C2D] shadow-lg shadow-[#C9A962]/30'
+                : 'bg-gradient-to-r from-[#C9A962]/10 to-[#D4B97A]/10 text-[#C9A962] border border-[#C9A962]/30 hover:border-[#C9A962] hover:shadow-lg hover:shadow-[#C9A962]/20'
             ]">
-            <i class="fa-solid fa-crown text-xs" aria-hidden="true"></i>开通会员
+            <i class="fa-solid fa-crown text-sm" aria-hidden="true"></i>
+            <span>开通会员</span>
           </router-link>
 
-          <div v-if="isAuthenticated" class="relative">
+          <div v-if="isAuthenticated" class="relative ml-2">
             <button
-              class="flex items-center space-x-2"
+              class="flex items-center space-x-3 p-1.5 rounded-xl hover:bg-[#2D3748] transition-colors duration-300 group"
               @click="toggleProfileDropdown"
               aria-label="打开个人信息下拉菜单">
-              <img
-                :src="userAvatar"
-                :alt="username"
-                :class="['w-10 h-10 rounded-full object-cover border-2 cursor-pointer transition-transform hover:scale-110', theme === 'dark' ? 'border-[#4A5F8B]' : 'border-[#63B3ED]']" />
-              <span
-                :class="['font-medium hidden lg:inline', theme === 'dark' ? 'text-[#F5F7FA]' : 'text-[#1E2532]']">
-                {{ username }}
-              </span>
+              <div class="relative">
+                <img
+                  :src="userAvatar"
+                  :alt="username"
+                  class="w-10 h-10 rounded-full object-cover border-2 border-[#4A5F8B] group-hover:border-[#C9A962] transition-colors duration-300" />
+                <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#48BB78] rounded-full border-2 border-[#0F1C2D]"></div>
+              </div>
+              <div class="text-left hidden lg:block">
+                <p class="text-sm font-semibold text-[#F5F7FA]">{{ username }}</p>
+                <p class="text-[10px] text-[#6B7C93]">新锐摄影师</p>
+              </div>
+              <i class="fa-solid fa-chevron-down text-xs text-[#6B7C93] group-hover:text-[#C9A962] transition-colors duration-300" aria-hidden="true"></i>
             </button>
           </div>
-          <div v-else class="flex items-center space-x-3">
+          <div v-else class="flex items-center space-x-2 ml-2">
             <router-link
               to="/login"
-              :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'text-[#F5F7FA] border border-[#4A5F8B] hover:bg-[#4A5F8B]/20' : 'text-[#1E2532] border border-gray-300 hover:bg-gray-100']">登录
+              class="px-4 py-2 rounded-lg text-sm font-medium text-[#B8C6D8] border border-[#4A5F8B] hover:border-[#C9A962] hover:text-[#F5F7FA] hover:bg-[#2D3748] transition-all duration-300">
+              登录
             </router-link>
             <router-link
               to="/register"
-              :class="['px-4 py-2 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'text-[#1E2532] bg-[#4A5F8B] hover:bg-[#6B7C93] shadow-[0_2px_8px_rgba(74,95,139,0.3)]' : 'text-white bg-[#63B3ED] hover:bg-[#4299E1] shadow-[0_2px_8px_rgba(99,179,237,0.3)]']">注册
+              class="px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] hover:shadow-lg hover:shadow-[#4A5F8B]/30 transition-all duration-300">
+              注册
             </router-link>
           </div>
         </nav>
 
-        <div class="md:hidden flex items-center space-x-3">
+        <div class="md:hidden flex items-center space-x-2">
           <button
-            class="p-2 rounded-full transition-colors"
-            :class="theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8]' : 'bg-gray-100 text-[#6B7C93]'"
+            class="p-2 rounded-xl transition-all duration-300 hover:bg-[#2D3748]"
             @click="toggleTheme"
             :aria-label="theme === 'dark' ? '切换到浅色模式' : '切换到深色模式'">
-            <i :class="['fa-solid', theme === 'dark' ? 'fa-sun' : 'fa-moon']" aria-hidden="true"></i>
+            <i :class="['fa-solid', theme === 'dark' ? 'fa-sun text-[#C9A962]' : 'fa-moon text-[#4A5F8B]']" aria-hidden="true"></i>
           </button>
           <button
             v-if="isAuthenticated"
-            class="p-2 rounded-full transition-colors"
-            :class="theme === 'dark' ? 'hover:bg-[#2D3748]' : 'hover:bg-gray-100'"
+            class="relative p-2 rounded-xl transition-all duration-300 hover:bg-[#2D3748]"
             @click="toggleProfileDropdown"
             aria-label="打开个人侧边栏">
             <img
               :src="userAvatar"
               :alt="username"
-              class="w-8 h-8 rounded-full object-cover cursor-pointer" />
+              class="w-8 h-8 rounded-full object-cover" />
+            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-[#48BB78] rounded-full border-2 border-[#0F1C2D]"></div>
           </button>
           <button
-            class="p-2 rounded-full transition-colors"
-            :class="theme === 'dark' ? 'hover:bg-[#2D3748] text-[#B8C6D8]' : 'hover:bg-gray-100 text-[#6B7C93]'"
+            class="p-2 rounded-xl transition-all duration-300 hover:bg-[#2D3748]"
             @click="isMobileMenuOpen = !isMobileMenuOpen"
             aria-label="打开菜单">
-            <i :class="['fa-solid', isMobileMenuOpen ? 'fa-times' : 'fa-bars']" aria-hidden="true"></i>
+            <i :class="['fa-solid text-[#B8C6D8]', isMobileMenuOpen ? 'fa-times' : 'fa-bars']" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -109,66 +114,84 @@
       <Transition name="slide">
         <div
           v-if="isMobileMenuOpen"
-          :class="['md:hidden py-4 space-y-4 border-t', theme === 'dark' ? 'border-[#4A5F8B] bg-[#1E2532]' : 'border-gray-200 bg-white']">
-          <router-link
-            v-for="link in navLinks"
-            :key="link.path"
-            :to="link.path"
-            :class="[
-              'block px-4 py-2 font-medium transition-colors',
-              route.path === link.path ? (theme === 'dark' ? 'text-[#F5F7FA] bg-[#2D3748] rounded-lg border-l-2 border-[#4A5F8B]' : 'text-[#1E2532] bg-gray-100 rounded-lg border-l-2 border-[#63B3ED]') : (theme === 'dark' ? 'text-[#B8C6D8]/70 hover:text-[#F5F7FA]' : 'text-[#6B7C93]/70 hover:text-[#1E2532]')
-            ]"
-            @click="isMobileMenuOpen = false">
-            {{ link.name }}
-          </router-link>
-          <div v-if="isAuthenticated" class="px-4 space-y-2">
-            <div class="grid grid-cols-3 gap-3">
+          class="md:hidden py-6 space-y-4 border-t border-[#4A5F8B]/30 bg-[#0F1C2D]/95 backdrop-blur-xl">
+          <nav class="flex flex-col space-y-1">
+            <router-link
+              v-for="link in navLinks"
+              :key="link.path"
+              :to="link.path"
+              :class="[
+                'flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-300',
+                route.path === link.path
+                  ? 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#F5F7FA] border-l-2 border-[#C9A962]'
+                  : 'text-[#B8C6D8]/70 hover:text-[#F5F7FA] hover:bg-[#2D3748]/50'
+              ]"
+              @click="isMobileMenuOpen = false">
+              <i class="fa-solid mr-3 text-sm" :class="getNavIcon(link.path)" aria-hidden="true"></i>
+              {{ link.name }}
+            </router-link>
+          </nav>
+          <div class="h-px bg-gradient-to-r from-transparent via-[#4A5F8B] to-transparent my-2"></div>
+          <div v-if="isAuthenticated" class="space-y-2">
+            <div class="grid grid-cols-4 gap-2">
               <router-link
                 :to="`/profile/${user?.id}`"
-                :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
+                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-image mb-1" aria-hidden="true"></i>作品
+                <i class="fa-solid fa-image mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">作品</span>
               </router-link>
               <router-link
-                :to="isAuthenticated ? '/profile/1' : '/login'"
-                :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
+                :to="'/profile/1'"
+                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-heart mb-1" aria-hidden="true"></i>收藏
+                <i class="fa-solid fa-heart mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">收藏</span>
               </router-link>
               <router-link
-                :to="isAuthenticated ? '/profile-settings' : '/login'"
-                :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
+                to="/profile-settings"
+                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-cog mb-1" aria-hidden="true"></i>设置
+                <i class="fa-solid fa-cog mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">设置</span>
               </router-link>
+              <router-link
+                to="/profile-benefits"
+                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#C9A962]/10 text-[#C9A962] hover:bg-[#C9A962]/20 transition-all duration-300"
+                @click="isMobileMenuOpen = false">
+                <i class="fa-solid fa-crown mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">权益</span>
+              </router-link>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
               <router-link
                 to="/admin"
-                :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#4A5F8B]/20 text-[#4A5F8B] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-[#63B3ED]/10 text-[#63B3ED] hover:bg-[#63B3ED]/20 hover:text-[#4299E1]']"
+                class="flex items-center justify-center px-4 py-3 rounded-xl bg-[#4A5F8B]/10 text-[#4A5F8B] hover:bg-[#4A5F8B]/20 transition-all duration-300"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-user-shield mb-1" aria-hidden="true"></i>管理后台
+                <i class="fa-solid fa-user-shield mr-2" aria-hidden="true"></i>管理后台
               </router-link>
               <router-link
                 to="/membership"
-                :class="['flex flex-col items-center justify-center p-3 rounded-lg text-sm font-medium transition-colors', 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#63B3ED] hover:from-[#4A5F8B]/30 hover:to-[#63B3ED]/30']"
+                class="flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-[#C9A962]/20 to-[#D4B97A]/20 text-[#C9A962] border border-[#C9A962]/30 hover:border-[#C9A962] transition-all duration-300"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-crown mb-1" aria-hidden="true"></i>开通会员
+                <i class="fa-solid fa-crown mr-2" aria-hidden="true"></i>开通会员
               </router-link>
             </div>
             <button
               @click="handleLogout(); isMobileMenuOpen = false"
-              :class="['w-full flex items-center justify-center px-4 py-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']">
+              class="w-full flex items-center justify-center px-4 py-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300">
               <i class="fa-solid fa-sign-out-alt mr-2" aria-hidden="true"></i>退出登录
             </button>
           </div>
-          <div v-else class="px-4 space-y-3">
+          <div v-else class="space-y-2">
             <router-link
               to="/login"
-              :class="['block w-full text-center px-4 py-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'bg-[#2D3748] text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA]' : 'bg-gray-100 text-[#6B7C93] hover:bg-gray-200 hover:text-[#1E2532]']"
+              class="block w-full text-center px-4 py-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
               @click="isMobileMenuOpen = false">登录
             </router-link>
             <router-link
               to="/register"
-              :class="['block w-full text-center px-4 py-3 rounded-lg text-sm font-medium transition-colors', theme === 'dark' ? 'text-[#1E2532] bg-[#4A5F8B] hover:bg-[#6B7C93]' : 'text-white bg-[#63B3ED] hover:bg-[#4299E1]']"
+              class="block w-full text-center px-4 py-3 rounded-xl bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-[#F5F7FA] hover:shadow-lg hover:shadow-[#4A5F8B]/30 transition-all duration-300"
               @click="isMobileMenuOpen = false">注册
             </router-link>
           </div>
@@ -220,13 +243,13 @@ const mockUserData = {
 };
 
 const navLinks = [
-  { name: '作品库', path: '/' },
-  { name: '器材中心', path: '/equipment-hub' },
-  { name: '课程', path: '/online-courses' },
-  { name: '社区', path: '/community' },
-  { name: '资源', path: '/resources' },
-  { name: 'AI助手', path: '/aichat' },
-  { name: '活动与赛事', path: '/events-contests' }
+  { name: '作品库', path: '/', icon: 'fa-images' },
+  { name: '器材中心', path: '/equipment-hub', icon: 'fa-camera' },
+  { name: '课程', path: '/online-courses', icon: 'fa-book-open' },
+  { name: '社区', path: '/community', icon: 'fa-users' },
+  { name: '资源', path: '/resources', icon: 'fa-folder-open' },
+  { name: 'AI助手', path: '/aichat', icon: 'fa-brain' },
+  { name: '活动赛事', path: '/events-contests', icon: 'fa-trophy' }
 ];
 
 const userAvatar = computed(() => user.value?.avatar || 'https://picsum.photos/400/400?random=124');
@@ -234,7 +257,7 @@ const username = computed(() => user.value?.username || mockUserData.username);
 
 onMounted(() => {
   const handleScroll = () => {
-    scrolled.value = window.scrollY > 50;
+    scrolled.value = window.scrollY > 20;
   };
   window.addEventListener('scroll', handleScroll);
   onUnmounted(() => {
@@ -250,29 +273,34 @@ const toggleProfileDropdown = () => {
   isProfileDropdownOpen.value = !isProfileDropdownOpen.value;
 };
 
-const getBgClass = () => {
+const getHeaderClass = () => {
   if (scrolled.value) {
-    return theme.value === 'dark' ? 'bg-[#1E2532]/80 backdrop-blur-lg shadow-lg shadow-black/20' : 'bg-white/80 backdrop-blur-lg shadow-md';
+    return 'bg-[#0F1C2D]/90 backdrop-blur-xl shadow-2xl shadow-black/30 border-b border-[#4A5F8B]/20';
   }
-  return theme.value === 'dark' ? 'bg-[#1E2532]' : 'bg-white';
+  return 'bg-transparent';
 };
 
-const getTextClass = (isActive: boolean) => {
+const getNavLinkClass = (isActive: boolean) => {
   if (isActive) {
-    return theme.value === 'dark' ? 'text-[#F5F7FA]' : 'text-[#1E2532]';
+    return 'text-[#F5F7FA] bg-[#2D3748]/50';
   }
-  return theme.value === 'dark' ? 'text-[#B8C6D8]/70 hover:text-[#F5F7FA]' : 'text-[#6B7C93]/70 hover:text-[#1E2532]';
+  return 'text-[#B8C6D8]/70 hover:text-[#F5F7FA] hover:bg-[#2D3748]/30';
+};
+
+const getNavIcon = (path: string) => {
+  const link = navLinks.find(l => l.path === path);
+  return link?.icon || 'fa-circle';
 };
 </script>
 
 <style scoped>
 .slide-enter-active {
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
 .slide-leave-active {
-  transition: opacity 0.25s cubic-bezier(0.4, 0, 1, 1), max-height 0.25s cubic-bezier(0.4, 0, 1, 1), transform 0.25s cubic-bezier(0.4, 0, 1, 1);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 1, 1), max-height 0.3s cubic-bezier(0.4, 0, 1, 1), transform 0.3s cubic-bezier(0.4, 0, 1, 1);
   overflow: hidden;
 }
 
@@ -280,13 +308,13 @@ const getTextClass = (isActive: boolean) => {
 .slide-leave-to {
   opacity: 0;
   max-height: 0;
-  transform: translateY(-8px);
+  transform: translateY(-10px);
 }
 
 .slide-enter-to,
 .slide-leave-from {
   opacity: 1;
-  max-height: 600px;
+  max-height: 800px;
   transform: translateY(0);
 }
 
