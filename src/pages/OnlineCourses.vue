@@ -373,7 +373,7 @@ const filteredCourses = computed(() => {
   }
   
   if (sortBy.value === 'popular') {
-    filtered = [...filtered].sort((a, b) => b.studentCount - a.studentCount;
+    filtered = [...filtered].sort((a, b) => b.studentCount - a.studentCount);
   } else if (sortBy.value === 'newest') {
     filtered = [...filtered].sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
   } else if (sortBy.value === 'rating') {
