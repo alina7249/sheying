@@ -8,68 +8,63 @@
         />
 
         <div
-          class="absolute top-16 right-4 w-[320px] max-w-[90%] bg-[#1E2532] border border-[#4A5F8B] rounded-lg shadow-lg overflow-hidden z-50 profile-dropdown-container"
+          class="absolute top-16 right-4 w-[280px] max-w-[90%] bg-[#1E2532] border border-[#4A5F8B] rounded-lg shadow-lg overflow-hidden z-50 profile-dropdown-container"
         >
-          <div class="px-6 py-4 border-b border-[#4A5F8B]">
-            <div class="flex items-center space-x-4">
-              <div class="w-16 h-16 rounded-full border-2 border-[#4A5F8B] overflow-hidden shadow-md">
+          <!-- 用户信息头部 -->
+          <div class="px-5 py-4 border-b border-[#4A5F8B]/50">
+            <router-link
+              :to="`/profile/${userId}`"
+              class="flex items-center space-x-4 hover:opacity-80 transition-opacity"
+              @click="onClose">
+              <div class="w-14 h-14 rounded-full border-2 border-[#4A5F8B] overflow-hidden shadow-md">
                 <img
                   :src="avatarSrc"
                   alt="User avatar"
                   class="w-full h-full object-cover"
                 />
               </div>
-
               <div class="flex-1">
                 <h2 class="text-lg font-bold text-[#F5F7FA] mb-1">{{ username }}</h2>
-                <p class="text-[#B8C6D8]/70 text-sm">风光/人像双题材创作者</p>
-
-                <div class="mt-2">
-                  <div class="flex justify-between items-center mb-1">
-                    <span class="text-[#4A5F8B] text-xs">{{ level }} LV.{{ levelNum }}</span>
-                    <span class="text-[#4A5F8B] text-xs">{{ progress }}/{{ progressMax }}成长值</span>
-                  </div>
-                  <div class="w-full h-1.5 bg-[#2D3748] rounded-full overflow-hidden">
-                    <div
-                      class="h-full bg-[#4A5F8B]"
-                      :style="{ width: `${progressPercentage}%` }"
-                    ></div>
-                  </div>
-                </div>
+                <p class="text-[#6B7C93] text-sm">摄影师</p>
               </div>
-            </div>
-
-            <div class="mt-4 bg-[#4A5F8B]/20 text-[#B8C6D8] text-xs font-medium py-1.5 px-3 rounded-full text-center border border-[#4A5F8B]">
-              银河会员·年卡（剩余128天）
-            </div>
-          </div>
-
-          <div class="grid grid-cols-3 gap-1 px-4 py-3 bg-[#2D3748]">
-            <div class="text-center">
-              <p class="text-[#B8C6D8]/70 text-xs mb-1">作品</p>
-              <p class="text-[#F5F7FA] font-bold text-lg">{{ stats.posts }}</p>
-            </div>
-            <div class="text-center">
-              <p class="text-[#B8C6D8]/70 text-xs mb-1">获赞</p>
-              <p class="text-[#F5F7FA] font-bold text-lg">{{ stats.likes }}</p>
-            </div>
-            <div class="text-center">
-              <p class="text-[#B8C6D8]/70 text-xs mb-1">收藏</p>
-              <p class="text-[#F5F7FA] font-bold text-lg">{{ stats.collections }}</p>
-            </div>
-          </div>
-
-          <div class="max-h-[300px] overflow-y-auto">
-            <router-link
-              v-for="item in profileMenuItems"
-              :key="item.id"
-              :to="item.link"
-              @click="onClose"
-              class="flex items-center py-3 px-6 text-[#B8C6D8] hover:bg-[#4A5F8B] hover:text-[#F5F7FA] transition-colors"
-            >
-              <i :class="['fa-solid', item.icon, 'mr-3 text-[#4A5F8B]']"></i>
-              <span>{{ item.text }}</span>
+              <i class="fa-solid fa-chevron-right text-[#6B7C93]"></i>
             </router-link>
+          </div>
+
+          <!-- 菜单列表 -->
+          <div class="max-h-[300px] overflow-y-auto py-2">
+            <router-link
+              :to="`/profile/${userId}`"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-user mr-3 text-[#4A5F8B]"></i>
+              <span>个人主页</span>
+            </router-link>
+
+            <router-link
+              to="/publish"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-cloud-upload-alt mr-3 text-[#4A5F8B]"></i>
+              <span>上传作品</span>
+            </router-link>
+
+            <router-link
+              to="/profile-settings"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-cog mr-3 text-[#4A5F8B]"></i>
+              <span>设置</span>
+            </router-link>
+
+            <div class="h-px bg-[#4A5F8B]/30 my-2"></div>
+
+            <button
+              @click="handleLogout"
+              class="w-full flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-sign-out-alt mr-3 text-[#4A5F8B]"></i>
+              <span>退出登录</span>
+            </button>
           </div>
         </div>
       </div>
@@ -78,28 +73,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue';
-import { profileMenuItems } from '../lib/menuConfig';
-
-interface ProfileStats {
-  posts: number;
-  likes: number;
-  collections: number;
-}
+import { onMounted, onUnmounted } from 'vue';
+import { useAuthStore } from '../store/authStore';
 
 const props = defineProps<{
   isOpen: boolean;
   onClose: () => void;
   username: string;
-  level: string;
-  levelNum: number;
-  progress: number;
-  progressMax: number;
-  stats: ProfileStats;
   avatarSrc: string;
+  userId?: string;
 }>();
 
-const progressPercentage = computed(() => (props.progress / props.progressMax) * 100);
+const authStore = useAuthStore();
+
+const handleLogout = () => {
+  authStore.logout();
+  props.onClose();
+};
 
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;

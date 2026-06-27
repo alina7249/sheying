@@ -50,18 +50,8 @@
             <i class="fa-solid fa-plus text-sm" aria-hidden="true"></i>
             <span>上传</span>
           </router-link>
-          <router-link
-            to="/membership"
-            :class="[
-              'relative px-5 py-2.5 font-semibold rounded-xl transition-all duration-300 flex items-center gap-2 overflow-hidden',
-              route.path === '/membership'
-                ? 'bg-gradient-to-r from-[#C9A962] to-[#D4B97A] text-[#0F1C2D] shadow-lg shadow-[#C9A962]/30'
-                : 'bg-gradient-to-r from-[#C9A962]/10 to-[#D4B97A]/10 text-[#C9A962] border border-[#C9A962]/30 hover:border-[#C9A962] hover:shadow-lg hover:shadow-[#C9A962]/20'
-            ]">
-            <i class="fa-solid fa-crown text-sm" aria-hidden="true"></i>
-            <span>开通会员</span>
-          </router-link>
 
+          <!-- 已登录用户下拉菜单 -->
           <div v-if="isAuthenticated" class="relative ml-2">
             <button
               class="flex items-center space-x-3 p-1.5 rounded-xl hover:bg-[#2D3748] transition-colors duration-300 group"
@@ -76,11 +66,13 @@
               </div>
               <div class="text-left hidden lg:block">
                 <p class="text-sm font-semibold text-[#F5F7FA]">{{ username }}</p>
-                <p class="text-[10px] text-[#6B7C93]">新锐摄影师</p>
+                <p class="text-[10px] text-[#6B7C93]">摄影师</p>
               </div>
               <i class="fa-solid fa-chevron-down text-xs text-[#6B7C93] group-hover:text-[#C9A962] transition-colors duration-300" aria-hidden="true"></i>
             </button>
           </div>
+
+          <!-- 未登录显示登录注册按钮 -->
           <div v-else class="flex items-center space-x-2 ml-2">
             <router-link
               to="/login"
@@ -95,6 +87,7 @@
           </div>
         </nav>
 
+        <!-- 移动端 -->
         <div class="md:hidden flex items-center space-x-2">
           <button
             class="p-2 rounded-xl transition-all duration-300 hover:bg-[#2D3748]"
@@ -122,6 +115,7 @@
         </div>
       </div>
 
+      <!-- 移动端菜单 -->
       <Transition name="slide">
         <div
           v-if="isMobileMenuOpen"
@@ -189,16 +183,14 @@
       </Transition>
     </div>
 
+    <!-- 简化版用户下拉菜单 -->
     <ProfileDropdown
+      v-if="isAuthenticated"
       :is-open="isProfileDropdownOpen"
       :on-close="() => isProfileDropdownOpen = false"
       :username="username"
-      :level="mockUserData.level"
-      :level-num="mockUserData.levelNum"
-      :progress="mockUserData.progress"
-      :progress-max="mockUserData.progressMax"
-      :stats="mockUserData.stats"
-      :avatar-src="userAvatar" />
+      :avatar-src="userAvatar"
+      :user-id="user?.id" />
   </header>
 </template>
 
@@ -217,30 +209,25 @@ const isProfileDropdownOpen = ref(false);
 const scrolled = ref(false);
 
 const { isAuthenticated, user, theme } = storeToRefs(authStore);
-const { logout, toggleTheme } = authStore;
-
-const mockUserData = {
-  username: '@光影捕手',
-  level: '新锐摄影师',
-  levelNum: 3,
-  progress: 120,
-  progressMax: 200,
-  stats: {
-    posts: 12,
-    likes: 236,
-    collections: 48
-  }
-};
+const { logout, toggleTheme, fetchCurrentUser } = authStore;
 
 const navLinks = [
   { name: '作品库', path: '/', icon: 'fa-images' },
   { name: '社区', path: '/community', icon: 'fa-users' }
 ];
 
-const userAvatar = computed(() => user.value?.avatar || 'https://picsum.photos/400/400?random=124');
-const username = computed(() => user.value?.username || mockUserData.username);
+// 使用 authStore 中的真实用户数据
+const userAvatar = computed(() => {
+  if (user.value?.avatar) {
+    return user.value.avatar;
+  }
+  return 'https://picsum.photos/400/400?random=default';
+});
 
-onMounted(() => {
+const username = computed(() => user.value?.username || '用户');
+
+// 页面加载时，如果 token 存在但用户信息不完整，自动获取用户信息
+onMounted(async () => {
   const handleScroll = () => {
     scrolled.value = window.scrollY > 20;
   };
@@ -248,6 +235,11 @@ onMounted(() => {
   onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
   });
+
+  // 如果已登录但用户信息不完整，尝试获取用户信息
+  if (isAuthenticated.value && user.value && !user.value.avatar) {
+    await fetchCurrentUser();
+  }
 });
 
 const handleLogout = () => {
