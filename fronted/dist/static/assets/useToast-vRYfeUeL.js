@@ -1,0 +1,1 @@
+import{r as c}from"./index-GdsBUZpu.js";const t=c([]);let i=0;function o(s,r){const e=++i;t.value.push({id:e,type:s,message:r}),setTimeout(()=>{t.value=t.value.filter(a=>a.id!==e)},3e3)}const n={success:s=>o("success",s),error:s=>o("error",s),info:s=>o("info",s)};export{n as t};
