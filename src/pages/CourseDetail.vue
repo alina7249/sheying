@@ -191,7 +191,7 @@
         </Transition>
       </Teleport>
 
-      <div v-if="!course" class="p-8 bg-[#2D3748] rounded-xl border border-[#4A5F8B] text-center">
+      <div v-else class="p-8 bg-[#2D3748] rounded-xl border border-[#4A5F8B] text-center">
         <div class="w-16 h-16 bg-[#1E2A3A] rounded-full flex items-center justify-center text-[#4A5F8B] mx-auto mb-4 border border-[#4A5F8B]"><i class="fa-solid fa-search-minus text-2xl"></i></div>
         <h3 class="text-lg font-medium text-[#F5F7FA] mb-2">课程不存在</h3>
         <p class="text-[#B8C6D8]">未找到该课程，请检查链接是否正确</p>
