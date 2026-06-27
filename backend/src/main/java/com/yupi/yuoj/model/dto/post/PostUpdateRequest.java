@@ -33,5 +33,35 @@ public class PostUpdateRequest implements Serializable {
      */
     private List<String> tags;
 
+    /**
+     * 作品图片
+     */
+    private String imageUrl;
+
+    /**
+     * 相机
+     */
+    private String camera;
+
+    /**
+     * 镜头
+     */
+    private String lens;
+
+    /**
+     * 光圈
+     */
+    private String aperture;
+
+    /**
+     * 快门
+     */
+    private String shutter;
+
+    /**
+     * ISO
+     */
+    private String iso;
+
     private static final long serialVersionUID = 1L;
 }

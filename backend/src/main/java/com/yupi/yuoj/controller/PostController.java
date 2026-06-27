@@ -197,6 +197,28 @@ public class PostController {
     // endregion
 
     /**
+     * 搜索帖子（GET 方式，按标题/内容/标签搜索）
+     *
+     * @param searchText
+     * @param current
+     * @param pageSize
+     * @param request
+     * @return
+     */
+    @GetMapping("/search")
+    public BaseResponse<Page<PostVO>> searchPost(String searchText, long current, long pageSize,
+            HttpServletRequest request) {
+        ThrowUtils.throwIf(pageSize > 20, ErrorCode.PARAMS_ERROR);
+        PostQueryRequest postQueryRequest = new PostQueryRequest();
+        postQueryRequest.setSearchText(searchText);
+        postQueryRequest.setCurrent(current);
+        postQueryRequest.setPageSize(pageSize);
+        Page<Post> postPage = postService.page(new Page<>(current, pageSize),
+                postService.getQueryWrapper(postQueryRequest));
+        return ResultUtils.success(postService.getPostVOPage(postPage, request));
+    }
+
+    /**
      * 分页搜索（从 ES 查询，封装类）
      *
      * @param postQueryRequest

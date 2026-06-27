@@ -66,6 +66,36 @@ public class PostVO implements Serializable {
     private List<String> tagList;
 
     /**
+     * 作品图片
+     */
+    private String imageUrl;
+
+    /**
+     * 相机
+     */
+    private String camera;
+
+    /**
+     * 镜头
+     */
+    private String lens;
+
+    /**
+     * 光圈
+     */
+    private String aperture;
+
+    /**
+     * 快门
+     */
+    private String shutter;
+
+    /**
+     * ISO
+     */
+    private String iso;
+
+    /**
      * 创建人信息
      */
     private UserVO user;

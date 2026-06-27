@@ -91,16 +91,23 @@ public class FileController {
      * @param fileUploadBizEnum 业务类型
      */
     private void validFile(MultipartFile multipartFile, FileUploadBizEnum fileUploadBizEnum) {
-        // 文件大小
         long fileSize = multipartFile.getSize();
-        // 文件后缀
         String fileSuffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
         final long ONE_M = 1024 * 1024L;
+        final long TEN_M = 10 * 1024 * 1024L;
         if (FileUploadBizEnum.USER_AVATAR.equals(fileUploadBizEnum)) {
             if (fileSize > ONE_M) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件大小不能超过 1M");
             }
             if (!Arrays.asList("jpeg", "jpg", "svg", "png", "webp").contains(fileSuffix)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件类型错误");
+            }
+        }
+        if (FileUploadBizEnum.POST_IMAGE.equals(fileUploadBizEnum)) {
+            if (fileSize > TEN_M) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件大小不能超过 10M");
+            }
+            if (!Arrays.asList("jpeg", "jpg", "png", "webp", "gif").contains(fileSuffix)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件类型错误");
             }
         }
