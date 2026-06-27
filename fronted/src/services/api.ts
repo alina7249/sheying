@@ -1,18 +1,15 @@
 import axios from 'axios';
 
-// 创建 axios 实例
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8121', // 后端 API 基础地址
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8121',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// 请求拦截器
 api.interceptors.request.use(
   (config) => {
-    // 从 localStorage 获取 token
     const token = localStorage.getItem('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -24,27 +21,21 @@ api.interceptors.request.use(
   }
 );
 
-// 响应拦截器
 api.interceptors.response.use(
   (response) => {
     return response.data;
   },
   (error) => {
-    // 处理 token 过期
     if (error.response?.status === 401) {
-      // 清除本地存储的 token 和用户信息
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
-      // 跳转到登录页面
       window.location.href = '/login';
       return Promise.reject({ message: '登录已过期，请重新登录' });
     }
     
-    // 处理其他错误
     let errorMessage = '网络错误，请稍后重试';
     
     if (error.response) {
-      // 服务器返回错误
       const { status, data } = error.response;
       
       switch (status) {
@@ -64,10 +55,8 @@ api.interceptors.response.use(
           errorMessage = data?.message || `请求失败 (${status})`;
       }
     } else if (error.request) {
-      // 请求已发出但没有收到响应
       errorMessage = '网络连接失败，请检查网络';
     } else {
-      // 请求配置出错
       errorMessage = error.message || '请求失败';
     }
     
@@ -75,19 +64,125 @@ api.interceptors.response.use(
   }
 );
 
-// 登录接口
+export interface PostQueryRequest {
+  current: number;
+  pageSize: number;
+  searchText?: string;
+  userId?: number;
+  tags?: string[];
+}
+
+export interface CommentQueryRequest {
+  current: number;
+  pageSize: number;
+  postId?: number;
+  userId?: number;
+}
+
+export interface CommentAddRequest {
+  postId: number;
+  content: string;
+}
+
+export interface PostAddRequest {
+  title: string;
+  content: string;
+  tags: string[];
+  imageUrl: string;
+  camera?: string;
+  lens?: string;
+  aperture?: string;
+  shutter?: string;
+  iso?: string;
+}
+
 export const login = async (userAccount: string, userPassword: string) => {
   return api.post('/api/user/login', { userAccount, userPassword });
 };
 
-// 注册接口
 export const register = async (userAccount: string, userPassword: string, checkPassword: string, userName: string) => {
   return api.post('/api/user/register', { userAccount, userPassword, checkPassword, userName });
 };
 
-// 获取当前登录用户信息
 export const getCurrentUser = async () => {
-  return api.get('/api/user/getLoginUser');
+  return api.get('/api/user/get/login');
+};
+
+export const getUserVOById = async (id: number) => {
+  return api.get(`/api/user/get/vo?id=${id}`);
+};
+
+export const getPostList = async (queryRequest: PostQueryRequest) => {
+  return api.post('/api/post/list/page/vo', queryRequest);
+};
+
+export const getPostDetail = async (id: number) => {
+  return api.get(`/api/post/get/vo?id=${id}`);
+};
+
+export const searchPosts = async (searchText: string, current: number, pageSize: number) => {
+  return api.get('/api/post/search', {
+    params: { searchText, current, pageSize }
+  });
+};
+
+export const addPost = async (post: PostAddRequest) => {
+  return api.post('/api/post/add', post);
+};
+
+export const thumbPost = async (postId: number) => {
+  return api.post('/api/post_thumb/', { postId });
+};
+
+export const favourPost = async (postId: number) => {
+  return api.post('/api/post_favour/', { postId });
+};
+
+export const getMyFavourPosts = async (queryRequest: PostQueryRequest) => {
+  return api.post('/api/post_favour/my/list/page', queryRequest);
+};
+
+export const getCommentList = async (queryRequest: CommentQueryRequest) => {
+  return api.post('/api/comment/list/page/vo', queryRequest);
+};
+
+export const addComment = async (comment: CommentAddRequest) => {
+  return api.post('/api/comment/add', comment);
+};
+
+export const deleteComment = async (id: number) => {
+  return api.post('/api/comment/delete', { id });
+};
+
+export const doFollow = async (followeeId: number) => {
+  return api.post('/api/follow/do', { followeeId });
+};
+
+export const checkFollow = async (followeeId: number) => {
+  return api.get(`/api/follow/check?followeeId=${followeeId}`);
+};
+
+export const getMyFollowers = async (current: number, pageSize: number) => {
+  return api.get('/api/follow/my/followers', {
+    params: { current, pageSize }
+  });
+};
+
+export const getMyFollowing = async (current: number, pageSize: number) => {
+  return api.get('/api/follow/my/following', {
+    params: { current, pageSize }
+  });
+};
+
+export const uploadFile = async (file: File, biz: string) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('biz', biz);
+  return api.post('/api/file/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
 
 export default api;

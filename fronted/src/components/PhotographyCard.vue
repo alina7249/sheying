@@ -7,25 +7,25 @@
   >
     <div class="card-image-wrapper">
       <router-link :to="`/photo-detail/${post.id}`" class="card-image-link">
-        <LazyImage :src="post.image" :alt="post.title" />
+        <LazyImage :src="post.imageUrl" :alt="post.title" />
         <div class="image-overlay">
           <div class="overlay-content">
             <div class="quick-actions">
               <button
                 @click.stop="handleLike"
-                :class="['action-btn', { active: isLiked }]"
-                :aria-label="isLiked ? '取消点赞' : '点赞'"
+                :class="['action-btn', { active: post.hasThumb }]"
+                :aria-label="post.hasThumb ? '取消点赞' : '点赞'"
               >
-                <i :class="['fa-solid fa-heart', isLiked ? 'heart-pulse' : '']"></i>
-                <span>{{ likeCount }}</span>
+                <i :class="['fa-solid fa-heart', isLikeAnimating ? 'heart-pulse' : '']"></i>
+                <span>{{ post.thumbNum }}</span>
               </button>
               <button
                 @click.stop="handleBookmark"
-                :class="['action-btn', { active: isBookmarked }]"
-                :aria-label="isBookmarked ? '取消收藏' : '收藏'"
+                :class="['action-btn', { active: post.hasFavour }]"
+                :aria-label="post.hasFavour ? '取消收藏' : '收藏'"
               >
                 <i class="fa-solid fa-bookmark"></i>
-                <span>{{ collectionCount }}</span>
+                <span>{{ post.favourNum }}</span>
               </button>
             </div>
           </div>
@@ -34,24 +34,24 @@
       
       <div class="tag-overlay">
         <span
-          v-for="(tag, index) in post.tags.slice(0, 2)"
+          v-for="(tag, index) in (post.tagList || []).slice(0, 2)"
           :key="index"
           class="tag-badge"
         >
           #{{ tag }}
         </span>
-        <span v-if="post.tags.length > 2" class="tag-badge">
-          +{{ post.tags.length - 2 }}
+        <span v-if="(post.tagList || []).length > 2" class="tag-badge">
+          +{{ (post.tagList || []).length - 2 }}
         </span>
       </div>
     </div>
 
     <div class="card-content">
       <div class="author-section">
-        <router-link :to="`/profile/${post.author.id}`" class="author-avatar-link">
+        <router-link :to="`/profile/${post.userId}`" class="author-avatar-link">
           <img
-            :src="post.author.avatar"
-            :alt="post.author.name"
+            :src="post.user?.userAvatar || 'https://picsum.photos/400/400?random=' + post.userId"
+            :alt="post.user?.userName"
             class="author-avatar"
             loading="lazy"
           />
@@ -59,14 +59,14 @@
         </router-link>
         <div class="author-info">
           <router-link
-            :to="`/profile/${post.author.id}`"
+            :to="`/profile/${post.userId}`"
             class="author-name"
           >
-            {{ post.author.name }}
+            {{ post.user?.userName || '匿名用户' }}
           </router-link>
           <p class="post-date">
             <i class="fa-regular fa-calendar mr-1"></i>
-            {{ post.date }}
+            {{ formatDate(post.createTime) }}
           </p>
         </div>
       </div>
@@ -82,18 +82,12 @@
       <div class="card-footer">
         <div class="footer-actions">
           <router-link
-            :to="`/photo/${post.id}#comments`"
+            :to="`/photo-detail/${post.id}#comments`"
             class="footer-link"
           >
             <i class="fa-regular fa-comment"></i>
-            <span>{{ post.comments }} 评论</span>
+            <span>评论</span>
           </router-link>
-          <div class="footer-stats">
-            <span class="stat-item">
-              <i class="fa-regular fa-eye"></i>
-              {{ Math.floor(Math.random() * 5000 + 1000).toLocaleString() }}
-            </span>
-          </div>
         </div>
       </div>
     </div>
@@ -103,50 +97,90 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import LazyImage from './LazyImage.vue';
+import { thumbPost, favourPost } from '../services/api';
+import { toast } from 'vue-sonner';
 
-export interface PhotographyPost {
-  id: string;
+export interface PostVO {
+  id: number;
   title: string;
-  description: string;
-  image: string;
-  author: {
-    id: string;
-    name: string;
-    avatar: string;
+  content: string;
+  thumbNum: number;
+  favourNum: number;
+  userId: number;
+  createTime: string;
+  updateTime: string;
+  tagList: string[];
+  imageUrl: string;
+  camera?: string;
+  lens?: string;
+  aperture?: string;
+  shutter?: string;
+  iso?: string;
+  user?: {
+    id: number;
+    userName: string;
+    userAvatar: string;
+    userProfile: string;
+    userRole: string;
   };
-  likes: number;
-  comments: number;
-  collections: number;
-  tags: string[];
-  date: string;
+  hasThumb?: boolean;
+  hasFavour?: boolean;
 }
 
 const props = defineProps<{
-  post: PhotographyPost;
+  post: PostVO;
+}>();
+
+const emit = defineEmits<{
+  (e: 'update', post: PostVO): void;
 }>();
 
 const isHovered = ref(false);
-const isLiked = ref(false);
-const isBookmarked = ref(false);
-const likeCount = ref(props.post.likes);
-const collectionCount = ref(props.post.collections);
+const isLikeAnimating = ref(false);
 
 const equipmentParams = computed(() => {
-  const firstLine = props.post.description.split('\n')[0];
-  if (firstLine.includes('|')) {
-    return firstLine;
-  }
-  return '';
+  const parts: string[] = [];
+  if (props.post.camera) parts.push(props.post.camera);
+  if (props.post.lens) parts.push(props.post.lens);
+  if (props.post.aperture) parts.push(`f/${props.post.aperture}`);
+  if (props.post.shutter) parts.push(props.post.shutter);
+  if (props.post.iso) parts.push(`ISO ${props.post.iso}`);
+  return parts.join(' | ');
 });
 
-const handleLike = () => {
-  isLiked.value = !isLiked.value;
-  likeCount.value += isLiked.value ? 1 : -1;
+const formatDate = (dateStr: string): string => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('zh-CN');
 };
 
-const handleBookmark = () => {
-  isBookmarked.value = !isBookmarked.value;
-  collectionCount.value += isBookmarked.value ? 1 : -1;
+const handleLike = async () => {
+  try {
+    await thumbPost(props.post.id);
+    isLikeAnimating.value = true;
+    setTimeout(() => {
+      isLikeAnimating.value = false;
+    }, 400);
+    const updated = { ...props.post };
+    updated.hasThumb = !updated.hasThumb;
+    updated.thumbNum = (updated.thumbNum || 0) + (updated.hasThumb ? 1 : -1);
+    emit('update', updated);
+  } catch (error: any) {
+    toast.error(error.message || '操作失败');
+  }
+};
+
+const handleBookmark = async () => {
+  try {
+    await favourPost(props.post.id);
+    const updated = { ...props.post };
+    updated.hasFavour = !updated.hasFavour;
+    updated.favourNum = (updated.favourNum || 0) + (updated.hasFavour ? 1 : -1);
+    emit('update', updated);
+    toast.success(updated.hasFavour ? '收藏成功' : '已取消收藏');
+  } catch (error: any) {
+    toast.error(error.message || '操作失败');
+  }
 };
 </script>
 

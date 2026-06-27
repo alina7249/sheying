@@ -273,9 +273,8 @@ const handleSubmit = async () => {
     const success = await authStore.register(formData.username, formData.password, formData.confirmPassword, formData.username);
 
     if (success) {
-      toast.success('注册成功，正在自动登录…');
-      await authStore.localLogin(formData.username, formData.password);
-      router.push('/');
+      toast.success('注册成功，请登录');
+      router.push('/login');
     } else {
       toast.error('注册失败，请稍后重试');
     }
