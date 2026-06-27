@@ -32,12 +32,23 @@
           </router-link>
           <div class="w-px h-8 bg-[#4A5F8B] mx-2"></div>
           <router-link
-            to="/admin"
+            to="/search-result"
             :class="[
               'relative px-4 py-2 font-medium rounded-lg transition-all duration-300',
-              getNavLinkClass(route.path.startsWith('/admin'))
+              getNavLinkClass(route.path === '/search-result')
             ]">
-            管理后台
+            搜索
+          </router-link>
+          <router-link
+            to="/publish"
+            :class="[
+              'relative px-5 py-2.5 font-semibold rounded-xl transition-all duration-300 flex items-center gap-2 overflow-hidden',
+              route.path === '/publish'
+                ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white shadow-lg shadow-[#4A5F8B]/30'
+                : 'bg-gradient-to-r from-[#4A5F8B]/10 to-[#63B3ED]/10 text-[#63B3ED] border border-[#4A5F8B]/30 hover:border-[#4A5F8B] hover:shadow-lg hover:shadow-[#4A5F8B]/20'
+            ]">
+            <i class="fa-solid fa-plus text-sm" aria-hidden="true"></i>
+            <span>上传</span>
           </router-link>
           <router-link
             to="/membership"
@@ -133,48 +144,27 @@
           </nav>
           <div class="h-px bg-gradient-to-r from-transparent via-[#4A5F8B] to-transparent my-2"></div>
           <div v-if="isAuthenticated" class="space-y-2">
-            <div class="grid grid-cols-4 gap-2">
+            <div class="grid grid-cols-3 gap-2">
+              <router-link
+                to="/publish"
+                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#4A5F8B]/20 text-[#63B3ED] hover:bg-[#4A5F8B]/30 transition-all duration-300"
+                @click="isMobileMenuOpen = false">
+                <i class="fa-solid fa-plus mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">上传</span>
+              </router-link>
+              <router-link
+                to="/search-result"
+                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
+                @click="isMobileMenuOpen = false">
+                <i class="fa-solid fa-search mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">搜索</span>
+              </router-link>
               <router-link
                 :to="`/profile/${user?.id}`"
                 class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
                 @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-image mb-1 text-lg" aria-hidden="true"></i>
-                <span class="text-xs">作品</span>
-              </router-link>
-              <router-link
-                :to="'/profile/1'"
-                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
-                @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-heart mb-1 text-lg" aria-hidden="true"></i>
-                <span class="text-xs">收藏</span>
-              </router-link>
-              <router-link
-                to="/profile-settings"
-                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#2D3748]/50 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-all duration-300"
-                @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-cog mb-1 text-lg" aria-hidden="true"></i>
-                <span class="text-xs">设置</span>
-              </router-link>
-              <router-link
-                to="/profile-benefits"
-                class="flex flex-col items-center justify-center p-3 rounded-xl bg-[#C9A962]/10 text-[#C9A962] hover:bg-[#C9A962]/20 transition-all duration-300"
-                @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-crown mb-1 text-lg" aria-hidden="true"></i>
-                <span class="text-xs">权益</span>
-              </router-link>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <router-link
-                to="/admin"
-                class="flex items-center justify-center px-4 py-3 rounded-xl bg-[#4A5F8B]/10 text-[#4A5F8B] hover:bg-[#4A5F8B]/20 transition-all duration-300"
-                @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-user-shield mr-2" aria-hidden="true"></i>管理后台
-              </router-link>
-              <router-link
-                to="/membership"
-                class="flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-[#C9A962]/20 to-[#D4B97A]/20 text-[#C9A962] border border-[#C9A962]/30 hover:border-[#C9A962] transition-all duration-300"
-                @click="isMobileMenuOpen = false">
-                <i class="fa-solid fa-crown mr-2" aria-hidden="true"></i>开通会员
+                <i class="fa-solid fa-user mb-1 text-lg" aria-hidden="true"></i>
+                <span class="text-xs">个人中心</span>
               </router-link>
             </div>
             <button
@@ -244,12 +234,7 @@ const mockUserData = {
 
 const navLinks = [
   { name: '作品库', path: '/', icon: 'fa-images' },
-  { name: '器材中心', path: '/equipment-hub', icon: 'fa-camera' },
-  { name: '课程', path: '/online-courses', icon: 'fa-book-open' },
-  { name: '社区', path: '/community', icon: 'fa-users' },
-  { name: '资源', path: '/resources', icon: 'fa-folder-open' },
-  { name: 'AI助手', path: '/aichat', icon: 'fa-brain' },
-  { name: '活动赛事', path: '/events-contests', icon: 'fa-trophy' }
+  { name: '社区', path: '/community', icon: 'fa-users' }
 ];
 
 const userAvatar = computed(() => user.value?.avatar || 'https://picsum.photos/400/400?random=124');

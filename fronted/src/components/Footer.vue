@@ -44,16 +44,16 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/resources" :class="['text-sm', getLinkClass(), 'transition-colors']">
-                资源
+              <router-link to="/publish" :class="['text-sm', getLinkClass(), 'transition-colors']">
+                上传作品
               </router-link>
             </li>
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 赛事
               </router-link>
             </li>
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 器材交易
               </router-link>
@@ -64,27 +64,27 @@
         <div :class="[getCardBgClass(), 'rounded-lg p-5 border']">
           <h4 :class="['text-lg font-bold mb-4', getTextClass(true)]">支持</h4>
           <ul class="space-y-2">
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 帮助中心
               </router-link>
             </li>
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 社区准则
               </router-link>
             </li>
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 隐私政策
               </router-link>
             </li>
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 服务条款
               </router-link>
             </li>
-            <li>
+            <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 联系我们
               </router-link>

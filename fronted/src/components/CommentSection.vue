@@ -534,7 +534,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
 
 interface Comment {
   id: string;
@@ -568,8 +567,6 @@ const props = withDefaults(defineProps<CommentSectionProps>(), {
   darkMode: true,
   authorId: '1'
 });
-
-const router = useRouter();
 
 const EMOJI_LIST = [
   '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',

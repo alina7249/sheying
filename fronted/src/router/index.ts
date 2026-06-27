@@ -4,6 +4,14 @@ import Login from '../pages/Login.vue';
 import Profile from '../pages/Profile.vue';
 import EquipmentHub from '../pages/EquipmentHub.vue';
 
+// 需要登录才能访问的路由
+const authRoutes = ['/publish', '/profile-settings'];
+
+// 检查是否已登录
+const isAuthenticated = () => {
+  return !!localStorage.getItem('authToken');
+};
+
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/login', name: 'Login', component: Login },
@@ -52,11 +60,25 @@ const routes = [
   { path: '/admin/orders', name: 'OrderManagement', component: () => import('../pages/admin/OrderManagement.vue') },
   { path: '/admin/analytics', name: 'Analytics', component: () => import('../pages/admin/Analytics.vue') },
   { path: '/admin/settings', name: 'AdminSettings', component: () => import('../pages/admin/Settings.vue') },
+
+  // 404 路由
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('../pages/NotFound.vue') },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+// 路由守卫
+router.beforeEach((to, _from, next) => {
+  // 检查是否需要登录
+  if (authRoutes.includes(to.path) && !isAuthenticated()) {
+    // 未登录，跳转到登录页
+    next({ path: '/login', query: { redirect: to.fullPath } });
+  } else {
+    next();
+  }
 });
 
 export default router;
