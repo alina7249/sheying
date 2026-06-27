@@ -21,11 +21,6 @@
                   <i class="fa-solid fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-[#B8C6D8]"></i>
                 </form>
               </div>
-              <select v-model="sortBy" class="px-4 py-3 bg-[#1E2532] border border-[#4A5F8B] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A5F8B] transition-all appearance-none cursor-pointer">
-                <option value="relevance">相关度</option>
-                <option value="date">按日期</option>
-                <option value="popularity">受欢迎度</option>
-              </select>
             </div>
 
             <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,7 +101,6 @@ const router = useRouter();
 
 const query = ref(route.query.q as string || '');
 const searchTerm = ref(query.value);
-const sortBy = ref('relevance');
 const posts = ref<PostVO[]>([]);
 const loading = ref(false);
 const loadingMore = ref(false);

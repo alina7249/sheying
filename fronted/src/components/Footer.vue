@@ -15,17 +15,14 @@
             聚焦艺术摄影、商业创作及黑白影像领域，为追求质感的摄影师与爱好者，打造"深邃夜空"风格的专业交流空间。
           </p>
           <div class="flex space-x-4">
-            <a href="#" :class="getSocialIconClass()">
+            <a href="#" :class="getSocialIconClass()" @click.prevent="shareToWeibo" title="分享到微博">
               <i class="fa-brands fa-weibo"></i>
             </a>
-            <a href="#" :class="getSocialIconClass()">
+            <a href="#" :class="getSocialIconClass()" @click.prevent="shareToWechat" title="分享到微信">
               <i class="fa-brands fa-weixin"></i>
             </a>
-            <a href="#" :class="getSocialIconClass()">
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-            <a href="#" :class="getSocialIconClass()">
-              <i class="fa-brands fa-twitter"></i>
+            <a href="#" :class="getSocialIconClass()" @click.prevent="shareToQQ" title="分享到QQ">
+              <i class="fa-brands fa-qq"></i>
             </a>
           </div>
         </div>
@@ -121,10 +118,29 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { toast } from 'vue-sonner';
 import { useAuthStore } from '../store/authStore';
 
 const authStore = useAuthStore();
 const theme = computed(() => authStore.theme);
+
+const shareTitle = '影研社 - 专业摄影交流社区';
+const shareUrl = typeof window !== 'undefined' ? window.location.origin : '';
+const shareSummary = '聚焦艺术摄影、商业创作及黑白影像领域，为追求质感的摄影师与爱好者，打造专业交流空间。';
+
+const shareToWeibo = () => {
+  const url = `https://service.weibo.com/share/share.php?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareSummary)}`;
+  window.open(url, '_blank', 'width=600,height=400');
+};
+
+const shareToWechat = () => {
+  toast.info('请使用微信扫描二维码分享');
+};
+
+const shareToQQ = () => {
+  const url = `https://connect.qq.com/widget/shareqq/index.html?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}&summary=${encodeURIComponent(shareSummary)}&desc=${encodeURIComponent(shareSummary)}`;
+  window.open(url, '_blank', 'width=600,height=400');
+};
 
 const getBgClass = () => {
   return theme.value === 'dark' ? 'bg-[#1E2532]' : 'bg-gray-100';
