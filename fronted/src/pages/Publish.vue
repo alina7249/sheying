@@ -298,7 +298,7 @@ const handleSubmit = async () => {
 onMounted(() => {
   if (!authStore.isAuthenticated) {
     toast.warning('请先登录');
-    router.push('/login');
+    router.push({ path: '/login', query: { redirect: '/publish' } });
   }
 });
 </script>
