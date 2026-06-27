@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摄影分享平台 - 图片预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0F1C2D 0%, #1E2532 100%);
+            min-height: 100vh;
+            color: #F5F7FA;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #4A5F8B, #6B7C93);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #B8C6D8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 32px;
+            background: #4A5F8B;
+            border-radius: 2px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: rgba(45, 55, 72, 0.8);
+            border: 1px solid rgba(74, 95, 139, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(74, 95, 139, 0.3);
+            border-color: rgba(74, 95, 139, 0.6);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #F5F7FA;
+        }
+
+        .card-meta {
+            font-size: 13px;
+            color: #6B7C93;
+        }
+
+        .hero-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .hero-card {
+            position: relative;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .hero-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 28, 45, 0.9) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 32px;
+        }
+
+        .hero-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #F5F7FA;
+        }
+
+        .hero-desc {
+            font-size: 14px;
+            color: #B8C6D8;
+        }
+
+        .avatar-gallery {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .avatar-item {
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar-item:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4A5F8B;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 20px rgba(74, 95, 139, 0.3);
+        }
+
+        .avatar-name {
+            font-size: 14px;
+            color: #B8C6D8;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: rgba(74, 95, 139, 0.1);
+            border: 1px solid rgba(74, 95, 139, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(74, 95, 139, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            color: #4A5F8B;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #B8C6D8;
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(74, 95, 139, 0.2);
+        }
+
+        footer p {
+            color: #6B7C93;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+            
+            .hero-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 摄影分享平台</h1>
+            <p class="subtitle">
+                精选高质量图片素材，展示平台视觉风格。所有图片均来自 Picsum Photos 服务，支持随机种子确保一致性。
+            </p>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">Banner 轮播图</h2>
+            <div class="hero-gallery">
+                <div class="hero-card">
+                    <img src="https://picsum.photos/seed/324/1280/720" alt="极简黑白建筑摄影展">
+                    <div class="hero-overlay">
+                        <h3 class="hero-title">极简黑白建筑摄影展</h3>
+                        <p class="hero-desc">探索建筑中的几何美感与光影艺术</p>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <img src="https://picsum.photos/seed/326/1280/720" alt="胶片摄影的永恒魅力">
+                    <div class="hero-overlay">
+                        <h3 class="hero-title">胶片摄影的永恒魅力</h3>
+                        <p class="hero-desc">专访胶片摄影师安娜，探讨传统摄影的现代意义</p>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <img src="https://picsum.photos/seed/328/1280/720" alt="暗调摄影的情绪表达">
+                    <div class="hero-overlay">
+                        <h3 class="hero-title">暗调摄影的情绪表达</h3>
+                        <p class="hero-desc">如何通过暗调摄影传达深沉的情感与故事</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">灵感专栏</h2>
+            <div class="gallery">
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/223/600/800" alt="黑白摄影的光影艺术">
+                    <div class="card-content">
+                        <h3 class="card-title">黑白摄影的光影艺术</h3>
+                        <p class="card-meta">探索如何通过光影对比创造出富有情感的黑白影像作品</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/224/600/800" alt="胶片摄影的复兴">
+                    <div class="card-content">
+                        <h3 class="card-title">胶片摄影的复兴与现代应用</h3>
+                        <p class="card-meta">探讨胶片摄影在数字时代的独特魅力</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/225/600/800" alt="极简主义摄影">
+                    <div class="card-content">
+                        <h3 class="card-title">极简主义摄影的构图法则</h3>
+                        <p class="card-meta">解析极简主义摄影的核心构图原则</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/226/600/800" alt="暗房技术">
+                    <div class="card-content">
+                        <h3 class="card-title">暗房技术与现代数字暗房</h3>
+                        <p class="card-meta">比较传统暗房技术与现代数字暗房的异同</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">精选摄影作品</h2>
+            <div class="gallery">
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/208/1280/720" alt="黑白光影">
+                    <div class="card-content">
+                        <h3 class="card-title">黑白光影</h3>
+                        <p class="card-meta">极简主义 · 黑白 · 建筑 · 徕卡</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/210/600/800" alt="胶片质感人像">
+                    <div class="card-content">
+                        <h3 class="card-title">胶片质感人像</h3>
+                        <p class="card-meta">人像 · 胶片 · 复古 · 自然光</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/212/800/600" alt="暗调氛围">
+                    <div class="card-content">
+                        <h3 class="card-title">暗调氛围</h3>
+                        <p class="card-meta">暗调 · 氛围 · 情绪 · 人像</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/216/1280/720" alt="城市几何">
+                    <div class="card-content">
+                        <h3 class="card-title">城市几何</h3>
+                        <p class="card-meta">城市 · 几何 · 手机摄影 · 极简</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">摄影师头像</h2>
+            <div class="avatar-gallery">
+                <div class="avatar-item">
+                    <img class="avatar" src="https://picsum.photos/seed/209/400/400" alt="极简摄影师林风">
+                    <p class="avatar-name">极简摄影师林风</p>
+                </div>
+                <div class="avatar-item">
+                    <img class="avatar" src="https://picsum.photos/seed/211/400/400" alt="胶片摄影师安娜">
+                    <p class="avatar-name">胶片摄影师安娜</p>
+                </div>
+                <div class="avatar-item">
+                    <img class="avatar" src="https://picsum.photos/seed/213/400/400" alt="情绪摄影师李明">
+                    <p class="avatar-name">情绪摄影师李明</p>
+                </div>
+                <div class="avatar-item">
+                    <img class="avatar" src="https://picsum.photos/seed/215/400/400" alt="静物摄影师王静">
+                    <p class="avatar-name">静物摄影师王静</p>
+                </div>
+                <div class="avatar-item">
+                    <img class="avatar" src="https://picsum.photos/seed/217/400/400" alt="手机摄影师张强">
+                    <p class="avatar-name">手机摄影师张强</p>
+                </div>
+                <div class="avatar-item">
+                    <img class="avatar" src="https://picsum.photos/seed/219/400/400" alt="纪实摄影师陈默">
+                    <p class="avatar-name">纪实摄影师陈默</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">器材展示</h2>
+            <div class="gallery">
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/101/800/600" alt="索尼 A7M4">
+                    <div class="card-content">
+                        <h3 class="card-title">索尼 A7M4</h3>
+                        <p class="card-meta">全画幅微单相机 · 3300万像素</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/102/800/600" alt="佳能 EOS R5">
+                    <div class="card-content">
+                        <h3 class="card-title">佳能 EOS R5</h3>
+                        <p class="card-meta">专业全画幅 · 4500万像素 · 8K视频</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img class="card-image" src="https://picsum.photos/seed/103/800/600" alt="尼康 Z8">
+                    <div class="card-content">
+                        <h3 class="card-title">尼康 Z8</h3>
+                        <p class="card-meta">旗舰全画幅 · 4550万像素</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">精选图片</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">图片分类</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4K</div>
+                <div class="stat-label">高清质量</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">服务可用</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📸 摄影分享平台 - 用心记录每一刻</p>
+            <p style="margin-top: 8px;">所有图片素材均来自 Picsum Photos</p>
+        </footer>
+    </div>
+</body>
+</html>
