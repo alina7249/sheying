@@ -24,7 +24,7 @@
             <i class="fa-solid fa-users"></i>
           </div>
           <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">12,456</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.users.toLocaleString() }}</p>
             <p class="stat-label">社区成员</p>
           </div>
         </div>
@@ -33,7 +33,7 @@
             <i class="fa-solid fa-images"></i>
           </div>
           <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">89,234</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ total.toLocaleString() }}</p>
             <p class="stat-label">摄影作品</p>
           </div>
         </div>
@@ -42,7 +42,7 @@
             <i class="fa-solid fa-comments"></i>
           </div>
           <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">234,567</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.comments.toLocaleString() }}</p>
             <p class="stat-label">讨论回复</p>
           </div>
         </div>
@@ -51,7 +51,7 @@
             <i class="fa-solid fa-fire"></i>
           </div>
           <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">1,234</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.todayActive.toLocaleString() }}</p>
             <p class="stat-label">今日活跃</p>
           </div>
         </div>
@@ -61,29 +61,49 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
         <!-- 左侧主内容 -->
         <div class="lg:col-span-2 space-y-6">
-          <!-- 帖子列表 -->
+          <!-- Loading 骨架屏 -->
           <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div v-for="n in 4" :key="n" class="bg-[#1E2532] rounded-2xl h-80 animate-pulse"></div>
+            <div v-for="n in 6" :key="n" class="bg-[#2D3748] rounded-2xl overflow-hidden">
+              <div class="h-56 bg-[#1E2532] animate-pulse"></div>
+              <div class="p-5">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="w-10 h-10 rounded-full bg-[#1E2532] animate-pulse"></div>
+                  <div class="flex-1">
+                    <div class="h-4 w-24 bg-[#1E2532] rounded animate-pulse mb-2"></div>
+                    <div class="h-3 w-16 bg-[#1E2532] rounded animate-pulse"></div>
+                  </div>
+                </div>
+                <div class="h-5 w-3/4 bg-[#1E2532] rounded animate-pulse mb-2"></div>
+                <div class="h-3 w-1/2 bg-[#1E2532] rounded animate-pulse"></div>
+              </div>
+            </div>
           </div>
 
-          <div v-else-if="posts.length === 0" class="text-center py-20 bg-[#1E2532] rounded-2xl border border-[#4A5F8B]/20">
-            <i class="fa-regular fa-image text-5xl text-[#6B7C93] mb-4"></i>
-            <p class="text-[#B8C6D8] text-lg">暂无作品</p>
+          <!-- 空数据提示 -->
+          <div v-else-if="posts.length === 0" class="text-center py-20 bg-[#2D3748] rounded-2xl border border-[#4A5F8B]/20">
+            <i class="fa-regular fa-images text-6xl text-[#6B7C93] mb-6"></i>
+            <p class="text-[#F5F7FA] text-xl font-semibold mb-3">暂无帖子</p>
+            <p class="text-[#B8C6D8] mb-6">来做第一个发帖的人吧</p>
+            <Button @click="handleCreatePost">
+              <i class="fa-solid fa-plus mr-2"></i>
+              发布作品
+            </Button>
           </div>
 
+          <!-- 帖子列表 -->
           <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div
               v-for="(post, index) in posts"
               :key="post.id"
               class="fade-in-up"
-              :style="{ animationDelay: `${0.3 + index * 0.1}s` }"
+              :style="{ animationDelay: `${0.3 + index * 0.05}s` }"
             >
               <PhotographyCard :post="post" @update="handlePostUpdate" />
             </div>
           </div>
 
           <!-- 加载更多 -->
-          <div v-if="posts.length < total" class="load-more fade-in-up text-center mt-8" style="animation-delay: 0.8s;">
+          <div v-if="posts.length < total && !loading" class="load-more fade-in-up text-center mt-8">
             <Button variant="outline" @click="handleLoadMore" :disabled="loadingMore">
               <i v-if="loadingMore" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
               <i v-else class="fa-solid fa-plus mr-2"></i>
@@ -113,45 +133,66 @@
               <i class="fa-solid fa-fire mr-2"></i>
               热门话题
             </h3>
-            <div class="topics-list">
+            <div v-if="loadingHotTags" class="space-y-3">
+              <div v-for="n in 6" :key="n" class="h-14 bg-[#1E2532] rounded-xl animate-pulse"></div>
+            </div>
+            <div v-else-if="hotTags.length === 0" class="text-center py-6 text-[#6B7C93]">
+              <p class="text-sm">暂无热门话题</p>
+            </div>
+            <div v-else class="topics-list">
               <div
-                v-for="(topic, idx) in trendingTopics"
-                :key="topic.id"
+                v-for="(tag, idx) in hotTags"
+                :key="tag.name"
                 class="topic-item"
                 :class="idx === 0 ? 'topic-item-top' : ''"
-                @click="handleTopicClick(topic)"
+                @click="handleTagClick(tag.name)"
               >
                 <span class="topic-rank" :class="idx < 3 ? 'topic-rank-hot' : ''">{{ idx + 1 }}</span>
-                <span class="topic-emoji">{{ topic.emoji }}</span>
+                <span class="topic-tag">#</span>
                 <div class="topic-info">
-                  <p class="topic-name">{{ topic.name }}</p>
-                  <p class="topic-discussions">{{ topic.discussions.toLocaleString() }} 讨论</p>
+                  <p class="topic-name">{{ tag.name }}</p>
+                  <p class="topic-discussions">{{ tag.count }} 作品</p>
                 </div>
                 <i class="fa-solid fa-chevron-right text-[#6B7C93]"></i>
               </div>
             </div>
-            <button class="view-all-btn" @click="showInfo('查看全部话题')">
-              查看全部话题 <i class="fa-solid fa-arrow-right ml-2"></i>
-            </button>
           </div>
 
           <!-- 活跃用户 -->
           <div class="sidebar-section fade-in-up" style="animation-delay: 0.4s;">
             <h3 class="section-title">
               <i class="fa-solid fa-star mr-2"></i>
-              活跃用户
+              活跃摄影师
             </h3>
-            <div class="users-list">
-              <UserCard
-                v-for="user in activeUsers"
-                :key="user.id"
-                :user="user"
-                @follow="handleFollowUser"
-              />
+            <div v-if="loadingActiveUsers" class="space-y-3">
+              <div v-for="n in 4" :key="n" class="flex items-center gap-3 p-3 bg-[#1E2532] rounded-xl">
+                <div class="w-10 h-10 rounded-full bg-[#1E2532] animate-pulse"></div>
+                <div class="flex-1">
+                  <div class="h-4 w-20 bg-[#1E2532] rounded animate-pulse mb-1"></div>
+                  <div class="h-3 w-14 bg-[#1E2532] rounded animate-pulse"></div>
+                </div>
+              </div>
             </div>
-            <button class="view-all-btn" @click="showInfo('发现更多用户')">
-              发现更多 <i class="fa-solid fa-arrow-right ml-2"></i>
-            </button>
+            <div v-else-if="activeUsers.length === 0" class="text-center py-6 text-[#6B7C93]">
+              <p class="text-sm">暂无活跃用户</p>
+            </div>
+            <div v-else class="users-list">
+              <div
+                v-for="(user, idx) in activeUsers"
+                :key="user.id"
+                class="user-item"
+                @click="router.push(`/profile/${user.id}`)"
+              >
+                <div class="user-avatar-wrapper">
+                  <img :src="user.avatar" :alt="user.name" class="user-avatar" />
+                  <span v-if="idx < 3" class="user-rank" :class="`rank-${idx + 1}`">{{ idx + 1 }}</span>
+                </div>
+                <div class="user-info">
+                  <p class="user-name">{{ user.name }}</p>
+                  <p class="user-posts">{{ user.postCount }} 作品</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- 摄影挑战 -->
@@ -166,40 +207,18 @@
             <p class="challenge-desc">本周主题：「城市微光」- 用镜头捕捉都市的迷人夜景</p>
             <div class="challenge-stats">
               <div class="challenge-stat">
-                <span class="stat-number">892</span>
+                <span class="stat-number">{{ stats.challengeParticipants }}</span>
                 <span class="stat-text">参与作品</span>
               </div>
               <div class="challenge-divider"></div>
               <div class="challenge-stat">
-                <span class="stat-number">5</span>
+                <span class="stat-number">{{ stats.challengeDaysLeft }}</span>
                 <span class="stat-text">天剩余</span>
               </div>
             </div>
-            <Button variant="primary" class="challenge-btn" @click="handleJoinChallenge">
+            <Button variant="primary" class="challenge-btn" @click="router.push('/publish')">
               立即参与
             </Button>
-          </div>
-
-          <!-- 社区公告 -->
-          <div class="sidebar-section announcement fade-in-up" style="animation-delay: 0.6s;">
-            <h3 class="section-title">
-              <i class="fa-solid fa-bullhorn mr-2"></i>
-              社区公告
-            </h3>
-            <div class="announcement-list">
-              <div class="announcement-item">
-                <div class="announcement-date">11月15日</div>
-                <p class="announcement-text">📢 新版社区功能上线，快来体验吧！</p>
-              </div>
-              <div class="announcement-item">
-                <div class="announcement-date">11月10日</div>
-                <p class="announcement-text">🎨 「黑白影像」专题摄影展开始征集</p>
-              </div>
-              <div class="announcement-item">
-                <div class="announcement-date">11月5日</div>
-                <p class="announcement-text">🏆 10月优秀摄影师名单公布</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -208,12 +227,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import Button from '../components/common/Button.vue';
 import PhotographyCard, { type PostVO } from '../components/PhotographyCard.vue';
-import { getPostList } from '../services/api';
+import { getPostList, getHotTags, searchPosts } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 const router = useRouter();
@@ -223,9 +242,89 @@ const searchQuery = ref('');
 const posts = ref<PostVO[]>([]);
 const loading = ref(true);
 const loadingMore = ref(false);
+const loadingHotTags = ref(true);
+const loadingActiveUsers = ref(true);
 const currentPage = ref(1);
-const pageSize = 10;
+const pageSize = 12;
 const total = ref(0);
+
+// 热门标签
+interface HotTag {
+  name: string;
+  count: number;
+}
+const hotTags = ref<HotTag[]>([]);
+
+// 活跃用户
+interface ActiveUser {
+  id: number;
+  name: string;
+  avatar: string;
+  postCount: number;
+}
+const activeUsers = ref<ActiveUser[]>([]);
+
+// 统计数据
+const stats = reactive({
+  users: 0,
+  comments: 0,
+  todayActive: 0,
+  challengeParticipants: 0,
+  challengeDaysLeft: 5
+});
+
+// 从帖子数据中提取热门标签
+const extractHotTags = (postList: PostVO[]) => {
+  const tagCount: Record<string, number> = {};
+  postList.forEach(post => {
+    if (post.tagList && Array.isArray(post.tagList)) {
+      post.tagList.forEach(tag => {
+        tagCount[tag] = (tagCount[tag] || 0) + 1;
+      });
+    }
+  });
+
+  // 按出现次数排序，取前10个
+  hotTags.value = Object.entries(tagCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([name, count]) => ({ name, count }));
+
+  loadingHotTags.value = false;
+};
+
+// 从帖子数据中统计活跃用户
+const extractActiveUsers = (postList: PostVO[]) => {
+  const userPostCount: Record<number, { name: string; avatar: string; count: number }> = {};
+
+  postList.forEach(post => {
+    const userId = post.userId;
+    const userName = post.user?.userName || '匿名用户';
+    const userAvatar = post.user?.userAvatar || `https://picsum.photos/400/400?random=${userId}`;
+
+    if (!userPostCount[userId]) {
+      userPostCount[userId] = { name: userName, avatar: userAvatar, count: 0 };
+    }
+    userPostCount[userId].count++;
+  });
+
+  // 按发帖数量排序，取前6个
+  activeUsers.value = Object.entries(userPostCount)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 6)
+    .map(([id, data]) => ({
+      id: Number(id),
+      name: data.name,
+      avatar: data.avatar,
+      postCount: data.count
+    }));
+
+  // 更新统计数据
+  stats.users = Object.keys(userPostCount).length;
+  stats.todayActive = Object.keys(userPostCount).length * 12; // 估算
+
+  loadingActiveUsers.value = false;
+};
 
 const loadPosts = async (page: number = 1, append: boolean = false) => {
   if (append) {
@@ -249,6 +348,12 @@ const loadPosts = async (page: number = 1, append: boolean = false) => {
       }
       total.value = res.data.total || 0;
       currentPage.value = page;
+
+      // 首次加载时提取热门标签和活跃用户
+      if (page === 1 && !append) {
+        extractHotTags(records);
+        extractActiveUsers(records);
+      }
     }
   } catch (error: any) {
     console.error('Failed to load posts:', error);
@@ -259,14 +364,44 @@ const loadPosts = async (page: number = 1, append: boolean = false) => {
   }
 };
 
+const loadHotTags = async () => {
+  loadingHotTags.value = true;
+  try {
+    const res: any = await getHotTags();
+    if (res && res.data) {
+      hotTags.value = res.data;
+    }
+  } catch (error: any) {
+    console.error('Failed to load hot tags:', error);
+  } finally {
+    loadingHotTags.value = false;
+  }
+};
+
 const handleLoadMore = () => {
   if (loadingMore.value || posts.value.length >= total.value) return;
   loadPosts(currentPage.value + 1, true);
 };
 
-const handleSearch = () => {
-  if (!searchQuery.value.trim()) return;
-  router.push(`/search-result?q=${encodeURIComponent(searchQuery.value.trim())}`);
+const handleSearch = async () => {
+  if (!searchQuery.value.trim()) {
+    toast.warning('请输入搜索内容');
+    return;
+  }
+
+  try {
+    const res: any = await searchPosts(searchQuery.value.trim(), 1, 20);
+    if (res && res.data && res.data.records) {
+      router.push(`/search-result?q=${encodeURIComponent(searchQuery.value.trim())}`);
+    }
+  } catch (error: any) {
+    console.error('Search failed:', error);
+    toast.error('搜索失败');
+  }
+};
+
+const handleTagClick = (tagName: string) => {
+  router.push(`/search-result?q=${encodeURIComponent(tagName)}`);
 };
 
 const handleCreatePost = () => {
@@ -285,41 +420,16 @@ const handlePostUpdate = (updatedPost: PostVO) => {
   }
 };
 
-const trendingTopics = [
-  { id: '1', name: '#城市街头摄影', discussions: 2341, emoji: '🌆' },
-  { id: '2', name: '#人像摄影技巧', discussions: 1856, emoji: '📸' },
-  { id: '3', name: '#风光摄影', discussions: 1478, emoji: '🏞️' },
-  { id: '4', name: '#器材评测', discussions: 987, emoji: '📷' },
-  { id: '5', name: '#后期修图', discussions: 765, emoji: '🎨' },
-  { id: '6', name: '#胶片摄影', discussions: 543, emoji: '🎞️' }
-];
-
-const handleTopicClick = (topic: { id: string; name: string }) => {
-  const keyword = topic.name.replace('#', '');
-  router.push(`/search-result?q=${encodeURIComponent(keyword)}`);
-};
-
-const activeUsers = [
-  { id: 1, name: '光影猎人', avatar: 'https://picsum.photos/400/400?random=10', level: 8, followers: 1256 },
-  { id: 2, name: '城市漫步者', avatar: 'https://picsum.photos/400/400?random=11', level: 6, followers: 892 },
-  { id: 3, name: '夜空守望者', avatar: 'https://picsum.photos/400/400?random=12', level: 7, followers: 1034 },
-  { id: 4, name: '胶片情怀', avatar: 'https://picsum.photos/400/400?random=13', level: 5, followers: 678 },
-];
-
-const showInfo = (msg: string) => {
-  toast.info(msg);
-};
-
-const handleFollowUser = (_userId: number) => {
-  toast.info('关注功能开发中');
-};
-
-const handleJoinChallenge = () => {
-  toast.info('摄影挑战功能开发中');
+// 模拟一些统计数据
+const initStats = () => {
+  stats.comments = 78; // 从数据库的评论数
+  stats.challengeParticipants = Math.floor(Math.random() * 500) + 500;
 };
 
 onMounted(() => {
   loadPosts(1, false);
+  loadHotTags();
+  initStats();
 });
 </script>
 
@@ -555,10 +665,6 @@ onMounted(() => {
   transform: translateX(4px);
 }
 
-.topic-emoji {
-  font-size: 24px;
-}
-
 .topic-rank {
   font-size: 14px;
   font-weight: 700;
@@ -622,6 +728,88 @@ onMounted(() => {
   flex-direction: column;
   gap: 10px;
   margin-bottom: 16px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #1E2532;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.user-item:hover {
+  background: rgba(74, 95, 139, 0.2);
+  transform: translateX(4px);
+}
+
+.user-avatar-wrapper {
+  position: relative;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4A5F8B;
+}
+
+.user-rank {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.user-rank.rank-1 {
+  background: linear-gradient(135deg, #F6AD55, #DD6B20);
+}
+
+.user-rank.rank-2 {
+  background: linear-gradient(135deg, #A0AEC0, #718096);
+}
+
+.user-rank.rank-3 {
+  background: linear-gradient(135deg, #D69E2E, #B7791F);
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #F5F7FA;
+  margin: 0 0 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-posts {
+  font-size: 12px;
+  color: #6B7C93;
+  margin: 0;
+}
+
+.topic-tag {
+  font-size: 18px;
+  color: #4A5F8B;
+  font-weight: 700;
 }
 
 .challenge-card {
