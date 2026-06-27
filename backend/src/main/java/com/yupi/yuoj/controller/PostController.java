@@ -19,7 +19,10 @@ import com.yupi.yuoj.model.entity.User;
 import com.yupi.yuoj.model.vo.PostVO;
 import com.yupi.yuoj.service.PostService;
 import com.yupi.yuoj.service.UserService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -266,6 +269,49 @@ public class PostController {
         }
         boolean result = postService.updateById(post);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 获取热门标签
+     * 统计所有帖子中标签的出现频率，返回 top 10
+     *
+     * @return 热门标签列表
+     */
+    @GetMapping("/tags/hot")
+    public BaseResponse<List<Map<String, Object>>> getHotTags() {
+        // 获取所有帖子
+        List<Post> posts = postService.list();
+
+        // 统计标签出现次数
+        Map<String, Integer> tagCount = new HashMap<>();
+        for (Post post : posts) {
+            String tagsJson = post.getTags();
+            if (tagsJson != null && !tagsJson.isEmpty()) {
+                try {
+                    List<String> tags = GSON.fromJson(tagsJson, List.class);
+                    for (String tag : tags) {
+                        tagCount.merge(tag, 1, Integer::sum);
+                    }
+                } catch (Exception e) {
+                    // 忽略解析错误
+                }
+            }
+        }
+
+        // 按出现次数排序，取前10个
+        List<Map<String, Object>> hotTags = tagCount.entrySet()
+                .stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(10)
+                .map(e -> {
+                    Map<String, Object> tagInfo = new HashMap<>();
+                    tagInfo.put("name", e.getKey());
+                    tagInfo.put("count", e.getValue());
+                    return tagInfo;
+                })
+                .collect(Collectors.toList());
+
+        return ResultUtils.success(hotTags);
     }
 
 }

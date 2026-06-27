@@ -185,4 +185,8 @@ export const uploadFile = async (file: File, biz: string) => {
   });
 };
 
+export const getHotTags = async () => {
+  return api.get('/api/post/tags/hot');
+};
+
 export default api;
