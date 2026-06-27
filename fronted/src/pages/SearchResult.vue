@@ -28,8 +28,21 @@
               </select>
             </div>
 
-            <div v-if="loading" class="space-y-4">
-              <div v-for="n in 5" :key="n" class="bg-[#1E2532] rounded-xl h-48 animate-pulse"></div>
+            <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div v-for="n in 6" :key="n" class="bg-[#1E2532] rounded-2xl overflow-hidden">
+                <div class="h-56 bg-[#2D3748] animate-pulse"></div>
+                <div class="p-5">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-[#2D3748] animate-pulse"></div>
+                    <div class="flex-1">
+                      <div class="h-4 w-24 bg-[#2D3748] rounded animate-pulse mb-2"></div>
+                      <div class="h-3 w-16 bg-[#2D3748] rounded animate-pulse"></div>
+                    </div>
+                  </div>
+                  <div class="h-5 w-3/4 bg-[#2D3748] rounded animate-pulse mb-2"></div>
+                  <div class="h-3 w-1/2 bg-[#2D3748] rounded animate-pulse"></div>
+                </div>
+              </div>
             </div>
 
             <div v-else-if="!query" class="p-8 bg-[#1E2532] rounded-xl border border-[#4A5F8B] text-center">
@@ -44,39 +57,9 @@
               <p class="text-[#B8C6D8]">请尝试调整搜索条件或使用不同的关键词</p>
             </div>
 
-            <div v-else class="space-y-6">
-              <div v-for="post in posts" :key="post.id" class="bg-[#1E2532] rounded-xl overflow-hidden border border-[#4A5F8B] transition-all cursor-pointer hover:border-[#63B3ED] hover:shadow-lg hover:shadow-[#4A5F8B]/10" @click="router.push(`/photo-detail/${post.id}`)">
-                <div class="md:flex">
-                  <div class="md:w-1/3">
-                    <img :src="post.imageUrl" :alt="post.title" class="w-full h-48 md:h-full object-cover" />
-                  </div>
-                  <div class="p-5 md:w-2/3">
-                    <div class="flex items-center justify-between mb-2">
-                      <span class="px-2 py-1 bg-[#0F1C2D] text-[#63B3ED] rounded-full text-xs border border-[#4A5F8B]">作品</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">{{ post.title }}</h3>
-                    <p class="text-sm text-[#B8C6D8] mb-4 line-clamp-2 leading-relaxed">{{ post.content }}</p>
-                    <div class="flex items-center justify-between mb-4">
-                      <div class="flex items-center">
-                        <img :src="post.user?.userAvatar || 'https://picsum.photos/400/400?random=' + post.userId" :alt="post.user?.userName" class="w-6 h-6 rounded-full mr-2 object-cover border border-[#B8C6D8]" />
-                        <span class="text-sm text-[#B8C6D8]">{{ post.user?.userName || '匿名用户' }}</span>
-                      </div>
-                      <span class="text-sm text-[#6B7C93]">发布于 {{ formatDate(post.createTime) }}</span>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                      <div class="flex items-center gap-4 text-sm text-[#6B7C93]">
-                        <span class="flex items-center gap-1">
-                          <i class="fa-regular fa-heart"></i>
-                          {{ post.thumbNum || 0 }}
-                        </span>
-                        <span class="flex items-center gap-1">
-                          <i class="fa-regular fa-bookmark"></i>
-                          {{ post.favourNum || 0 }}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div v-for="(post, index) in posts" :key="post.id" class="fade-in-up" :style="{ animationDelay: `${index * 0.05}s` }">
+                <PhotographyCard :post="post" @update="handlePostUpdate" />
               </div>
             </div>
 
@@ -115,29 +98,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import PhotographyCard, { type PostVO } from '../components/PhotographyCard.vue';
 import { searchPosts } from '../services/api';
 
 const route = useRoute();
 const router = useRouter();
-
-interface PostVO {
-  id: number;
-  title: string;
-  content: string;
-  thumbNum: number;
-  favourNum: number;
-  userId: number;
-  createTime: string;
-  tagList: string[];
-  imageUrl: string;
-  camera?: string;
-  lens?: string;
-  user?: {
-    id: number;
-    userName: string;
-    userAvatar: string;
-  };
-}
 
 const query = ref(route.query.q as string || '');
 const searchTerm = ref(query.value);
@@ -146,7 +111,7 @@ const posts = ref<PostVO[]>([]);
 const loading = ref(false);
 const loadingMore = ref(false);
 const currentPage = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(12);
 const total = ref(0);
 
 const hotKeywords = ['风光摄影', '人像摄影', '黑白', '街拍', '建筑', '胶片', '夜景', '极简'];
@@ -162,10 +127,11 @@ const hasMore = computed(() => {
   return posts.value.length < total.value;
 });
 
-const formatDate = (dateStr: string): string => {
-  if (!dateStr) return '';
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('zh-CN');
+const handlePostUpdate = (updatedPost: PostVO) => {
+  const index = posts.value.findIndex(p => p.id === updatedPost.id);
+  if (index !== -1) {
+    posts.value[index] = updatedPost;
+  }
 };
 
 const doSearch = (keyword: string) => {
@@ -232,3 +198,28 @@ onMounted(() => {
   }
 });
 </script>
+
+<style scoped>
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-up {
+    animation: none;
+    opacity: 1;
+  }
+}
+</style>

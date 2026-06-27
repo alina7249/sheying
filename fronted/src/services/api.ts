@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'vue-sonner';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8121',
@@ -30,6 +31,7 @@ api.interceptors.response.use(
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       window.location.href = '/login';
+      toast.error('登录已过期，请重新登录');
       return Promise.reject({ message: '登录已过期，请重新登录' });
     }
     
@@ -49,7 +51,7 @@ api.interceptors.response.use(
           errorMessage = data?.message || '请求的资源不存在';
           break;
         case 500:
-          errorMessage = data?.message || '服务器内部错误';
+          errorMessage = data?.message || '服务器繁忙，请稍后重试';
           break;
         default:
           errorMessage = data?.message || `请求失败 (${status})`;
@@ -58,6 +60,11 @@ api.interceptors.response.use(
       errorMessage = '网络连接失败，请检查网络';
     } else {
       errorMessage = error.message || '请求失败';
+    }
+    
+    // 500 错误统一 toast 提示
+    if (error.response?.status === 500) {
+      toast.error('服务器繁忙，请稍后重试');
     }
     
     return Promise.reject({ message: errorMessage, ...error.response?.data });
