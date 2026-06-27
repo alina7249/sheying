@@ -205,17 +205,21 @@ public class PostController {
      * @param searchText
      * @param current
      * @param pageSize
+     * @param sortField
+     * @param sortOrder
      * @param request
      * @return
      */
     @GetMapping("/search")
     public BaseResponse<Page<PostVO>> searchPost(String searchText, long current, long pageSize,
-            HttpServletRequest request) {
-        ThrowUtils.throwIf(pageSize > 20, ErrorCode.PARAMS_ERROR);
+            String sortField, String sortOrder, HttpServletRequest request) {
+        ThrowUtils.throwIf(pageSize > 50, ErrorCode.PARAMS_ERROR);
         PostQueryRequest postQueryRequest = new PostQueryRequest();
         postQueryRequest.setSearchText(searchText);
         postQueryRequest.setCurrent(current);
         postQueryRequest.setPageSize(pageSize);
+        postQueryRequest.setSortField(sortField);
+        postQueryRequest.setSortOrder(sortOrder);
         Page<Post> postPage = postService.page(new Page<>(current, pageSize),
                 postService.getQueryWrapper(postQueryRequest));
         return ResultUtils.success(postService.getPostVOPage(postPage, request));

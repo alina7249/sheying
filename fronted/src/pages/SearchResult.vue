@@ -23,6 +23,23 @@
               </div>
             </div>
 
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-sm text-[#6B7C93]">排序：</span>
+              <button
+                v-for="option in sortOptions"
+                :key="option.id"
+                @click="handleSortChange(option.id)"
+                :class="[
+                  'px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
+                  currentSort === option.id
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/20'
+                    : 'bg-[#1E2532] text-[#B8C6D8] border border-[#4A5F8B]/30 hover:border-[#4A5F8B]/60 hover:bg-[#2D3748] hover:text-white active:scale-95'
+                ]"
+              >
+                {{ option.name }}
+              </button>
+            </div>
+
             <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div v-for="n in 6" :key="n" class="bg-[#1E2532] rounded-2xl overflow-hidden">
                 <div class="h-56 bg-[#2D3748] animate-pulse"></div>
@@ -107,6 +124,13 @@ const loadingMore = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(12);
 const total = ref(0);
+const currentSort = ref('relevance');
+
+const sortOptions = [
+  { id: 'relevance', name: '相关度', sortField: '', sortOrder: '' },
+  { id: 'latest', name: '最新发布', sortField: 'createTime', sortOrder: 'descend' },
+  { id: 'popular', name: '最受欢迎', sortField: 'thumbNum', sortOrder: 'descend' },
+];
 
 const hotKeywords = ['风光摄影', '人像摄影', '黑白', '街拍', '建筑', '胶片', '夜景', '极简'];
 
@@ -139,6 +163,13 @@ const handleSearch = () => {
   if (!searchTerm.value.trim()) return;
   query.value = searchTerm.value.trim();
   router.push({ path: '/search-result', query: { q: query.value } });
+  currentSort.value = 'relevance';
+  performSearch(1, false);
+};
+
+const handleSortChange = (sortId: string) => {
+  if (currentSort.value === sortId) return;
+  currentSort.value = sortId;
   performSearch(1, false);
 };
 
@@ -152,7 +183,11 @@ const performSearch = async (page: number, append: boolean) => {
   }
   
   try {
-    const res: any = await searchPosts(query.value.trim(), page, pageSize.value);
+    const sortOption = sortOptions.find(o => o.id === currentSort.value);
+    const sortField = sortOption?.sortField || '';
+    const sortOrder = sortOption?.sortOrder || '';
+    
+    const res: any = await searchPosts(query.value.trim(), page, pageSize.value, sortField || undefined, sortOrder || undefined);
     
     if (res && res.data) {
       const records = res.data.records || [];

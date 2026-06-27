@@ -186,10 +186,10 @@ const handleBookmark = async () => {
 
 <style scoped>
 .photography-card {
-  background: #2D3748;
+  background: #1E2532;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #4A5F8B;
+  border: 1px solid rgba(74, 95, 139, 0.15);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
@@ -197,15 +197,23 @@ const handleBookmark = async () => {
 }
 
 .photography-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px -12px rgba(74, 95, 139, 0.3);
-  border-color: #6B7C93;
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border-color: rgba(201, 169, 98, 0.3);
 }
 
 .card-image-wrapper {
   position: relative;
   aspect-ratio: 4/3;
   overflow: hidden;
+}
+
+.card-image-wrapper :deep(img) {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hovered .card-image-wrapper :deep(img) {
+  transform: scale(1.06);
 }
 
 .card-image-link {

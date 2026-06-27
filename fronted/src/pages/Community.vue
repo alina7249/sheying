@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <!-- 统计数据卡片 -->
+      <!-- 统计数据卡片（仅保留真实数据） -->
       <div class="stats-grid fade-in-up" style="animation-delay: 0.1s;">
         <div class="stat-card">
           <div class="stat-icon green">
@@ -26,15 +26,6 @@
           <div>
             <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ total.toLocaleString() }}</p>
             <p class="stat-label">摄影作品</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon blue">
-            <i class="fa-solid fa-users"></i>
-          </div>
-          <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.users.toLocaleString() }}</p>
-            <p class="stat-label">社区成员</p>
           </div>
         </div>
       </div>
@@ -139,43 +130,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 活跃用户（仅当前页面数据，非全站统计） -->
-          <div class="sidebar-section fade-in-up" style="animation-delay: 0.4s;">
-            <h3 class="section-title">
-              <i class="fa-solid fa-star mr-2"></i>
-              本页活跃作者
-            </h3>
-            <div v-if="loadingActiveUsers" class="space-y-3">
-              <div v-for="n in 4" :key="n" class="flex items-center gap-3 p-3 bg-[#1E2532] rounded-xl">
-                <div class="w-10 h-10 rounded-full bg-[#1E2532] animate-pulse"></div>
-                <div class="flex-1">
-                  <div class="h-4 w-20 bg-[#1E2532] rounded animate-pulse mb-1"></div>
-                  <div class="h-3 w-14 bg-[#1E2532] rounded animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-            <div v-else-if="activeUsers.length === 0" class="text-center py-6 text-[#6B7C93]">
-              <p class="text-sm">暂无活跃用户</p>
-            </div>
-            <div v-else class="users-list">
-              <div
-                v-for="(user, idx) in activeUsers"
-                :key="user.id"
-                class="user-item"
-                @click="router.push(`/profile/${user.id}`)"
-              >
-                <div class="user-avatar-wrapper">
-                  <img :src="user.avatar" :alt="user.name" class="user-avatar" />
-                  <span v-if="idx < 3" class="user-rank" :class="`rank-${idx + 1}`">{{ idx + 1 }}</span>
-                </div>
-                <div class="user-info">
-                  <p class="user-name">{{ user.name }}</p>
-                  <p class="user-posts">{{ user.postCount }} 作品</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -183,7 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import Button from '../components/common/Button.vue';
@@ -199,7 +153,6 @@ const posts = ref<PostVO[]>([]);
 const loading = ref(true);
 const loadingMore = ref(false);
 const loadingHotTags = ref(true);
-const loadingActiveUsers = ref(true);
 const currentPage = ref(1);
 const pageSize = 12;
 const total = ref(0);
@@ -210,20 +163,6 @@ interface HotTag {
   count: number;
 }
 const hotTags = ref<HotTag[]>([]);
-
-// 活跃用户
-interface ActiveUser {
-  id: number;
-  name: string;
-  avatar: string;
-  postCount: number;
-}
-const activeUsers = ref<ActiveUser[]>([]);
-
-// 统计数据
-const stats = reactive({
-  users: 0
-});
 
 // 从帖子数据中提取热门标签
 const extractHotTags = (postList: PostVO[]) => {
@@ -243,38 +182,6 @@ const extractHotTags = (postList: PostVO[]) => {
     .map(([name, count]) => ({ name, count }));
 
   loadingHotTags.value = false;
-};
-
-// 从帖子数据中统计活跃用户
-const extractActiveUsers = (postList: PostVO[]) => {
-  const userPostCount: Record<number, { name: string; avatar: string; count: number }> = {};
-
-  postList.forEach(post => {
-    const userId = post.userId;
-    const userName = post.user?.userName || '匿名用户';
-    const userAvatar = post.user?.userAvatar || `https://picsum.photos/400/400?random=${userId}`;
-
-    if (!userPostCount[userId]) {
-      userPostCount[userId] = { name: userName, avatar: userAvatar, count: 0 };
-    }
-    userPostCount[userId].count++;
-  });
-
-  // 按发帖数量排序，取前6个
-  activeUsers.value = Object.entries(userPostCount)
-    .sort((a, b) => b[1].count - a[1].count)
-    .slice(0, 6)
-    .map(([id, data]) => ({
-      id: Number(id),
-      name: data.name,
-      avatar: data.avatar,
-      postCount: data.count
-    }));
-
-  // 更新统计数据
-  stats.users = Object.keys(userPostCount).length;
-
-  loadingActiveUsers.value = false;
 };
 
 const loadPosts = async (page: number = 1, append: boolean = false) => {
@@ -300,10 +207,9 @@ const loadPosts = async (page: number = 1, append: boolean = false) => {
       total.value = res.data.total || 0;
       currentPage.value = page;
 
-      // 首次加载时提取热门标签和活跃用户
+      // 首次加载时提取热门标签
       if (page === 1 && !append) {
         extractHotTags(records);
-        extractActiveUsers(records);
       }
     }
   } catch (error: any) {

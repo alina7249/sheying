@@ -8,16 +8,24 @@
     <div class="relative z-10">
       <div class="container mx-auto px-4 py-12">
         <section class="relative mb-24 overflow-hidden rounded-3xl">
-          <div class="absolute inset-0 bg-gradient-to-br from-[#4A5F8B]/20 via-transparent to-purple-900/10"></div>
+          <div class="absolute inset-0">
+            <img 
+              src="https://picsum.photos/1600/800?random=hero" 
+              alt="精选作品背景" 
+              class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/95 via-[#0a0a0a]/80 to-[#0a0a0a]/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
+          </div>
           <div class="relative px-8 py-20 md:py-28">
             <div class="max-w-4xl">
               <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-full mb-6">
                 <span class="w-2 h-2 rounded-full bg-[#48BB78] animate-pulse"></span>
                 <span class="text-sm text-[#B8C6D8] tracking-wide">摄影爱好者社区</span>
               </div>
-              <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 tracking-tight">
+              <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6 tracking-tightest">
                 用光影
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#63B3ED] via-[#4A5F8B] to-purple-400">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-orange-400">
                   讲述故事
                 </span>
               </h1>
@@ -46,8 +54,8 @@
                   <h2 class="text-2xl font-bold text-white">精选作品</h2>
                 </div>
               </div>
-              <div class="filter-buttons flex flex-wrap gap-3">
-                <button v-for="category in categories" :key="category.id" @click="handleCategoryChange(category.id)" :class="['px-6 py-3 rounded-2xl font-medium transition-all duration-300', selectedCategory === category.id ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white shadow-lg shadow-[#4A5F8B]/30' : 'bg-[#1E2532] text-[#B8C6D8] border border-[#4A5F8B]/20 hover:border-[#4A5F8B]/50 hover:bg-[#2D3748]']" :aria-pressed="selectedCategory === category.id">
+              <div class="filter-buttons flex flex-wrap gap-2">
+                <button v-for="category in categories" :key="category.id" @click="handleCategoryChange(category.id)" :class="['px-5 py-2 rounded-full text-sm font-medium transition-all duration-200', selectedCategory === category.id ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/25' : 'bg-[#1E2532] text-[#B8C6D8] border border-[#4A5F8B]/20 hover:border-[#4A5F8B]/50 hover:bg-[#2D3748] hover:text-white active:scale-95']" :aria-pressed="selectedCategory === category.id">
                   {{ category.name }}
                 </button>
               </div>

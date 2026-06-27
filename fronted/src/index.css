@@ -28,6 +28,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 字体类 */
+.font-display {
+  font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  letter-spacing: -0.02em;
+}
+
+.font-body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.font-mono {
+  font-family: 'SF Mono', 'JetBrains Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
 /* 高级排版系统 */
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
@@ -379,4 +393,32 @@ textarea:focus-visible {
 :disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* 通用按钮交互优化 */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* 卡片交错进入动画 */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+
+/* 图片淡入效果增强 */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
 }

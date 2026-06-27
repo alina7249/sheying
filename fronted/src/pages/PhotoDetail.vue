@@ -40,7 +40,7 @@
                       <span class="w-1 h-8 bg-gradient-to-b from-[#4A5F8B] to-[#63B3ED] rounded-full"></span>
                       <span class="text-sm font-medium text-[#63B3ED] tracking-widest uppercase">作品详情</span>
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ post.title }}</h1>
+                    <h1 class="font-display text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">{{ post.title }}</h1>
                     <div class="flex flex-wrap gap-2">
                       <span v-for="tag in post.tagList" :key="tag" class="px-4 py-1.5 bg-[#4A5F8B]/15 text-[#63B3ED] text-sm rounded-full border border-[#4A5F8B]/20">
                         #{{ tag }}
@@ -80,26 +80,26 @@
                   <i class="fa-solid fa-camera text-[#63B3ED]"></i>
                   EXIF 信息
                 </h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div v-if="post.camera" class="bg-[#0F1C2D]/60 rounded-2xl p-5 border border-[#4A5F8B]/10">
-                    <p class="text-xs text-[#6B7C93] uppercase tracking-wider mb-2">相机</p>
-                    <p class="text-white text-sm font-mono font-semibold">{{ post.camera }}</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  <div v-if="post.camera" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
+                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Camera</p>
+                    <p class="text-white text-sm font-mono">{{ post.camera }}</p>
                   </div>
-                  <div v-if="post.lens" class="bg-[#0F1C2D]/60 rounded-2xl p-5 border border-[#4A5F8B]/10">
-                    <p class="text-xs text-[#6B7C93] uppercase tracking-wider mb-2">镜头</p>
-                    <p class="text-white text-sm font-mono font-semibold">{{ post.lens }}</p>
+                  <div v-if="post.lens" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
+                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Lens</p>
+                    <p class="text-white text-sm font-mono">{{ post.lens }}</p>
                   </div>
-                  <div v-if="post.aperture" class="bg-[#0F1C2D]/60 rounded-2xl p-5 border border-[#4A5F8B]/10">
-                    <p class="text-xs text-[#6B7C93] uppercase tracking-wider mb-2">光圈</p>
-                    <p class="text-white text-sm font-mono font-semibold">f/{{ post.aperture }}</p>
+                  <div v-if="post.aperture" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
+                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Aperture</p>
+                    <p class="text-white text-sm font-mono">f/{{ post.aperture }}</p>
                   </div>
-                  <div v-if="post.shutter" class="bg-[#0F1C2D]/60 rounded-2xl p-5 border border-[#4A5F8B]/10">
-                    <p class="text-xs text-[#6B7C93] uppercase tracking-wider mb-2">快门</p>
-                    <p class="text-white text-sm font-mono font-semibold">{{ post.shutter }}</p>
+                  <div v-if="post.shutter" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
+                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Shutter</p>
+                    <p class="text-white text-sm font-mono">{{ post.shutter }}</p>
                   </div>
-                  <div v-if="post.iso" class="bg-[#0F1C2D]/60 rounded-2xl p-5 border border-[#4A5F8B]/10">
-                    <p class="text-xs text-[#6B7C93] uppercase tracking-wider mb-2">ISO</p>
-                    <p class="text-white text-sm font-mono font-semibold">{{ post.iso }}</p>
+                  <div v-if="post.iso" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
+                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">ISO</p>
+                    <p class="text-white text-sm font-mono">{{ post.iso }}</p>
                   </div>
                 </div>
               </div>

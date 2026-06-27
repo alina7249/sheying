@@ -26,8 +26,13 @@
 
     <!-- 用户信息 -->
     <template v-else-if="user">
-      <div class="relative h-48 md:h-64 bg-gradient-to-r from-[#4A5F8B]/30 to-[#63B3ED]/30">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0F1C2D] via-transparent to-transparent"></div>
+      <div class="relative h-48 md:h-64 overflow-hidden">
+        <img 
+          :src="`https://picsum.photos/1600/400?random=user${user.id}`" 
+          :alt="user.userName"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0F1C2D] via-[#0F1C2D]/50 to-transparent"></div>
       </div>
 
       <div class="max-w-6xl mx-auto px-4 -mt-20 relative">
@@ -37,7 +42,7 @@
           </div>
           <div class="flex-1">
             <div class="flex flex-wrap items-center gap-3 mb-2">
-              <h1 class="text-2xl md:text-3xl font-bold text-white">{{ user.userName }}</h1>
+              <h1 class="font-display text-2xl md:text-3xl font-bold text-white tracking-tight">{{ user.userName }}</h1>
               <span v-if="user.userRole === 'admin' || user.userRole === 'superAdmin'" class="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-full">
                 {{ user.userRole === 'superAdmin' ? '超级管理员' : '管理员' }}
               </span>

@@ -127,10 +127,11 @@ export const getPostDetail = async (id: number) => {
   return api.get(`/api/post/get/vo?id=${id}`);
 };
 
-export const searchPosts = async (searchText: string, current: number, pageSize: number) => {
-  return api.get('/api/post/search', {
-    params: { searchText, current, pageSize }
-  });
+export const searchPosts = async (searchText: string, current: number, pageSize: number, sortField?: string, sortOrder?: string) => {
+  const params: any = { searchText, current, pageSize };
+  if (sortField) params.sortField = sortField;
+  if (sortOrder) params.sortOrder = sortOrder;
+  return api.get('/api/post/search', { params });
 };
 
 export const addPost = async (post: PostAddRequest) => {
