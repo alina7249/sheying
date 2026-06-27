@@ -61,47 +61,33 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
         <!-- 左侧主内容 -->
         <div class="lg:col-span-2 space-y-6">
-          <!-- 分类筛选 -->
-          <div class="filter-section fade-in-up" style="animation-delay: 0.2s;">
-            <div class="filter-header">
-              <h3 class="text-white font-semibold">浏览分类</h3>
-            </div>
-            <div class="filter-buttons">
-              <button
-                v-for="filter in filters"
-                :key="filter.id"
-                @click="activeFilter = filter.id"
-                class="filter-btn"
-                :class="{ active: activeFilter === filter.id }"
-                :aria-pressed="activeFilter === filter.id"
-              >
-                <i :class="filter.icon" class="mr-2"></i>
-                {{ filter.name }}
-              </button>
-            </div>
+          <!-- 帖子列表 -->
+          <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div v-for="n in 4" :key="n" class="bg-[#1E2532] rounded-2xl h-80 animate-pulse"></div>
           </div>
 
-          <!-- 帖子列表 -->
-          <div class="posts-list space-y-4">
-            <PostCard
-              v-for="(post, index) in filteredPosts"
+          <div v-else-if="posts.length === 0" class="text-center py-20 bg-[#1E2532] rounded-2xl border border-[#4A5F8B]/20">
+            <i class="fa-regular fa-image text-5xl text-[#6B7C93] mb-4"></i>
+            <p class="text-[#B8C6D8] text-lg">暂无作品</p>
+          </div>
+
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+              v-for="(post, index) in posts"
               :key="post.id"
-              :post="post"
-              :style="{ animationDelay: `${0.3 + index * 0.1}s` }"
               class="fade-in-up"
-              @click="handlePostClick"
-              @like="(id: string) => handleLike(id)"
-              @comment="(id: string) => showInfo('评论功能')"
-              @bookmark="(id: string) => handleBookmark(id)"
-              @share="(id: string) => handleShare()"
-            />
+              :style="{ animationDelay: `${0.3 + index * 0.1}s` }"
+            >
+              <PhotographyCard :post="post" @update="handlePostUpdate" />
+            </div>
           </div>
 
           <!-- 加载更多 -->
-          <div class="load-more fade-in-up" style="animation-delay: 0.8s;">
-            <Button variant="outline" @click="loadMore">
-              <i class="fa-solid fa-spinner mr-2"></i>
-              加载更多
+          <div v-if="posts.length < total" class="load-more fade-in-up text-center mt-8" style="animation-delay: 0.8s;">
+            <Button variant="outline" @click="handleLoadMore" :disabled="loadingMore">
+              <i v-if="loadingMore" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+              <i v-else class="fa-solid fa-plus mr-2"></i>
+              {{ loadingMore ? '加载中…' : '加载更多' }}
             </Button>
           </div>
         </div>
@@ -110,15 +96,15 @@
         <div class="space-y-6">
           <!-- 搜索框 -->
           <div class="sidebar-section fade-in-up" style="animation-delay: 0.2s;">
-            <div class="search-box">
+            <form @submit.prevent="handleSearch" class="search-box">
               <i class="fa-solid fa-search search-icon"></i>
               <input
                 type="text"
                 v-model="searchQuery"
-                placeholder="搜索帖子、话题或用户…"
+                placeholder="搜索作品、摄影师或标签…"
                 class="search-input"
               />
-            </div>
+            </form>
           </div>
 
           <!-- 热门话题 -->
@@ -222,160 +208,82 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useInteraction } from '../composables/useInteraction';
+import { toast } from 'vue-sonner';
 import Button from '../components/common/Button.vue';
-import PostCard, { type PostItem } from '../components/PostCard.vue';
-import UserCard, { type UserItem } from '../components/UserCard.vue';
+import PhotographyCard, { type PostVO } from '../components/PhotographyCard.vue';
+import { getPostList } from '../services/api';
+import { useAuthStore } from '../store/authStore';
 
 const router = useRouter();
-const {
-  showInfo,
-  handleFollow: followAction,
-  handleCreate,
-  handleJoin,
-  handleLoadMore: loadMore,
-  handleLike,
-  handleBookmark,
-  handleShare
-} = useInteraction();
+const authStore = useAuthStore();
 
 const searchQuery = ref('');
-const activeFilter = ref('all');
+const posts = ref<PostVO[]>([]);
+const loading = ref(true);
+const loadingMore = ref(false);
+const currentPage = ref(1);
+const pageSize = 10;
+const total = ref(0);
 
-const filters = [
-  { id: 'all', name: '全部', icon: 'fa-solid fa-layer-group' },
-  { id: 'works', name: '作品分享', icon: 'fa-solid fa-images' },
-  { id: 'qa', name: '摄影问答', icon: 'fa-solid fa-question-circle' },
-  { id: 'equipment', name: '器材讨论', icon: 'fa-solid fa-camera' },
-  { id: 'tutorial', name: '教程技巧', icon: 'fa-solid fa-graduation-cap' },
-  { id: 'activity', name: '活动约拍', icon: 'fa-solid fa-calendar-alt' }
-];
+const loadPosts = async (page: number = 1, append: boolean = false) => {
+  if (append) {
+    loadingMore.value = true;
+  } else {
+    loading.value = true;
+  }
 
-const filteredPosts = computed(() => {
-  if (activeFilter.value === 'all') return communityPosts;
-  const filterMap: Record<string, string> = {
-    works: '摄影作品',
-    qa: '摄影问答',
-    equipment: '器材讨论',
-    tutorial: '教程技巧',
-    activity: '活动约拍'
-  };
-  const target = filterMap[activeFilter.value];
-  return target ? communityPosts.filter(p => p.category === target) : communityPosts;
-});
+  try {
+    const res: any = await getPostList({
+      current: page,
+      pageSize: pageSize,
+    });
 
-const handleFollowUser = (userId: string) => {
-  followAction(userId);
+    if (res && res.data) {
+      const records = res.data.records || [];
+      if (append) {
+        posts.value = [...posts.value, ...records];
+      } else {
+        posts.value = records;
+      }
+      total.value = res.data.total || 0;
+      currentPage.value = page;
+    }
+  } catch (error: any) {
+    console.error('Failed to load posts:', error);
+    toast.error(error.message || '加载失败');
+  } finally {
+    loading.value = false;
+    loadingMore.value = false;
+  }
+};
+
+const handleLoadMore = () => {
+  if (loadingMore.value || posts.value.length >= total.value) return;
+  loadPosts(currentPage.value + 1, true);
+};
+
+const handleSearch = () => {
+  if (!searchQuery.value.trim()) return;
+  router.push(`/search-result?q=${encodeURIComponent(searchQuery.value.trim())}`);
 };
 
 const handleCreatePost = () => {
-  handleCreate();
-};
-
-const handleJoinChallenge = () => {
-  handleJoin();
-};
-
-const handleTopicClick = (topic: { id: string; name: string }) => {
-  showInfo(`查看话题：${topic.name}`);
-  router.push(`/community/topic/${topic.id}`);
-};
-
-const handlePostClick = (post: PostItem) => {
-  router.push(`/post-detail/${post.id}`);
-};
-
-const communityPosts: PostItem[] = [
-  {
-    id: '1',
-    title: '分享我的城市街头摄影作品集',
-    content: '最近在城市里拍了一些街头摄影作品，尝试了不同的构图和光影效果。想听听大家的意见和建议。',
-    category: '摄影作品',
-    images: [
-      'https://picsum.photos/1280/720?random=264',
-      'https://picsum.photos/1280/720?random=265',
-      'https://picsum.photos/1280/720?random=266'
-    ],
-    author: {
-      name: '街头摄影师阿杰',
-      avatar: 'https://picsum.photos/400/400?random=267'
-    },
-    date: '2小时前',
-    likes: 342,
-    comments: 48,
-    bookmarks: 56
-  },
-  {
-    id: '2',
-    title: '新手请教：如何提高人像摄影技巧？',
-    content: '刚接触人像摄影不久，想请教大家如何提高人像摄影技巧。特别是在光线运用和引导模特方面，有没有什么好的建议？',
-    category: '摄影问答',
-    images: [],
-    author: {
-      name: '摄影新手小李',
-      avatar: 'https://picsum.photos/400/400?random=268'
-    },
-    date: '5小时前',
-    likes: 89,
-    comments: 32,
-    bookmarks: 24
-  },
-  {
-    id: '3',
-    title: '新疆风光摄影之旅总结',
-    content: '分享这次新疆摄影之旅的一些感悟和作品。新疆真的太美了，每一处都是大片！',
-    category: '摄影作品',
-    images: [
-      'https://picsum.photos/1280/720?random=269',
-      'https://picsum.photos/1280/720?random=270'
-    ],
-    author: {
-      name: '风光摄影达人',
-      avatar: 'https://picsum.photos/400/400?random=271'
-    },
-    date: '昨天',
-    likes: 856,
-    comments: 124,
-    bookmarks: 234
-  },
-  {
-    id: '4',
-    title: '富士X-T5使用半年体验分享',
-    content: '入手富士X-T5已经半年了，今天来跟大家分享一下使用体验。从画质到对焦，从机身设计到续航表现...',
-    category: '器材讨论',
-    images: [
-      'https://picsum.photos/800/600?random=272'
-    ],
-    author: {
-      name: '器材评测师',
-      avatar: 'https://picsum.photos/400/400?random=273'
-    },
-    date: '2天前',
-    likes: 423,
-    comments: 89,
-    bookmarks: 156
-  },
-  {
-    id: '5',
-    title: '【干货】夜景摄影长曝光技巧全解析',
-    content: '今天来给大家详细讲解夜景摄影的长曝光技巧，包括器材准备、参数设置、构图要点等...',
-    category: '教程技巧',
-    images: [
-      'https://picsum.photos/800/400?random=274',
-      'https://picsum.photos/800/400?random=275'
-    ],
-    author: {
-      name: '夜景大师',
-      avatar: 'https://picsum.photos/400/400?random=276'
-    },
-    date: '3天前',
-    likes: 1245,
-    comments: 167,
-    bookmarks: 567
+  if (!authStore.isAuthenticated) {
+    toast.warning('请先登录');
+    router.push('/login');
+    return;
   }
-];
+  router.push('/publish');
+};
+
+const handlePostUpdate = (updatedPost: PostVO) => {
+  const index = posts.value.findIndex(p => p.id === updatedPost.id);
+  if (index !== -1) {
+    posts.value[index] = updatedPost;
+  }
+};
 
 const trendingTopics = [
   { id: '1', name: '#城市街头摄影', discussions: 2341, emoji: '🌆' },
@@ -386,13 +294,33 @@ const trendingTopics = [
   { id: '6', name: '#胶片摄影', discussions: 543, emoji: '🎞️' }
 ];
 
-const activeUsers: UserItem[] = [
-  { id: '1', name: '风光摄影大师', avatar: 'https://picsum.photos/400/400?random=280', posts: 567 },
-  { id: '2', name: '人像摄影师小雅', avatar: 'https://picsum.photos/400/400?random=281', posts: 432 },
-  { id: '3', name: '旅行摄影玩家', avatar: 'https://picsum.photos/400/400?random=282', posts: 389 },
-  { id: '4', name: '街头扫街客', avatar: 'https://picsum.photos/400/400?random=283', posts: 321 },
-  { id: '5', name: '自然探索者', avatar: 'https://picsum.photos/400/400?random=284', posts: 278 }
+const handleTopicClick = (topic: { id: string; name: string }) => {
+  const keyword = topic.name.replace('#', '');
+  router.push(`/search-result?q=${encodeURIComponent(keyword)}`);
+};
+
+const activeUsers = [
+  { id: 1, name: '光影猎人', avatar: 'https://picsum.photos/400/400?random=10', level: 8, followers: 1256 },
+  { id: 2, name: '城市漫步者', avatar: 'https://picsum.photos/400/400?random=11', level: 6, followers: 892 },
+  { id: 3, name: '夜空守望者', avatar: 'https://picsum.photos/400/400?random=12', level: 7, followers: 1034 },
+  { id: 4, name: '胶片情怀', avatar: 'https://picsum.photos/400/400?random=13', level: 5, followers: 678 },
 ];
+
+const showInfo = (msg: string) => {
+  toast.info(msg);
+};
+
+const handleFollowUser = (_userId: number) => {
+  toast.info('关注功能开发中');
+};
+
+const handleJoinChallenge = () => {
+  toast.info('摄影挑战功能开发中');
+};
+
+onMounted(() => {
+  loadPosts(1, false);
+});
 </script>
 
 <style scoped>

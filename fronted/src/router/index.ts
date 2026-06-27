@@ -22,6 +22,7 @@ const routes = [
 
   { path: '/aichat', name: 'AIChat', component: () => import('../pages/AIChat.vue') },
   { path: '/community', name: 'Community', component: () => import('../pages/Community.vue') },
+  { path: '/publish', name: 'Publish', component: () => import('../pages/Publish.vue') },
   { path: '/groups-list', name: 'GroupsList', component: () => import('../pages/GroupsList.vue') },
   { path: '/group-detail/:id', name: 'GroupDetail', component: () => import('../pages/GroupDetail.vue') },
   { path: '/events-contests', name: 'EventsAndContests', component: () => import('../pages/EventsAndContests.vue') },
