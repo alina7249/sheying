@@ -73,7 +73,11 @@ export const useAuthStore = defineStore('auth', () => {
         isMember.value = true;
         memberLevel.value = 'free';
 
-        localStorage.setItem('authToken', response.data.token || userData.token || `token_${Date.now()}`);
+        const token = response.data.token || userData.token;
+        if (!token) {
+          throw new Error('登录失败：未获取到有效凭证');
+        }
+        localStorage.setItem('authToken', token);
         localStorage.setItem('user', JSON.stringify(user.value));
 
         if (userData.userRole === 'admin' || userData.userRole === 'superAdmin') {
@@ -90,11 +94,11 @@ export const useAuthStore = defineStore('auth', () => {
 
         return true;
       } else {
-        return false;
+        throw new Error(response?.message || '登录失败');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
-      return false;
+      throw error;
     }
   };
 
@@ -150,6 +154,11 @@ export const useAuthStore = defineStore('auth', () => {
         const userData = response.data;
 
         if (userData.userRole === 'admin' || userData.userRole === 'superAdmin') {
+          const token = response.data.token || userData.token;
+          if (!token) {
+            throw new Error('登录失败：未获取到有效凭证');
+          }
+
           adminUser.value = {
             id: userData.id?.toString() || `admin-${Date.now()}`,
             username: userData.userName || username,
@@ -160,17 +169,17 @@ export const useAuthStore = defineStore('auth', () => {
           isAdminAuthenticated.value = true;
           userRole.value = adminUser.value.role;
 
-          localStorage.setItem('authToken', response.data.token || userData.token || `token_${Date.now()}`);
+          localStorage.setItem('authToken', token);
 
           return true;
         }
-        return false;
+        throw new Error('非管理员账号无法登录后台');
       } else {
-        return false;
+        throw new Error(response?.message || '登录失败');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Admin login error:', error);
-      return false;
+      throw error;
     }
   };
 

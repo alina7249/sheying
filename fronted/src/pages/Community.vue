@@ -140,11 +140,11 @@
             </div>
           </div>
 
-          <!-- 活跃用户 -->
+          <!-- 活跃用户（仅当前页面数据，非全站统计） -->
           <div class="sidebar-section fade-in-up" style="animation-delay: 0.4s;">
             <h3 class="section-title">
               <i class="fa-solid fa-star mr-2"></i>
-              活跃摄影师
+              本页活跃作者
             </h3>
             <div v-if="loadingActiveUsers" class="space-y-3">
               <div v-for="n in 4" :key="n" class="flex items-center gap-3 p-3 bg-[#1E2532] rounded-xl">
