@@ -15,6 +15,8 @@ import com.yupi.yuoj.model.entity.User;
 import com.yupi.yuoj.model.vo.FollowVO;
 import com.yupi.yuoj.service.FollowService;
 import com.yupi.yuoj.service.UserService;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -124,6 +126,19 @@ public class FollowController {
         queryWrapper.eq("followeeId", followeeId);
         Follow follow = followService.getOne(queryWrapper);
         return ResultUtils.success(follow != null);
+    }
+
+    @GetMapping("/stats")
+    public BaseResponse<Map<String, Long>> getFollowStats(Long userId) {
+        if (userId == null || userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long followersCount = followService.getFollowersCount(userId);
+        long followingCount = followService.getFollowingCount(userId);
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("followersCount", followersCount);
+        stats.put("followingCount", followingCount);
+        return ResultUtils.success(stats);
     }
 
 }

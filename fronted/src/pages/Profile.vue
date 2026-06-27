@@ -199,7 +199,7 @@ import { ref, computed, reactive, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import PhotographyCard, { type PostVO } from '../components/PhotographyCard.vue';
-import { getUserVOById, getPostList, doFollow, checkFollow, getMyFollowers, getMyFollowing } from '../services/api';
+import { getUserVOById, getPostList, doFollow, checkFollow, getUserFollowStats } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 const route = useRoute();
@@ -262,16 +262,11 @@ const loadFollowStats = async () => {
   if (!userId.value) return;
 
   try {
-    const [followersRes, followingRes] = await Promise.all([
-      getMyFollowers(1, 1) as any,
-      getMyFollowing(1, 1) as any,
-    ]);
+    const res: any = await getUserFollowStats(userId.value);
 
-    if (followersRes && followersRes.data) {
-      stats.followers = followersRes.data.total || 0;
-    }
-    if (followingRes && followingRes.data) {
-      stats.following = followingRes.data.total || 0;
+    if (res && res.data) {
+      stats.followers = res.data.followersCount || 0;
+      stats.following = res.data.followingCount || 0;
     }
   } catch (error) {
     console.error('Failed to load follow stats:', error);

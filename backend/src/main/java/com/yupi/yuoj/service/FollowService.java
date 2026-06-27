@@ -19,4 +19,8 @@ public interface FollowService extends IService<Follow> {
     Page<FollowVO> getFollowVOPage(Page<Follow> followPage, HttpServletRequest request);
 
     boolean doFollow(Long followeeId, Long followerId);
+
+    long getFollowersCount(Long userId);
+
+    long getFollowingCount(Long userId);
 }

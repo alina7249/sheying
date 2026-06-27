@@ -181,6 +181,12 @@ export const getMyFollowing = async (current: number, pageSize: number) => {
   });
 };
 
+export const getUserFollowStats = async (userId: number) => {
+  return api.get('/api/follow/stats', {
+    params: { userId }
+  });
+};
+
 export const uploadFile = async (file: File, biz: string) => {
   const formData = new FormData();
   formData.append('file', file);

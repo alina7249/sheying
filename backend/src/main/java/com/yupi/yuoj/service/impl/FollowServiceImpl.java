@@ -140,4 +140,26 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
             return this.save(newFollow);
         }
     }
+
+    @Override
+    public long getFollowersCount(Long userId) {
+        if (userId == null || userId <= 0) {
+            return 0;
+        }
+        QueryWrapper<Follow> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("followeeId", userId);
+        queryWrapper.eq("isDelete", false);
+        return this.count(queryWrapper);
+    }
+
+    @Override
+    public long getFollowingCount(Long userId) {
+        if (userId == null || userId <= 0) {
+            return 0;
+        }
+        QueryWrapper<Follow> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("followerId", userId);
+        queryWrapper.eq("isDelete", false);
+        return this.count(queryWrapper);
+    }
 }
