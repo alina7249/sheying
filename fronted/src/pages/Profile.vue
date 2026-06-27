@@ -199,7 +199,7 @@ import { ref, computed, reactive, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
 import PhotographyCard, { type PostVO } from '../components/PhotographyCard.vue';
-import { getUserVOById, getPostList, doFollow, checkFollow } from '../services/api';
+import { getUserVOById, getPostList, doFollow, checkFollow, getMyFollowers, getMyFollowing } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 const route = useRoute();
@@ -255,6 +255,26 @@ const loadUser = async () => {
     toast.error(error.message || '加载用户信息失败');
   } finally {
     loading.value = false;
+  }
+};
+
+const loadFollowStats = async () => {
+  if (!userId.value) return;
+
+  try {
+    const [followersRes, followingRes] = await Promise.all([
+      getMyFollowers(1, 1) as any,
+      getMyFollowing(1, 1) as any,
+    ]);
+
+    if (followersRes && followersRes.data) {
+      stats.followers = followersRes.data.total || 0;
+    }
+    if (followingRes && followingRes.data) {
+      stats.following = followingRes.data.total || 0;
+    }
+  } catch (error) {
+    console.error('Failed to load follow stats:', error);
   }
 };
 
@@ -356,8 +376,11 @@ watch(() => route.params.id, (newId) => {
     totalPosts.value = 0;
     isFollowing.value = false;
     loadError.value = '';
+    stats.followers = 0;
+    stats.following = 0;
     loadUser();
     loadUserPosts(1, false);
+    loadFollowStats();
     if (authStore.isAuthenticated) {
       loadFollowStatus();
     }
@@ -368,6 +391,7 @@ onMounted(() => {
   if (userId.value) {
     loadUser();
     loadUserPosts(1, false);
+    loadFollowStats();
     if (authStore.isAuthenticated) {
       loadFollowStatus();
     }

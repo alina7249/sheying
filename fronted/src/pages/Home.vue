@@ -47,7 +47,7 @@
                 </div>
               </div>
               <div class="filter-buttons flex flex-wrap gap-3">
-                <button v-for="category in categories" :key="category.id" @click="selectedCategory = category.id" :class="['px-6 py-3 rounded-2xl font-medium transition-all duration-300', selectedCategory === category.id ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white shadow-lg shadow-[#4A5F8B]/30' : 'bg-[#1E2532] text-[#B8C6D8] border border-[#4A5F8B]/20 hover:border-[#4A5F8B]/50 hover:bg-[#2D3748]']" :aria-pressed="selectedCategory === category.id">
+                <button v-for="category in categories" :key="category.id" @click="handleCategoryChange(category.id)" :class="['px-6 py-3 rounded-2xl font-medium transition-all duration-300', selectedCategory === category.id ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white shadow-lg shadow-[#4A5F8B]/30' : 'bg-[#1E2532] text-[#B8C6D8] border border-[#4A5F8B]/20 hover:border-[#4A5F8B]/50 hover:bg-[#2D3748]']" :aria-pressed="selectedCategory === category.id">
                   {{ category.name }}
                 </button>
               </div>
@@ -153,10 +153,16 @@ const loadPosts = async (page: number = 1, append: boolean = false) => {
   }
   
   try {
-    const res: any = await getPostList({
+    const params: any = {
       current: page,
       pageSize: pageSize,
-    });
+    };
+
+    if (selectedCategory.value !== 'all') {
+      params.tags = [selectedCategory.value];
+    }
+
+    const res: any = await getPostList(params);
     
     if (res && res.data) {
       const records = res.data.records || [];
@@ -188,6 +194,12 @@ const loadHotTags = async () => {
   } finally {
     loadingTags.value = false;
   }
+};
+
+const handleCategoryChange = (categoryId: string) => {
+  selectedCategory.value = categoryId;
+  currentPage.value = 1;
+  loadPosts(1, false);
 };
 
 const handleLoadMore = () => {

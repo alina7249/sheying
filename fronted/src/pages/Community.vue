@@ -20,15 +20,6 @@
       <!-- 统计数据卡片 -->
       <div class="stats-grid fade-in-up" style="animation-delay: 0.1s;">
         <div class="stat-card">
-          <div class="stat-icon blue">
-            <i class="fa-solid fa-users"></i>
-          </div>
-          <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.users.toLocaleString() }}</p>
-            <p class="stat-label">社区成员</p>
-          </div>
-        </div>
-        <div class="stat-card">
           <div class="stat-icon green">
             <i class="fa-solid fa-images"></i>
           </div>
@@ -38,21 +29,12 @@
           </div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon purple">
-            <i class="fa-solid fa-comments"></i>
+          <div class="stat-icon blue">
+            <i class="fa-solid fa-users"></i>
           </div>
           <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.comments.toLocaleString() }}</p>
-            <p class="stat-label">讨论回复</p>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon orange">
-            <i class="fa-solid fa-fire"></i>
-          </div>
-          <div>
-            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.todayActive.toLocaleString() }}</p>
-            <p class="stat-label">今日活跃</p>
+            <p class="stat-value" style="font-variant-numeric: tabular-nums">{{ stats.users.toLocaleString() }}</p>
+            <p class="stat-label">社区成员</p>
           </div>
         </div>
       </div>
@@ -194,32 +176,6 @@
               </div>
             </div>
           </div>
-
-          <!-- 摄影挑战 -->
-          <div class="challenge-card fade-in-up" style="animation-delay: 0.5s;">
-            <div class="challenge-header">
-              <div class="challenge-icon">
-                <i class="fa-solid fa-trophy"></i>
-              </div>
-              <span class="challenge-badge">进行中</span>
-            </div>
-            <h3 class="challenge-title">加入摄影挑战</h3>
-            <p class="challenge-desc">本周主题：「城市微光」- 用镜头捕捉都市的迷人夜景</p>
-            <div class="challenge-stats">
-              <div class="challenge-stat">
-                <span class="stat-number">{{ stats.challengeParticipants }}</span>
-                <span class="stat-text">参与作品</span>
-              </div>
-              <div class="challenge-divider"></div>
-              <div class="challenge-stat">
-                <span class="stat-number">{{ stats.challengeDaysLeft }}</span>
-                <span class="stat-text">天剩余</span>
-              </div>
-            </div>
-            <Button variant="primary" class="challenge-btn" @click="router.push('/publish')">
-              立即参与
-            </Button>
-          </div>
         </div>
       </div>
     </div>
@@ -266,11 +222,7 @@ const activeUsers = ref<ActiveUser[]>([]);
 
 // 统计数据
 const stats = reactive({
-  users: 0,
-  comments: 0,
-  todayActive: 0,
-  challengeParticipants: 0,
-  challengeDaysLeft: 5
+  users: 0
 });
 
 // 从帖子数据中提取热门标签
@@ -321,7 +273,6 @@ const extractActiveUsers = (postList: PostVO[]) => {
 
   // 更新统计数据
   stats.users = Object.keys(userPostCount).length;
-  stats.todayActive = Object.keys(userPostCount).length * 12; // 估算
 
   loadingActiveUsers.value = false;
 };
@@ -420,16 +371,9 @@ const handlePostUpdate = (updatedPost: PostVO) => {
   }
 };
 
-// 模拟一些统计数据
-const initStats = () => {
-  stats.comments = 78; // 从数据库的评论数
-  stats.challengeParticipants = Math.floor(Math.random() * 500) + 500;
-};
-
 onMounted(() => {
   loadPosts(1, false);
   loadHotTags();
-  initStats();
 });
 </script>
 
