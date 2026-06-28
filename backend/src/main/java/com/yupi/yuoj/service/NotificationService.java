@@ -6,4 +6,5 @@ import com.yupi.yuoj.model.entity.Notification;
 public interface NotificationService extends IService<Notification> {
     int getUnreadCount(Long userId);
     int markAllAsRead(Long userId);
+    void createNotification(Long userId, String type, String title, String content, Long relatedId);
 }

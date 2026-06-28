@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yupi.yuoj.mapper.NotificationMapper;
 import com.yupi.yuoj.model.entity.Notification;
 import com.yupi.yuoj.service.NotificationService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Notification> implements NotificationService {
@@ -24,5 +27,19 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         QueryWrapper<Notification> qw = new QueryWrapper<>();
         qw.eq("userId", userId).eq("isRead", 0);
         return this.baseMapper.update(update, qw);
+    }
+
+    @Override
+    @Async
+    public void createNotification(Long userId, String type, String title, String content, Long relatedId) {
+        Notification notification = new Notification();
+        notification.setUserId(userId);
+        notification.setType(type);
+        notification.setTitle(title);
+        notification.setContent(content);
+        notification.setRelatedId(relatedId);
+        notification.setIsRead(0);
+        notification.setCreateTime(new Date());
+        this.save(notification);
     }
 }

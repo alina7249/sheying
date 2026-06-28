@@ -8,8 +8,10 @@ import com.yupi.yuoj.mapper.PostThumbMapper;
 import com.yupi.yuoj.model.entity.Post;
 import com.yupi.yuoj.model.entity.PostThumb;
 import com.yupi.yuoj.model.entity.User;
+import com.yupi.yuoj.service.NotificationService;
 import com.yupi.yuoj.service.PostService;
 import com.yupi.yuoj.service.PostThumbService;
+import com.yupi.yuoj.service.UserService;
 import javax.annotation.Resource;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,12 @@ public class PostThumbServiceImpl extends ServiceImpl<PostThumbMapper, PostThumb
 
     @Resource
     private PostService postService;
+
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private NotificationService notificationService;
 
     /**
      * 点赞
@@ -86,6 +94,19 @@ public class PostThumbServiceImpl extends ServiceImpl<PostThumbMapper, PostThumb
             // 未点赞
             result = this.save(postThumb);
             if (result) {
+                // 异步通知作品作者
+                Post likedPost = postService.getById(postId);
+                if (likedPost != null && !likedPost.getUserId().equals(userId)) {
+                    User thumbUser = userService.getById(userId);
+                    String userName = thumbUser != null ? thumbUser.getUserName() : "用户";
+                    notificationService.createNotification(
+                        likedPost.getUserId(),
+                        "like",
+                        "点赞通知",
+                        userName + " 赞了你的作品",
+                        postId
+                    );
+                }
                 // 点赞数 + 1
                 result = postService.update()
                         .eq("id", postId)

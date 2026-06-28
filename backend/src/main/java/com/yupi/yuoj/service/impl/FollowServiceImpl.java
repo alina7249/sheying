@@ -13,6 +13,7 @@ import com.yupi.yuoj.model.entity.User;
 import com.yupi.yuoj.model.vo.FollowVO;
 import com.yupi.yuoj.model.vo.UserVO;
 import com.yupi.yuoj.service.FollowService;
+import com.yupi.yuoj.service.NotificationService;
 import com.yupi.yuoj.service.UserService;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,9 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private NotificationService notificationService;
 
     @Override
     public void validFollow(Follow follow, boolean add) {
@@ -137,7 +141,19 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
             Follow newFollow = new Follow();
             newFollow.setFollowerId(followerId);
             newFollow.setFolloweeId(followeeId);
-            return this.save(newFollow);
+            boolean saved = this.save(newFollow);
+            if (saved) {
+                User followerUser = userService.getById(followerId);
+                String followerName = followerUser != null ? followerUser.getUserName() : "用户";
+                notificationService.createNotification(
+                    followeeId,
+                    "follow",
+                    "关注通知",
+                    followerName + " 关注了你",
+                    followerId
+                );
+            }
+            return saved;
         }
     }
 

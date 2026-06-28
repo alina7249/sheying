@@ -14,9 +14,12 @@ import com.yupi.yuoj.model.dto.comment.CommentEditRequest;
 import com.yupi.yuoj.model.dto.comment.CommentQueryRequest;
 import com.yupi.yuoj.model.dto.comment.CommentUpdateRequest;
 import com.yupi.yuoj.model.entity.Comment;
+import com.yupi.yuoj.model.entity.Post;
 import com.yupi.yuoj.model.entity.User;
 import com.yupi.yuoj.model.vo.CommentVO;
 import com.yupi.yuoj.service.CommentService;
+import com.yupi.yuoj.service.NotificationService;
+import com.yupi.yuoj.service.PostService;
 import com.yupi.yuoj.service.UserService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +42,12 @@ public class CommentController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private PostService postService;
+
+    @Resource
+    private NotificationService notificationService;
+
     @PostMapping("/add")
     public BaseResponse<Long> addComment(@RequestBody CommentAddRequest commentAddRequest, HttpServletRequest request) {
         if (commentAddRequest == null) {
@@ -52,6 +61,17 @@ public class CommentController {
         boolean result = commentService.save(comment);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         long newCommentId = comment.getId();
+        // 异步通知作品作者
+        Post post = postService.getById(comment.getPostId());
+        if (post != null && !post.getUserId().equals(loginUser.getId())) {
+            notificationService.createNotification(
+                post.getUserId(),
+                "comment",
+                "评论通知",
+                loginUser.getUserName() + " 评论了你的作品",
+                comment.getPostId()
+            );
+        }
         return ResultUtils.success(newCommentId);
     }
 

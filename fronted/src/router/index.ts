@@ -5,7 +5,7 @@ import Profile from '../pages/Profile.vue';
 import EquipmentHub from '../pages/EquipmentHub.vue';
 
 // 需要登录才能访问的路由
-const authRoutes = ['/publish', '/profile-settings', '/messages', '/notifications', '/my-collections', '/change-password'];
+const authRoutes = ['/publish', '/profile-settings', '/messages', '/notifications', '/my-collections', '/change-password', '/profile-settings', '/publish'];
 
 // 检查是否已登录
 const isAuthenticated = () => {
@@ -31,8 +31,7 @@ const routes = [
   { path: '/aichat', name: 'AIChat', component: () => import('../pages/AIChat.vue') },
   { path: '/community', name: 'Community', component: () => import('../pages/Community.vue') },
   { path: '/publish', name: 'Publish', component: () => import('../pages/Publish.vue') },
-  { path: '/groups-list', name: 'GroupsList', component: () => import('../pages/GroupsList.vue') },
-  { path: '/group-detail/:id', name: 'GroupDetail', component: () => import('../pages/GroupDetail.vue') },
+  
   { path: '/events-contests', name: 'EventsAndContests', component: () => import('../pages/EventsAndContests.vue') },
   { path: '/photography-contests', name: 'PhotographyContests', component: () => import('../pages/PhotographyContests.vue') },
   { path: '/contest-detail/:id', name: 'ContestDetail', component: () => import('../pages/ContestDetail.vue') },
@@ -45,9 +44,7 @@ const routes = [
   { path: '/resources', name: 'Resources', component: () => import('../pages/Resources.vue') },
   { path: '/project-detail/:id', name: 'ProjectDetail', component: () => import('../pages/ProjectDetail.vue') },
   { path: '/post-detail/:id', name: 'PostDetail', component: () => import('../pages/PostDetail.vue') },
-  { path: '/photo-comments/:id', name: 'PhotoComments', component: () => import('../pages/PhotoComments.vue') },
-  { path: '/photo-locations', name: 'PhotoLocations', component: () => import('../pages/PhotoLocations.vue') },
-  { path: '/batch-manage-photos', name: 'BatchManagePhotos', component: () => import('../pages/BatchManagePhotos.vue') },
+  
   { path: '/profile-settings', name: 'ProfileSettings', component: () => import('../pages/ProfileSettings.vue') },
   { path: '/messages', name: 'Messages', component: () => import('../pages/Messages.vue') },
   { path: '/notifications', name: 'Notifications', component: () => import('../pages/Notifications.vue') },
@@ -59,7 +56,7 @@ const routes = [
   { path: '/admin/users', name: 'UserManagement', component: () => import('../pages/admin/UserManagement.vue') },
   { path: '/admin/groups', name: 'GroupManagement', component: () => import('../pages/admin/GroupManagement.vue') },
   { path: '/admin/content', name: 'ContentManagement', component: () => import('../pages/admin/ContentManagement.vue') },
-  { path: '/admin/orders', name: 'OrderManagement', component: () => import('../pages/admin/OrderManagement.vue') },
+  
   { path: '/admin/analytics', name: 'Analytics', component: () => import('../pages/admin/Analytics.vue') },
   { path: '/admin/settings', name: 'AdminSettings', component: () => import('../pages/admin/Settings.vue') },
   { path: '/admin/reports', name: 'ReportManagement', component: () => import('../pages/admin/ReportManagement.vue') },
