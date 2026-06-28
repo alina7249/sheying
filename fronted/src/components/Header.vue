@@ -30,6 +30,17 @@
             {{ link.name }}
             <span v-if="route.path === link.path" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-[#C9A962] to-[#D4B97A] rounded-full"></span>
           </router-link>
+          <router-link
+            to="/messages"
+            :class="[
+              'relative px-4 py-2 font-medium rounded-lg transition-all duration-300',
+              getNavLinkClass(route.path === '/messages')
+            ]">
+            消息
+            <span v-if="unreadNotifCount > 0" class="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+              {{ unreadNotifCount > 99 ? '99+' : unreadNotifCount }}
+            </span>
+          </router-link>
           <div class="w-px h-8 bg-[#4A5F8B] mx-2"></div>
           <router-link
             to="/search-result"
@@ -181,6 +192,21 @@
               <i class="fa-solid mr-3 text-sm" :class="getNavIcon(link.path)" aria-hidden="true"></i>
               {{ link.name }}
             </router-link>
+            <router-link
+              to="/messages"
+              :class="[
+                'flex items-center px-4 py-3 rounded-xl font-medium transition-all duration-300',
+                route.path === '/messages'
+                  ? 'bg-gradient-to-r from-[#4A5F8B]/20 to-[#63B3ED]/20 text-[#F5F7FA] border-l-2 border-[#C9A962]'
+                  : 'text-[#B8C6D8]/70 hover:text-[#F5F7FA] hover:bg-[#2D3748]/50'
+              ]"
+              @click="isMobileMenuOpen = false">
+              <i class="fa-solid fa-comments mr-3 text-sm"></i>
+              消息
+              <span v-if="unreadNotifCount > 0" class="ml-2 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                {{ unreadNotifCount > 99 ? '99+' : unreadNotifCount }}
+              </span>
+            </router-link>
           </nav>
           <div class="h-px bg-gradient-to-r from-transparent via-[#4A5F8B] to-transparent my-2"></div>
           <div v-if="isAuthenticated" class="space-y-2">
@@ -266,7 +292,10 @@ let notifPolling: ReturnType<typeof setInterval> | null = null;
 
 const navLinks = [
   { name: '作品库', path: '/', icon: 'fa-images' },
-  { name: '社区', path: '/community', icon: 'fa-users' }
+  { name: '社区', path: '/community', icon: 'fa-users' },
+  { name: '器材', path: '/equipment-hub', icon: 'fa-camera-retro' },
+  { name: '活动', path: '/events-contests', icon: 'fa-calendar-star' },
+  { name: '教程', path: '/tutorial-resources', icon: 'fa-graduation-cap' },
 ];
 
 // 使用 authStore 中的真实用户数据
@@ -311,7 +340,7 @@ const toggleProfileDropdown = () => {
 
 const getHeaderClass = () => {
   if (scrolled.value) {
-    return 'bg-[#0F1C2D]/90 backdrop-blur-xl shadow-2xl shadow-black/30 border-b border-[#4A5F8B]/20';
+    return 'bg-[rgba(10,10,10,0.85)] backdrop-blur-[12px] shadow-2xl shadow-black/30 border-b border-[rgba(255,255,255,0.08)]';
   }
   return 'bg-transparent';
 };

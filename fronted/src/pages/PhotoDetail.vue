@@ -1,200 +1,144 @@
 <template>
-  <div class="min-h-screen bg-[#0a0f1a] text-white">
-    <div class="fixed inset-0 bg-gradient-to-br from-[#0a0f1a] via-[#0F1C2D] to-[#050810] pointer-events-none z-0"></div>
-    <div class="fixed inset-0 opacity-[0.02] pointer-events-none z-0" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;);"></div>
-    
-    <div class="relative z-10">
-      <div v-if="loading" class="flex items-center justify-center min-h-screen">
-        <div class="text-center">
-          <i class="fa-solid fa-circle-notch fa-spin text-4xl text-[#63B3ED] mb-4"></i>
-          <p class="text-[#B8C6D8]">加载中…</p>
-        </div>
+  <div class="min-h-screen bg-[#0a0a0a] text-white">
+    <div v-if="loading" class="flex items-center justify-center min-h-screen">
+      <div class="text-center">
+        <div class="w-8 h-8 border-2 border-[#d4a853] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-[#9ca3af]">加载中...</p>
+      </div>
+    </div>
+
+    <div v-else-if="!post" class="flex items-center justify-center min-h-screen">
+      <div class="text-center">
+        <i class="fa-regular fa-image text-6xl text-[#4b5563] mb-4 block"></i>
+        <p class="text-[#9ca3af] text-lg mb-4">作品不存在或已被删除</p>
+        <router-link to="/" class="text-[#d4a853] hover:underline">返回首页</router-link>
+      </div>
+    </div>
+
+    <div v-else class="lg:flex lg:h-[calc(100vh-64px)]">
+      <!-- LEFT: Image (60%) -->
+      <div class="lg:w-[60%] lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] bg-black flex items-center justify-center relative">
+        <img :src="post.imageUrl" :alt="post.title" class="max-w-full max-h-full object-contain" />
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
       </div>
 
-      <div v-else-if="!post" class="flex items-center justify-center min-h-screen">
-        <div class="text-center">
-          <i class="fa-regular fa-image text-6xl text-[#6B7C93] mb-4"></i>
-          <p class="text-[#B8C6D8] text-lg mb-4">作品不存在或已被删除</p>
-          <router-link to="/" class="text-[#63B3ED] hover:underline">返回首页</router-link>
-        </div>
-      </div>
-
-      <template v-else>
-        <div class="relative bg-black">
-          <div class="relative max-w-7xl mx-auto">
-            <div class="relative flex items-center justify-center min-h-[70vh] md:min-h-[85vh]">
-              <img :src="post.imageUrl" :alt="post.title" class="max-w-full max-h-[85vh] object-contain" />
-              
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none"></div>
+      <!-- RIGHT: Info panel (40%) -->
+      <div class="lg:w-[40%] overflow-y-auto">
+        <div class="p-6 lg:p-10 space-y-8">
+          <!-- Author -->
+          <div class="flex items-center gap-4">
+            <img :src="post.user?.userAvatar || 'https://picsum.photos/400/400?random=' + post.userId" :alt="post.user?.userName" class="w-12 h-12 rounded-full object-cover border-2 border-[#d4a853]" />
+            <div class="flex-1">
+              <h3 class="text-white font-semibold">{{ post.user?.userName || '匿名用户' }}</h3>
+              <p class="text-[#9ca3af] text-sm">{{ post.user?.userProfile || '摄影爱好者' }}</p>
             </div>
+            <button @click="handleFollow" :class="['px-5 py-2 rounded-full text-sm font-medium transition-all duration-200', isFollowing ? 'border border-[rgba(255,255,255,0.2)] text-[#9ca3af]' : 'bg-[#d4a853] text-[#0a0a0a] hover:shadow-lg hover:shadow-[#d4a853]/20']">
+              {{ isFollowing ? '已关注' : '关注' }}
+            </button>
           </div>
-        </div>
 
-        <div class="max-w-7xl mx-auto px-4 -mt-20 relative z-20">
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div class="lg:col-span-2 space-y-8">
-              <div class="bg-gradient-to-br from-[#1E2532]/90 to-[#2D3748]/90 backdrop-blur-xl border border-[#4A5F8B]/20 rounded-3xl p-8 shadow-2xl">
-                <div class="flex flex-wrap items-start justify-between gap-6 mb-6">
-                  <div class="flex-1">
-                    <div class="flex items-center gap-3 mb-4">
-                      <span class="w-1 h-8 bg-gradient-to-b from-[#4A5F8B] to-[#63B3ED] rounded-full"></span>
-                      <span class="text-sm font-medium text-[#63B3ED] tracking-widest uppercase">作品详情</span>
-                    </div>
-                    <h1 class="font-display text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">{{ post.title }}</h1>
-                    <div class="flex flex-wrap gap-2">
-                      <span v-for="tag in post.tagList" :key="tag" class="px-4 py-1.5 bg-[#4A5F8B]/15 text-[#63B3ED] text-sm rounded-full border border-[#4A5F8B]/20">
-                        #{{ tag }}
-                      </span>
-                    </div>
-                  </div>
-                  <span class="text-sm text-[#6B7C93] flex items-center gap-2">
-                    <i class="fa-regular fa-calendar"></i>
-                    {{ formatDate(post.createTime) }}
-                  </span>
-                </div>
+          <!-- Title -->
+          <h1 class="font-display text-3xl font-bold text-white">{{ post.title }}</h1>
 
-                <div class="flex items-center gap-5 p-5 bg-[#0F1C2D]/60 rounded-2xl border border-[#4A5F8B]/10 mb-6">
-                  <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-[#4A5F8B]">
-                    <img :src="post.user?.userAvatar || 'https://picsum.photos/400/400?random=' + post.userId" :alt="post.user?.userName" class="w-full h-full object-cover" />
-                  </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-white mb-1">{{ post.user?.userName || '匿名用户' }}</h3>
-                    <p class="text-sm text-[#6B7C93]">{{ post.user?.userProfile || '热爱摄影的创作者' }}</p>
-                  </div>
-                  <button @click="handleFollow" :class="['px-6 py-2.5 rounded-xl font-medium transition-all duration-300', isFollowing ? 'bg-[#0F1C2D] border border-[#4A5F8B] text-[#63B3ED] hover:bg-[#4A5F8B]/10' : 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white hover:shadow-lg hover:shadow-[#4A5F8B]/30']">
-                    {{ isFollowing ? '已关注' : '+ 关注' }}
-                  </button>
-                </div>
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-2">
+            <span v-for="tag in post.tagList" :key="tag" class="px-3 py-1 bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-full text-sm text-[#9ca3af]">#{{ tag }}</span>
+          </div>
 
-                <div class="mb-6">
-                  <h4 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-quote-left text-[#4A5F8B]"></i>
-                    作品描述
-                  </h4>
-                  <p class="text-[#B8C6D8] leading-relaxed whitespace-pre-line text-lg">{{ post.content }}</p>
-                </div>
+          <!-- Description -->
+          <p class="text-[#9ca3af] leading-relaxed">{{ post.content }}</p>
+
+          <!-- EXIF -->
+          <div v-if="hasExif">
+            <h4 class="text-sm font-medium text-[#9ca3af] mb-3 uppercase tracking-wider">拍摄参数</h4>
+            <div class="grid grid-cols-3 gap-2">
+              <div v-if="post.camera" class="bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-lg p-3">
+                <p class="text-[10px] text-[#6b7280] uppercase tracking-wider mb-1">Camera</p>
+                <p class="text-white text-xs font-mono truncate">{{ post.camera }}</p>
               </div>
-
-              <div v-if="hasExif" class="bg-gradient-to-br from-[#1E2532]/90 to-[#2D3748]/90 backdrop-blur-xl border border-[#4A5F8B]/20 rounded-3xl p-8 shadow-2xl">
-                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                  <i class="fa-solid fa-camera text-[#63B3ED]"></i>
-                  EXIF 信息
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  <div v-if="post.camera" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
-                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Camera</p>
-                    <p class="text-white text-sm font-mono">{{ post.camera }}</p>
-                  </div>
-                  <div v-if="post.lens" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
-                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Lens</p>
-                    <p class="text-white text-sm font-mono">{{ post.lens }}</p>
-                  </div>
-                  <div v-if="post.aperture" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
-                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Aperture</p>
-                    <p class="text-white text-sm font-mono">f/{{ post.aperture }}</p>
-                  </div>
-                  <div v-if="post.shutter" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
-                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">Shutter</p>
-                    <p class="text-white text-sm font-mono">{{ post.shutter }}</p>
-                  </div>
-                  <div v-if="post.iso" class="bg-[#0F1C2D]/60 rounded-xl p-4 border border-[#4A5F8B]/10">
-                    <p class="text-[10px] text-[#6B7C93] uppercase tracking-wider mb-1.5">ISO</p>
-                    <p class="text-white text-sm font-mono">{{ post.iso }}</p>
-                  </div>
-                </div>
+              <div v-if="post.lens" class="bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-lg p-3">
+                <p class="text-[10px] text-[#6b7280] uppercase tracking-wider mb-1">Lens</p>
+                <p class="text-white text-xs font-mono truncate">{{ post.lens }}</p>
               </div>
-
-              <div id="comments" class="bg-gradient-to-br from-[#1E2532]/90 to-[#2D3748]/90 backdrop-blur-xl border border-[#4A5F8B]/20 rounded-3xl p-8 shadow-2xl">
-                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                  <i class="fa-solid fa-comments text-[#63B3ED]"></i>
-                  评论 ({{ totalComments }})
-                </h3>
-                
-                <div class="flex gap-4 mb-8">
-                  <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#4A5F8B] to-[#63B3ED] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[#4A5F8B]/30">
-                    <span class="text-white text-sm font-bold">{{ currentUserName.charAt(0) }}</span>
-                  </div>
-                  <form @submit.prevent="submitComment" class="flex-1 flex gap-3">
-                    <input v-model="newComment" placeholder="写下你的评论…" class="flex-1 px-5 py-3.5 bg-[#0F1C2D]/80 border border-[#4A5F8B]/20 rounded-2xl text-white placeholder-[#6B7C93] focus:outline-none focus:ring-2 focus:ring-[#4A5F8B]/50 focus:border-[#4A5F8B]/50 transition-all" />
-                    <button type="submit" :disabled="!newComment.trim() || submittingComment" :class="['px-6 py-3.5 rounded-2xl font-medium transition-all duration-300', newComment.trim() && !submittingComment ? 'bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white hover:shadow-lg hover:shadow-[#4A5F8B]/30' : 'bg-gray-600 text-white cursor-not-allowed']">
-                      <i v-if="submittingComment" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
-                      {{ submittingComment ? '发送中' : '发送' }}
-                    </button>
-                  </form>
-                </div>
-
-                <div v-if="loadingComments" class="text-center py-12">
-                  <i class="fa-solid fa-circle-notch fa-spin text-2xl text-[#63B3ED]"></i>
-                </div>
-
-                <div v-else-if="comments.length === 0" class="text-center py-12 text-[#6B7C93]">
-                  <i class="fa-regular fa-comment-dots text-4xl mb-4 opacity-50"></i>
-                  <p>暂无评论，快来发表第一条评论吧</p>
-                </div>
-
-                <div v-else class="space-y-4">
-                  <div v-for="comment in comments" :key="comment.id" class="flex gap-4 p-5 bg-[#0F1C2D]/60 rounded-2xl border border-[#4A5F8B]/10 hover:border-[#4A5F8B]/30 transition-all">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#4A5F8B] to-purple-500 flex items-center justify-center flex-shrink-0">
-                      <span class="text-white text-xs font-bold">{{ comment.user?.userName?.charAt(0) || 'U' }}</span>
-                    </div>
-                    <div class="flex-1">
-                      <div class="flex items-center gap-3 mb-2">
-                        <span class="text-white text-sm font-semibold">{{ comment.user?.userName || '匿名用户' }}</span>
-                        <span class="text-xs text-[#6B7C93]">{{ formatDate(comment.createTime) }}</span>
-                      </div>
-                      <p class="text-[#B8C6D8] text-sm leading-relaxed">{{ comment.content }}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="hasMoreComments" class="text-center mt-6">
-                  <button @click="loadMoreComments" :disabled="loadingMoreComments" class="px-6 py-2 text-[#63B3ED] hover:text-white transition-colors text-sm">
-                    <i v-if="loadingMoreComments" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
-                    {{ loadingMoreComments ? '加载中…' : '加载更多评论' }}
-                  </button>
-                </div>
+              <div v-if="post.aperture" class="bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-lg p-3">
+                <p class="text-[10px] text-[#6b7280] uppercase tracking-wider mb-1">Aperture</p>
+                <p class="text-white text-xs font-mono">f/{{ post.aperture }}</p>
               </div>
-            </div>
-
-            <div class="space-y-8">
-              <div class="bg-gradient-to-br from-[#1E2532]/90 to-[#2D3748]/90 backdrop-blur-xl border border-[#4A5F8B]/20 rounded-3xl p-8 shadow-2xl sticky top-8">
-                <div class="flex items-center justify-between mb-7">
-                  <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-chart-bar text-[#63B3ED]"></i>
-                    互动数据
-                  </h3>
-                </div>
-
-                <div class="flex items-center gap-4 mb-6">
-                  <button @click="handleLike" :class="['flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl transition-all duration-300 font-medium', post.hasThumb ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-[#0F1C2D]/60 text-[#6B7C93] border border-[#4A5F8B]/10 hover:text-white hover:border-[#4A5F8B]/30 hover:bg-[#0F1C2D]/80']">
-                    <i :class="['fa-solid', post.hasThumb ? 'fa-heart' : 'fa-heart']"></i>
-                    <span>{{ post.thumbNum?.toLocaleString() }}</span>
-                  </button>
-                  <button class="flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#0F1C2D]/60 text-[#6B7C93] border border-[#4A5F8B]/10 hover:text-white hover:border-[#4A5F8B]/30 hover:bg-[#0F1C2D]/80 transition-all duration-300 font-medium">
-                    <i class="fa-solid fa-comment"></i>
-                    <span>{{ totalComments }}</span>
-                  </button>
-                  <button @click="handleFavour" :class="['flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl transition-all duration-300 font-medium', post.hasFavour ? 'bg-[#4A5F8B]/20 text-[#63B3ED] border border-[#4A5F8B]/30' : 'bg-[#0F1C2D]/60 text-[#6B7C93] border border-[#4A5F8B]/10 hover:text-white hover:border-[#4A5F8B]/30 hover:bg-[#0F1C2D]/80']">
-                    <i :class="['fa-solid', post.hasFavour ? 'fa-bookmark' : 'fa-bookmark']"></i>
-                    <span>{{ post.favourNum?.toLocaleString() }}</span>
-                  </button>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 pt-5 border-t border-[#4A5F8B]/10">
-                  <button @click="handleShare" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#4A5F8B] to-[#63B3ED] text-white rounded-xl font-medium hover:shadow-lg hover:shadow-[#4A5F8B]/30 transition-all duration-300">
-                    <i class="fa-solid fa-share"></i>
-                    <span>分享</span>
-                  </button>
-                  <button @click="handleDownload" class="flex items-center justify-center gap-2 px-4 py-3 border border-[#4A5F8B]/30 text-[#63B3ED] rounded-xl font-medium hover:bg-[#4A5F8B]/10 transition-all duration-300">
-                    <i class="fa-solid fa-download"></i>
-                    <span>下载</span>
-                  </button>
-                </div>
+              <div v-if="post.shutter" class="bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-lg p-3">
+                <p class="text-[10px] text-[#6b7280] uppercase tracking-wider mb-1">Shutter</p>
+                <p class="text-white text-xs font-mono">{{ post.shutter }}</p>
+              </div>
+              <div v-if="post.iso" class="bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-lg p-3">
+                <p class="text-[10px] text-[#6b7280] uppercase tracking-wider mb-1">ISO</p>
+                <p class="text-white text-xs font-mono">{{ post.iso }}</p>
               </div>
             </div>
           </div>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-3">
+            <button @click="handleLike" :class="['flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium transition-all duration-200', post.hasThumb ? 'bg-red-500/20 text-red-400' : 'bg-[#111827] border border-[rgba(255,255,255,0.08)] text-[#9ca3af] hover:text-white']">
+              <i :class="['fa-solid fa-heart', post.hasThumb ? 'text-red-400' : '']"></i>
+              {{ post.thumbNum?.toLocaleString() }}
+            </button>
+            <button @click="handleFavour" :class="['flex items-center gap-2 px-5 py-3 rounded-full text-sm font-medium transition-all duration-200', post.hasFavour ? 'bg-[#d4a853]/20 text-[#d4a853]' : 'bg-[#111827] border border-[rgba(255,255,255,0.08)] text-[#9ca3af] hover:text-white']">
+              <i class="fa-solid fa-bookmark"></i>
+              {{ post.favourNum?.toLocaleString() }}
+            </button>
+            <button @click="handleShare" class="flex items-center gap-2 px-5 py-3 rounded-full bg-[#111827] border border-[rgba(255,255,255,0.08)] text-[#9ca3af] hover:text-white transition-all duration-200 text-sm font-medium">
+              <i class="fa-solid fa-share"></i>
+            </button>
+            <button @click="handleDownload" class="flex items-center gap-2 px-5 py-3 rounded-full bg-[#111827] border border-[rgba(255,255,255,0.08)] text-[#9ca3af] hover:text-white transition-all duration-200 text-sm font-medium">
+              <i class="fa-solid fa-download"></i>
+            </button>
+          </div>
+
+          <!-- Comments -->
+          <div class="border-t border-[rgba(255,255,255,0.08)] pt-8">
+            <h3 class="text-lg font-bold text-white mb-6">评论 ({{ totalComments }})</h3>
+            
+            <!-- Comment form -->
+            <div class="flex gap-3 mb-6">
+              <div class="w-10 h-10 rounded-full bg-[#d4a853] flex items-center justify-center flex-shrink-0">
+                <span class="text-[#0a0a0a] text-sm font-bold">{{ currentUserName.charAt(0) }}</span>
+              </div>
+              <form @submit.prevent="submitComment" class="flex-1">
+                <input v-model="newComment" placeholder="写下你的评论..." 
+                  class="w-full px-4 py-3 bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-full text-white text-sm placeholder-[#6b7280] focus:outline-none focus:border-[#d4a853] transition-colors" />
+              </form>
+            </div>
+
+            <!-- Comment list -->
+            <div v-if="loadingComments" class="text-center py-8">
+              <div class="w-6 h-6 border-2 border-[#d4a853] border-t-transparent rounded-full animate-spin mx-auto"></div>
+            </div>
+            <div v-else-if="comments.length === 0" class="text-center py-8 text-[#6b7280] text-sm">
+              暂无评论
+            </div>
+            <div v-else class="space-y-4">
+              <div v-for="comment in comments" :key="comment.id" class="flex gap-3">
+                <div class="w-9 h-9 rounded-full bg-[#374151] flex items-center justify-center flex-shrink-0">
+                  <span class="text-white text-xs font-bold">{{ comment.user?.userName?.charAt(0) || 'U' }}</span>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-white text-sm font-medium">{{ comment.user?.userName || '匿名' }}</span>
+                    <span class="text-[#6b7280] text-xs">{{ formatRelativeTime(comment.createTime) }}</span>
+                  </div>
+                  <p class="text-[#9ca3af] text-sm">{{ comment.content }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="hasMoreComments" class="text-center mt-6">
+              <button @click="loadMoreComments" :disabled="loadingMoreComments" class="px-6 py-2 text-[#d4a853] hover:text-white transition-colors text-sm">
+                <i v-if="loadingMoreComments" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                {{ loadingMoreComments ? '加载中...' : '加载更多评论' }}
+              </button>
+            </div>
+          </div>
         </div>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -275,10 +219,16 @@ const hasMoreComments = computed(() => {
   return comments.value.length < totalComments.value;
 });
 
-const formatDate = (dateStr: string): string => {
-  if (!dateStr) return '';
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('zh-CN');
+const formatRelativeTime = (time: string) => {
+  if (!time) return '';
+  const d = new Date(time);
+  const now = new Date();
+  const diff = now.getTime() - d.getTime();
+  if (diff < 60000) return '刚刚';
+  if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+  if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+  if (diff < 604800000) return Math.floor(diff / 86400000) + '天前';
+  return d.toLocaleDateString('zh-CN');
 };
 
 const loadPost = async () => {
@@ -447,12 +397,3 @@ onMounted(() => {
   });
 });
 </script>
-
-<style scoped>
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-</style>

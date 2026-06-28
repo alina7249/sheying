@@ -8,7 +8,7 @@
         />
 
         <div
-          class="absolute top-16 right-4 w-[280px] max-w-[90%] bg-[#1E2532] border border-[#4A5F8B] rounded-lg shadow-lg overflow-hidden z-50 profile-dropdown-container"
+          class="absolute top-16 right-4 w-[280px] max-w-[90%] bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-lg shadow-lg overflow-hidden z-50 profile-dropdown-container"
         >
           <!-- 用户信息头部 -->
           <div class="px-5 py-4 border-b border-[#4A5F8B]/50">
@@ -55,6 +55,22 @@
               class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
               <i class="fa-solid fa-cog mr-3 text-[#4A5F8B]"></i>
               <span>设置</span>
+            </router-link>
+
+            <router-link
+              to="/aichat"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-robot mr-3 text-[#4A5F8B]"></i>
+              <span>AI 助手</span>
+            </router-link>
+
+            <router-link
+              to="/membership"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-crown mr-3 text-[#C9A962]"></i>
+              <span>会员中心</span>
             </router-link>
 
             <div class="h-px bg-[#4A5F8B]/30 my-2"></div>

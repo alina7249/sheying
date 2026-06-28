@@ -4,18 +4,23 @@
 
 /* 光影视界 · 品牌色彩系统 */
 :root {
-  /* 主色调 */
-  --brand-navy: #0F1C2D;        /* 深邃海军蓝 - 主背景 */
-  --brand-midnight: #1E3A5F;     /* 午夜青 - 次要背景、卡片 */
-  --brand-teal: #2D4A6F;         /* 青蓝 - 悬停状态 */
-  --brand-accent: #4A5F8B;       /* 浅蓝灰 - 交互元素、边框 */
-  --brand-gold: #C9A962;         /* 柔光金 - 品牌点缀、强调 */
-  --brand-gold-light: #D4B97A;   /* 浅金 - 高光效果 */
-  --brand-ivory: #F5F7FA;        /* 象牙白 - 主要文字 */
-  --brand-silver: #B8C6D8;       /* 浅冷灰 - 次要文字 */
-  --brand-gray: #6B7C93;         /* 中灰 - 辅助文字 */
-  --brand-card: #2D3748;         /* 卡片背景 */
-  --brand-surface: #1E2532;      /* 表面背景 */
+  --brand-bg: #0a0a0a;
+  --brand-card: #111827;
+  --brand-border: rgba(255, 255, 255, 0.08);
+  --brand-gold: #d4a853;
+  --brand-gold-light: #e5c97a;
+  --brand-accent: #d4a853;
+  --brand-text: #ffffff;
+  --brand-text-secondary: #9ca3af;
+  --brand-danger: #ef4444;
+  --brand-navy: #0a0a0a;
+  --brand-midnight: #111827;
+  --brand-teal: #1f2937;
+  --brand-ivory: #ffffff;
+  --brand-silver: #9ca3af;
+  --brand-gray: #6b7280;
+  --brand-card-bg: #111827;
+  --brand-surface: #1f2937;
 
   font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.5;
@@ -56,23 +61,21 @@ h4 { font-size: clamp(1.125rem, 2.5vw, 1.375rem); }
 
 /* 自定义滚动条 - 高端质感 */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--brand-navy);
-  border-radius: 4px;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--brand-accent), var(--brand-gray));
-  border-radius: 4px;
-  border: 2px solid var(--brand-navy);
+  background: #374151;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--brand-gold), var(--brand-accent));
+  background: #4b5563;
 }
 
 /* 动画效果 */
@@ -145,8 +148,8 @@ h4 { font-size: clamp(1.125rem, 2.5vw, 1.375rem); }
 /* 全局样式 */
 body {
   min-height: 100vh;
-  background-color: var(--brand-navy);
-  color: var(--brand-ivory);
+  background-color: #0a0a0a;
+  color: #ffffff;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   font-variant-numeric: tabular-nums;
@@ -266,19 +269,41 @@ body {
 /* 卡片样式 */
 .card {
   @apply rounded-2xl overflow-hidden transition-all duration-500;
-  background: var(--brand-card);
-  border: 1px solid var(--brand-accent);
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card:hover {
   transform: translateY(-4px);
-  border-color: var(--brand-gold);
+  border-color: rgba(212, 168, 83, 0.3);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .card-gold {
   border-color: var(--brand-gold);
   box-shadow: 0 0 30px rgba(201, 169, 98, 0.2);
+}
+
+/* 骨架屏加载 */
+.skeleton {
+  background: #1f2937;
+  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+  background-image: linear-gradient(90deg, #1f2937 0%, #374151 50%, #1f2937 100%);
+}
+
+/* 卡片交错进入动画 */
+.staggered-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardEnter 0.5s ease forwards;
+}
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 发光效果 */
