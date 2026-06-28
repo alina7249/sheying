@@ -203,4 +203,129 @@ export const getHotTags = async () => {
   return api.get('/api/post/tags/hot');
 };
 
+// ==================== 消息相关 ====================
+export interface MessageAddRequest {
+  toUserId: number;
+  content: string;
+}
+
+export const sendMessage = async (req: MessageAddRequest) => {
+  return api.post('/api/message/send', req);
+};
+
+export const getConversations = async () => {
+  return api.get('/api/message/conversations');
+};
+
+export const getConversationMessages = async (targetUserId: number) => {
+  return api.get(`/api/message/conversation/${targetUserId}`);
+};
+
+export const markMessageRead = async (fromUserId: number, toUserId: number) => {
+  return api.put('/api/message/read', { fromUserId, toUserId });
+};
+
+export const getUnreadMessageCount = async () => {
+  return api.get('/api/message/unread-count');
+};
+
+// ==================== 通知相关 ====================
+export const getNotifications = async (current: number, pageSize: number, type?: string, isRead?: number) => {
+  return api.get('/api/notification/list', { params: { current, pageSize, type, isRead } });
+};
+
+export const markNotificationRead = async (id: number) => {
+  return api.post('/api/notification/read', { id });
+};
+
+export const getUnreadNotificationCount = async () => {
+  return api.get('/api/notification/unread-count');
+};
+
+export const markAllNotificationsRead = async () => {
+  return api.post('/api/notification/read-all');
+};
+
+// ==================== 器材相关 ====================
+export const getEquipmentList = async (current: number, pageSize: number, brand?: string, category?: string, name?: string) => {
+  return api.get('/api/equipment/list', { params: { current, pageSize, brand, category, name } });
+};
+
+export const getEquipmentDetail = async (id: number) => {
+  return api.get(`/api/equipment/get/${id}`);
+};
+
+export const addEquipment = async (data: any) => {
+  return api.post('/api/equipment/add', data);
+};
+
+export const getEquipmentReviews = async (equipmentId: number, current: number, pageSize: number) => {
+  return api.get(`/api/equipment-review/list/${equipmentId}`, { params: { current, pageSize } });
+};
+
+export const addEquipmentReview = async (data: { equipmentId: number; title: string; content: string; rating: number }) => {
+  return api.post('/api/equipment-review/add', data);
+};
+
+// ==================== 活动相关 ====================
+export const getEventList = async (current: number, pageSize: number, status?: string) => {
+  return api.get('/api/event/list', { params: { current, pageSize, status } });
+};
+
+export const getEventDetail = async (id: number) => {
+  return api.get(`/api/event/get/${id}`);
+};
+
+export const joinEvent = async (eventId: number) => {
+  return api.post(`/api/event/register/${eventId}`);
+};
+
+export const cancelEventJoin = async (eventId: number) => {
+  return api.post(`/api/event/cancel/${eventId}`);
+};
+
+export const getMyRegistrations = async () => {
+  return api.get('/api/event/my-registrations');
+};
+
+// ==================== AI 聊天 ====================
+export const chatWithAI = async (message: string, sessionId?: string) => {
+  return api.post('/api/ai/chat', { message, sessionId });
+};
+
+export const getAIHistory = async (sessionId: string) => {
+  return api.get('/api/ai/history', { params: { sessionId } });
+};
+
+// ==================== 用户资料 ====================
+export const updateUserProfile = async (data: { userName?: string; userAvatar?: string; userProfile?: string }) => {
+  return api.put('/api/profile/update', data);
+};
+
+export const getMemberInfo = async () => {
+  return api.get('/api/member/info');
+};
+
+export const upgradeMember = async (level: number) => {
+  return api.post('/api/member/upgrade', null, { params: { level } });
+};
+
+// ==================== 热门作品 ====================
+export const getHotPosts = async (current: number = 1, pageSize: number = 10) => {
+  return api.get('/api/post/hot', { params: { current, pageSize } });
+};
+
+// ==================== 用户列表（管理后台） ====================
+export const getUserListPage = async (current: number, pageSize: number, userName?: string) => {
+  return api.get('/api/user/list/page', { params: { current, pageSize, userName } });
+};
+
+export const banUser = async (userId: number) => {
+  return api.post('/api/user/ban', { userId });
+};
+
+export const unbanUser = async (userId: number) => {
+  return api.post('/api/user/unban', { userId });
+};
+
 export default api;

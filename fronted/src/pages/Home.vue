@@ -45,6 +45,33 @@
           </div>
         </section>
 
+        <!-- 热门推荐 -->
+        <section v-if="hotPosts.length > 0" class="mb-12 fade-in-up">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-white">
+              <i class="fa-solid fa-fire mr-2 text-orange-500"></i>热门推荐
+            </h2>
+          </div>
+          <div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            <router-link
+              v-for="post in hotPosts"
+              :key="post.id"
+              :to="`/photo-detail/${post.id}`"
+              class="flex-shrink-0 w-64 bg-[#1E2532] rounded-2xl overflow-hidden border border-[#2D3748] hover:border-[#4A5F8B]/50 transition-all duration-300 hover:shadow-xl hover:shadow-black/30 group">
+              <div class="h-40 overflow-hidden">
+                <img :src="post.coverImage || 'https://picsum.photos/400/300?random=' + post.id" :alt="post.title" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div class="p-4">
+                <h3 class="text-white font-medium text-sm truncate mb-1">{{ post.title }}</h3>
+                <div class="flex items-center gap-2">
+                  <img :src="post.user?.userAvatar || 'https://picsum.photos/40/40?random=user' + post.userId" class="w-5 h-5 rounded-full object-cover" />
+                  <span class="text-[#6B7C93] text-xs">{{ post.user?.userName || '用户' }}</span>
+                </div>
+              </div>
+            </router-link>
+          </div>
+        </section>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div class="lg:col-span-2">
             <div class="filter-section fade-in-up mb-8" style="animation-delay: 0.8s;">
@@ -119,7 +146,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import PhotographyCard, { type PostVO } from '../components/PhotographyCard.vue';
 import Button from '../components/common/Button.vue';
-import { getPostList, getHotTags } from '../services/api';
+import { getPostList, getHotTags, getHotPosts } from '../services/api';
 import '../components/Animations.vue';
 
 const router = useRouter();
@@ -139,6 +166,8 @@ interface HotTag {
 
 const popularTags = ref<HotTag[]>([]);
 const loadingTags = ref(true);
+
+const hotPosts = ref<any[]>([]);
 
 const photographyPosts = ref<PostVO[]>([]);
 const loading = ref(true);
@@ -204,6 +233,15 @@ const loadHotTags = async () => {
   }
 };
 
+const loadHotPosts = async () => {
+  try {
+    const res: any = await getHotPosts(1, 8);
+    if (res?.code === 0 && res.data?.records) {
+      hotPosts.value = res.data.records;
+    }
+  } catch (e) { /* ignore */ }
+};
+
 const handleCategoryChange = (categoryId: string) => {
   selectedCategory.value = categoryId;
   currentPage.value = 1;
@@ -230,6 +268,7 @@ const handlePostUpdate = (updatedPost: PostVO) => {
 onMounted(() => {
   loadPosts(1, false);
   loadHotTags();
+  loadHotPosts();
 });
 </script>
 

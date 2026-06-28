@@ -43,6 +43,13 @@
           <div class="flex-1">
             <div class="flex flex-wrap items-center gap-3 mb-2">
               <h1 class="font-display text-2xl md:text-3xl font-bold text-white tracking-tight">{{ user.userName }}</h1>
+              <span v-if="user.memberBadge" :class="['inline-block ml-2 px-2 py-0.5 rounded-full text-xs font-medium',
+                user.memberBadge === 'diamond' ? 'bg-blue-500/20 text-blue-400' :
+                user.memberBadge === 'gold' ? 'bg-[#C9A962]/20 text-[#C9A962]' :
+                'bg-gray-400/20 text-gray-400']">
+                <i :class="['fa-solid mr-1', user.memberBadge === 'diamond' ? 'fa-gem' : user.memberBadge === 'gold' ? 'fa-crown' : 'fa-medal', 'text-[10px]']"></i>
+                {{ user.memberBadge === 'diamond' ? '钻石' : user.memberBadge === 'gold' ? '金牌' : '银牌' }}
+              </span>
               <span v-if="user.userRole === 'admin' || user.userRole === 'superAdmin'" class="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm rounded-full">
                 {{ user.userRole === 'superAdmin' ? '超级管理员' : '管理员' }}
               </span>
@@ -71,9 +78,10 @@
                   <i v-else :class="['fa-solid', isFollowing ? 'fa-user-check' : 'fa-plus']"></i>
                   {{ isFollowing ? '已关注' : '关注' }}
                 </button>
-                <button @click="toast.info('私信功能即将上线')" class="px-5 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">
-                  <i class="fa-solid fa-message-circle mr-2"></i>私信
-                </button>
+                <router-link :to="`/messages?userId=${user.id}`" v-if="authStore.isAuthenticated && String(user.id) !== String(authStore.user?.id)"
+                  class="px-4 py-2 rounded-xl bg-[#2D3748] text-[#B8C6D8] text-sm hover:bg-[#4A5F8B] hover:text-white transition-colors">
+                  <i class="fa-solid fa-comment mr-1"></i>私信
+                </router-link>
               </template>
               <template v-else>
                 <router-link to="/profile-settings" class="px-5 py-2 border border-[#4A5F8B] text-[#4A5F8B] rounded-lg hover:bg-[#4A5F8B]/10 transition-colors">

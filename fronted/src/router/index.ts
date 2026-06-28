@@ -5,7 +5,7 @@ import Profile from '../pages/Profile.vue';
 import EquipmentHub from '../pages/EquipmentHub.vue';
 
 // 需要登录才能访问的路由
-const authRoutes = ['/publish', '/profile-settings'];
+const authRoutes = ['/publish', '/profile-settings', '/messages', '/notifications'];
 
 // 检查是否已登录
 const isAuthenticated = () => {
@@ -49,6 +49,8 @@ const routes = [
   { path: '/photo-locations', name: 'PhotoLocations', component: () => import('../pages/PhotoLocations.vue') },
   { path: '/batch-manage-photos', name: 'BatchManagePhotos', component: () => import('../pages/BatchManagePhotos.vue') },
   { path: '/profile-settings', name: 'ProfileSettings', component: () => import('../pages/ProfileSettings.vue') },
+  { path: '/messages', name: 'Messages', component: () => import('../pages/Messages.vue') },
+  { path: '/notifications', name: 'Notifications', component: () => import('../pages/Notifications.vue') },
   { path: '/profile-benefits', name: 'ProfileBenefits', component: () => import('../pages/ProfileBenefits.vue') },
   { path: '/membership', name: 'Membership', component: () => import('../pages/Membership.vue') },
   { path: '/search-result', name: 'SearchResult', component: () => import('../pages/SearchResult.vue') },

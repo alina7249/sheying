@@ -51,6 +51,52 @@
             <span>上传</span>
           </router-link>
 
+          <!-- 通知铃铛 -->
+          <div v-if="isAuthenticated" class="relative ml-1">
+            <button
+              class="relative p-2 rounded-xl hover:bg-[#2D3748] transition-colors duration-300"
+              @click="toggleNotifPanel"
+              aria-label="通知">
+              <i class="fa-solid fa-bell text-lg text-[#B8C6D8] hover:text-[#C9A962] transition-colors"></i>
+              <span v-if="unreadNotifCount > 0" class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                {{ unreadNotifCount > 99 ? '99+' : unreadNotifCount }}
+              </span>
+            </button>
+            <!-- 通知下拉面板 -->
+            <Transition name="dropdown-fade">
+              <div v-if="showNotifPanel" class="absolute right-0 mt-2 w-80 bg-[#1E2532] border border-[#2D3748] rounded-xl shadow-2xl z-50 overflow-hidden">
+                <div class="p-4 border-b border-[#2D3748] flex items-center justify-between">
+                  <h3 class="text-white font-semibold text-sm">通知</h3>
+                  <span class="text-[10px] text-[#6B7C93]">{{ unreadNotifCount }} 条未读</span>
+                </div>
+                <div class="max-h-80 overflow-y-auto">
+                  <div v-if="notifList.length === 0" class="p-6 text-center text-[#6B7C93] text-sm">
+                    <i class="fa-solid fa-bell-slash text-2xl mb-2 block"></i>
+                    暂无通知
+                  </div>
+                  <router-link
+                    v-for="notif in notifList.slice(0, 5)"
+                    :key="notif.id"
+                    :to="notif.relatedId ? `/photo-detail/${notif.relatedId}` : '/notifications'"
+                    @click="showNotifPanel = false"
+                    :class="['flex items-start gap-3 p-3 hover:bg-[#2D3748] transition-colors cursor-pointer border-b border-[#2D3748]/50', !notif.isRead ? 'bg-[#2D3748]/30' : '']">
+                    <div :class="['w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0', notif.type === 'like' ? 'bg-red-500/20 text-red-400' : notif.type === 'comment' ? 'bg-blue-500/20 text-blue-400' : notif.type === 'follow' ? 'bg-green-500/20 text-green-400' : 'bg-[#C9A962]/20 text-[#C9A962]']">
+                      <i :class="['fa-solid', notif.type === 'like' ? 'fa-heart' : notif.type === 'comment' ? 'fa-comment' : notif.type === 'follow' ? 'fa-user-plus' : 'fa-circle-info', 'text-xs']"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p :class="['text-xs truncate', !notif.isRead ? 'text-white' : 'text-[#6B7C93]']">{{ notif.title }}</p>
+                      <span class="text-[10px] text-[#6B7C93]">{{ formatNotifTime(notif.createTime) }}</span>
+                    </div>
+                    <div v-if="!notif.isRead" class="w-2 h-2 bg-[#C9A962] rounded-full flex-shrink-0 mt-1.5"></div>
+                  </router-link>
+                </div>
+                <router-link to="/notifications" @click="showNotifPanel = false" class="block p-3 text-center text-sm text-[#C9A962] hover:bg-[#2D3748] transition-colors border-t border-[#2D3748]">
+                  查看全部通知
+                </router-link>
+              </div>
+            </Transition>
+          </div>
+
           <!-- 已登录用户下拉菜单 -->
           <div v-if="isAuthenticated" class="relative ml-2">
             <button
@@ -200,6 +246,7 @@ import { useRoute } from 'vue-router';
 import { useAuthStore } from '../store/authStore';
 import { storeToRefs } from 'pinia';
 import ProfileDropdown from './ProfileDropdown.vue';
+import { getUnreadNotificationCount, getNotifications } from '../services/api';
 
 const authStore = useAuthStore();
 const route = useRoute();
@@ -210,6 +257,12 @@ const scrolled = ref(false);
 
 const { isAuthenticated, user, theme } = storeToRefs(authStore);
 const { logout, toggleTheme, fetchCurrentUser } = authStore;
+
+// Notification state
+const unreadNotifCount = ref(0);
+const showNotifPanel = ref(false);
+const notifList = ref<any[]>([]);
+let notifPolling: ReturnType<typeof setInterval> | null = null;
 
 const navLinks = [
   { name: '作品库', path: '/', icon: 'fa-images' },
@@ -234,12 +287,18 @@ onMounted(async () => {
   window.addEventListener('scroll', handleScroll);
   onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll);
+    if (notifPolling) {
+      clearInterval(notifPolling);
+      notifPolling = null;
+    }
   });
 
   // 如果已登录但用户信息不完整，尝试获取用户信息
   if (isAuthenticated.value && user.value && !user.value.avatar) {
     await fetchCurrentUser();
   }
+
+  if (isAuthenticated.value) startNotifPolling();
 });
 
 const handleLogout = () => {
@@ -267,6 +326,47 @@ const getNavLinkClass = (isActive: boolean) => {
 const getNavIcon = (path: string) => {
   const link = navLinks.find(l => l.path === path);
   return link?.icon || 'fa-circle';
+};
+
+const toggleNotifPanel = async () => {
+  showNotifPanel.value = !showNotifPanel.value;
+  if (showNotifPanel.value) {
+    await loadNotifPanel();
+  }
+};
+
+const loadNotifPanel = async () => {
+  try {
+    const res: any = await getNotifications(1, 5);
+    if (res?.code === 0 && res.data?.records) {
+      notifList.value = res.data.records;
+    }
+  } catch (e) { /* ignore */ }
+};
+
+const formatNotifTime = (time: string) => {
+  if (!time) return '';
+  const d = new Date(time);
+  const now = new Date();
+  const diff = now.getTime() - d.getTime();
+  if (diff < 60000) return '刚刚';
+  if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+  if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+  return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+};
+
+const fetchUnreadCount = async () => {
+  try {
+    const res: any = await getUnreadNotificationCount();
+    if (res?.code === 0) {
+      unreadNotifCount.value = res.data || 0;
+    }
+  } catch (e) { /* ignore */ }
+};
+
+const startNotifPolling = () => {
+  fetchUnreadCount();
+  notifPolling = setInterval(fetchUnreadCount, 30000);
 };
 </script>
 
@@ -300,5 +400,15 @@ const getNavIcon = (path: string) => {
   .slide-leave-active {
     transition: none;
   }
+}
+
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
+  transition: all 0.2s ease;
+}
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 </style>

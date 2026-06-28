@@ -319,6 +319,7 @@ import { useAuthStore } from '../store/authStore'
 import { storeToRefs } from 'pinia'
 import { toast } from 'vue-sonner'
 import { useInteraction } from '../composables/useInteraction'
+import { updateUserProfile } from '../services/api'
 
 const store = useAuthStore()
 const { isAuthenticated, user } = storeToRefs(store)
@@ -453,9 +454,28 @@ const handleNotificationChange = (field: keyof typeof preferences.notifications,
   (preferences.notifications as any)[field] = value
 }
 
-const handleSaveAccount = () => {
+const handleSaveAccount = async () => {
   isEditing.value = false
-  handleSave()
+  try {
+    const res: any = await updateUserProfile({
+      userName: formData.username,
+      userAvatar: formData.avatar,
+      userProfile: formData.bio,
+    });
+    if (res?.code === 0) {
+      if (store.user) {
+        store.user.username = formData.username;
+        store.user.avatar = formData.avatar;
+        store.user.bio = formData.bio;
+        localStorage.setItem('user', JSON.stringify(store.user));
+      }
+      toast.success('资料保存成功');
+    } else {
+      toast.error(res?.message || '保存失败');
+    }
+  } catch (e: any) {
+    toast.error(e?.message || '保存失败');
+  }
 }
 
 const handleSaveSettings = () => {
