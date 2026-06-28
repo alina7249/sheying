@@ -279,6 +279,9 @@ CREATE TABLE `user` (
   `userAvatar` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户头像',
   `userProfile` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '用户简介',
   `userRole` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user' COMMENT '用户角色：user/admin/ban',
+  `memberLevel` int NOT NULL DEFAULT '0' COMMENT '会员等级：0=普通用户 1=银牌 2=金牌 3=钻石',
+  `memberBadge` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '会员勋章标识',
+  `uploadQuota` int NOT NULL DEFAULT '10' COMMENT '每日上传配额',
   `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
@@ -422,6 +425,150 @@ INSERT INTO `follow` (`id`, `followerId`, `followeeId`, `createTime`, `updateTim
 (20028, 1935152147047858177, 1938481258256347138, '2025-06-23 14:20:00', '2025-06-23 14:20:00', 0),
 (20029, 1939569854321205250, 1938516975548272642, '2025-06-24 18:30:00', '2025-06-24 18:30:00', 0),
 (20030, 1938481258256347138, 1939569854321205250, '2025-06-25 21:00:00', '2025-06-25 21:00:00', 0);
+
+/* user表新增字段迁移（已有数据库需执行） */
+ALTER TABLE `user` ADD COLUMN `memberLevel` int NOT NULL DEFAULT 0 COMMENT '会员等级：0=普通用户 1=银牌 2=金牌 3=钻石' AFTER `userRole`;
+ALTER TABLE `user` ADD COLUMN `memberBadge` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '会员勋章标识' AFTER `memberLevel`;
+ALTER TABLE `user` ADD COLUMN `uploadQuota` int NOT NULL DEFAULT 10 COMMENT '每日上传配额' AFTER `memberBadge`;
+
+/*Table structure for table `message` */
+
+DROP TABLE IF EXISTS `message`;
+
+CREATE TABLE `message` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `fromUserId` bigint NOT NULL COMMENT '发送者id',
+  `toUserId` bigint NOT NULL COMMENT '接收者id',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '私信内容',
+  `isRead` tinyint NOT NULL DEFAULT '0' COMMENT '是否已读',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_fromUserId` (`fromUserId`) USING BTREE,
+  KEY `idx_toUserId` (`toUserId`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='私信';
+
+/*Table structure for table `notification` */
+
+DROP TABLE IF EXISTS `notification`;
+
+CREATE TABLE `notification` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `userId` bigint NOT NULL COMMENT '接收用户id',
+  `type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '通知类型：like/comment/follow/system',
+  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '通知标题',
+  `content` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '通知内容',
+  `relatedId` bigint DEFAULT NULL COMMENT '关联id（帖子/评论等）',
+  `isRead` tinyint NOT NULL DEFAULT '0' COMMENT '是否已读',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_userId` (`userId`) USING BTREE,
+  KEY `idx_type` (`type`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='通知';
+
+/*Table structure for table `equipment` */
+
+DROP TABLE IF EXISTS `equipment`;
+
+CREATE TABLE `equipment` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '器材名称',
+  `brand` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '品牌',
+  `category` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '分类：camera/lens/tripod/filter/other',
+  `coverImage` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '封面图',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '器材描述',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '参考价格',
+  `specs` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '规格参数JSON',
+  `userId` bigint NOT NULL COMMENT '创建用户id',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_brand` (`brand`) USING BTREE,
+  KEY `idx_category` (`category`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='器材';
+
+/*Table structure for table `equipment_review` */
+
+DROP TABLE IF EXISTS `equipment_review`;
+
+CREATE TABLE `equipment_review` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `equipmentId` bigint NOT NULL COMMENT '器材id',
+  `userId` bigint NOT NULL COMMENT '用户id',
+  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '评测标题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '评测内容',
+  `rating` int NOT NULL DEFAULT '5' COMMENT '评分 1-5',
+  `thumbNum` int NOT NULL DEFAULT '0' COMMENT '点赞数',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_equipmentId` (`equipmentId`) USING BTREE,
+  KEY `idx_userId` (`userId`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='器材评测';
+
+/*Table structure for table `event` */
+
+DROP TABLE IF EXISTS `event`;
+
+CREATE TABLE `event` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '活动标题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '活动详情',
+  `coverImage` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '封面图',
+  `location` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '活动地点',
+  `startTime` datetime NOT NULL COMMENT '开始时间',
+  `endTime` datetime NOT NULL COMMENT '结束时间',
+  `maxParticipants` int DEFAULT NULL COMMENT '人数上限',
+  `currentParticipants` int NOT NULL DEFAULT '0' COMMENT '当前报名人数',
+  `status` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'upcoming' COMMENT '状态：upcoming/ongoing/ended/cancelled',
+  `userId` bigint NOT NULL COMMENT '发起用户id',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_status` (`status`) USING BTREE,
+  KEY `idx_userId` (`userId`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='活动';
+
+/*Table structure for table `event_participant` */
+
+DROP TABLE IF EXISTS `event_participant`;
+
+CREATE TABLE `event_participant` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `eventId` bigint NOT NULL COMMENT '活动id',
+  `userId` bigint NOT NULL COMMENT '报名用户id',
+  `status` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'registered' COMMENT '状态：registered/cancelled/attended',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_eventId` (`eventId`) USING BTREE,
+  KEY `idx_userId` (`userId`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='活动报名';
+
+/*Table structure for table `ai_chat` */
+
+DROP TABLE IF EXISTS `ai_chat`;
+
+CREATE TABLE `ai_chat` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `userId` bigint NOT NULL COMMENT '用户id',
+  `role` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '角色：user/assistant',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '对话内容',
+  `sessionId` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '会话id',
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `isDelete` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_userId` (`userId`) USING BTREE,
+  KEY `idx_sessionId` (`sessionId`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='AI对话记录';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

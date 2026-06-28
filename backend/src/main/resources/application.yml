@@ -94,3 +94,6 @@ cos:
 # 代码沙箱配置
 codesandbox:
   type: remote
+# 智谱AI配置
+zhipu:
+  api-key: xx

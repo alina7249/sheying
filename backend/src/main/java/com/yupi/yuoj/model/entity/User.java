@@ -66,6 +66,21 @@ public class User implements Serializable {
     private String userRole;
 
     /**
+     * 会员等级
+     */
+    private Integer memberLevel;
+
+    /**
+     * 会员徽章
+     */
+    private String memberBadge;
+
+    /**
+     * 上传配额
+     */
+    private Integer uploadQuota;
+
+    /**
      * 创建时间
      */
     private Date createTime;
