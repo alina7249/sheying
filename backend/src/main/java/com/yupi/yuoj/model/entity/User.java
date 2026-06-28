@@ -81,6 +81,21 @@ public class User implements Serializable {
     private Integer uploadQuota;
 
     /**
+     * 会员过期时间
+     */
+    private Date memberExpireTime;
+
+    /**
+     * 每日上传已使用
+     */
+    private Integer dailyUploadUsed;
+
+    /**
+     * 每日上传限制
+     */
+    private Integer dailyUploadLimit;
+
+    /**
      * 创建时间
      */
     private Date createTime;

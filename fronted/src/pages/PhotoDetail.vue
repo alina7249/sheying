@@ -91,6 +91,9 @@
             <button @click="handleDownload" class="flex items-center gap-2 px-5 py-3 rounded-full bg-[#111827] border border-[rgba(255,255,255,0.08)] text-[#9ca3af] hover:text-white transition-all duration-200 text-sm font-medium">
               <i class="fa-solid fa-download"></i>
             </button>
+            <button @click="showReportModal = true" class="flex items-center gap-2 px-5 py-3 rounded-full bg-[#111827] border border-[rgba(255,255,255,0.08)] text-[#6b7280] hover:text-red-400 transition-all duration-200 text-sm font-medium">
+              <i class="fa-solid fa-flag"></i>
+            </button>
           </div>
 
           <!-- Comments -->
@@ -140,6 +143,28 @@
         </div>
       </div>
     </div>
+    <ReportModal v-model:visible="showReportModal" :target-id="postId" target-type="post" />
+
+    <!-- Collection picker modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="showCollectionPicker" class="fixed inset-0 z-50 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black/60" @click="showCollectionPicker = false"></div>
+          <div class="relative bg-[#1a1a2e] border border-[rgba(255,255,255,0.08)] rounded-2xl p-6 w-full max-w-sm mx-4">
+            <h3 class="text-white text-lg font-bold mb-4">选择收藏夹</h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto mb-4">
+              <div v-for="col in collections" :key="col.id" @click="addToCollection(col.id)"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl border border-[rgba(255,255,255,0.08)] hover:border-[#d4a853] cursor-pointer transition-colors">
+                <i class="fa-solid fa-folder text-[#d4a853]"></i>
+                <span class="text-white text-sm">{{ col.title }}</span>
+                <span class="text-[#6b7280] text-xs ml-auto">{{ col.postCount || 0 }}个</span>
+              </div>
+            </div>
+            <button @click="showCollectionPicker = false" class="w-full py-3 rounded-xl border border-[rgba(255,255,255,0.08)] text-[#9ca3af] hover:text-white transition-colors">取消</button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -147,7 +172,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { toast } from 'vue-sonner';
-import { getPostDetail, thumbPost, favourPost, addComment, getCommentList, doFollow, checkFollow } from '../services/api';
+import { getPostDetail, thumbPost, favourPost, addComment, getCommentList, doFollow, checkFollow, getCollections, addPostToCollection } from '../services/api';
+import ReportModal from '../components/ReportModal.vue';
 import { useAuthStore } from '../store/authStore';
 
 const route = useRoute();
@@ -205,6 +231,8 @@ const loadingMoreComments = ref(false);
 const commentPage = ref(1);
 const commentPageSize = 10;
 const totalComments = ref(0);
+
+const showReportModal = ref(false);
 
 const currentUserName = computed(() => {
   return authStore.user?.username || '用户';
@@ -312,21 +340,66 @@ const handleLike = async () => {
   }
 };
 
+const showCollectionPicker = ref(false);
+const collections = ref<any[]>([]);
+
 const handleFavour = async () => {
   if (!post.value) return;
   if (!authStore.isAuthenticated) {
     toast.warning('请先登录');
     return;
   }
+  // If already favourited, toggle off
+  if (post.value.hasFavour) {
+    try {
+      await favourPost(postId);
+      post.value.hasFavour = false;
+      post.value.favourNum = (post.value.favourNum || 1) - 1;
+      toast.success('已取消收藏');
+    } catch (e: any) {
+      toast.error(e.message || '操作失败');
+    }
+    return;
+  }
+  // Load collections and show picker
   try {
+    const res: any = await getCollections();
+    const cols = res?.data || [];
+    if (cols.length === 0) {
+      // No collections, just use default favour
+      await favourPost(postId);
+      post.value.hasFavour = true;
+      post.value.favourNum = (post.value.favourNum || 0) + 1;
+      toast.success('收藏成功');
+    } else {
+      collections.value = cols;
+      showCollectionPicker.value = true;
+    }
+  } catch (e: any) {
+    // Fallback to default favour
+    try {
+      await favourPost(postId);
+      post.value.hasFavour = true;
+      post.value.favourNum = (post.value.favourNum || 0) + 1;
+      toast.success('收藏成功');
+    } catch (e2: any) {
+      toast.error(e2.message || '操作失败');
+    }
+  }
+};
+
+const addToCollection = async (collectionId: number) => {
+  try {
+    await addPostToCollection(collectionId, postId);
     await favourPost(postId);
-    const updated = { ...post.value };
-    updated.hasFavour = !updated.hasFavour;
-    updated.favourNum = (updated.favourNum || 0) + (updated.hasFavour ? 1 : -1);
-    post.value = updated;
-    toast.success(updated.hasFavour ? '收藏成功' : '已取消收藏');
-  } catch (error: any) {
-    toast.error(error.message || '操作失败');
+    if (post.value) {
+      post.value.hasFavour = true;
+      post.value.favourNum = (post.value.favourNum || 0) + 1;
+    }
+    toast.success('已收藏到收藏夹');
+    showCollectionPicker.value = false;
+  } catch (e: any) {
+    toast.error(e?.message || '操作失败');
   }
 };
 

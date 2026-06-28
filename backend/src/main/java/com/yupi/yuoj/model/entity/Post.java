@@ -71,6 +71,16 @@ public class Post implements Serializable {
     private String iso;
 
     /**
+     * 审核状态
+     */
+    private String auditStatus;
+
+    /**
+     * 审核备注
+     */
+    private String auditNote;
+
+    /**
      * 点赞数
      */
     private Integer thumbNum;

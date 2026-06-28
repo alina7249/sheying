@@ -61,19 +61,19 @@
         <div :class="[getCardBgClass(), 'rounded-lg p-5 border']">
           <h4 :class="['text-lg font-bold mb-4', getTextClass(true)]">支持</h4>
           <ul class="space-y-2">
-            <li v-if="false">
-              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
+            <li>
+              <router-link to="/user-agreement" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 帮助中心
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/privacy-policy" :class="['text-sm', getLinkClass(), 'transition-colors']">
+                隐私政策
               </router-link>
             </li>
             <li v-if="false">
               <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
                 社区准则
-              </router-link>
-            </li>
-            <li v-if="false">
-              <router-link to="#" :class="['text-sm', getLinkClass(), 'transition-colors']">
-                隐私政策
               </router-link>
             </li>
             <li v-if="false">

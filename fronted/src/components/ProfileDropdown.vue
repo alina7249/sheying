@@ -58,6 +58,22 @@
             </router-link>
 
             <router-link
+              to="/change-password"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-lock mr-3 text-[#4A5F8B]"></i>
+              <span>修改密码</span>
+            </router-link>
+
+            <router-link
+              to="/my-collections"
+              @click="onClose"
+              class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">
+              <i class="fa-solid fa-bookmark mr-3 text-[#4A5F8B]"></i>
+              <span>我的收藏</span>
+            </router-link>
+
+            <router-link
               to="/aichat"
               @click="onClose"
               class="flex items-center py-3 px-5 text-[#B8C6D8] hover:bg-[#4A5F8B]/30 hover:text-[#F5F7FA] transition-colors">

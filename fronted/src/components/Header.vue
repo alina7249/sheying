@@ -120,6 +120,8 @@
                   :alt="username"
                   class="w-10 h-10 rounded-full object-cover border-2 border-[#4A5F8B] group-hover:border-[#C9A962] transition-colors duration-300" />
                 <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#48BB78] rounded-full border-2 border-[#0F1C2D]"></div>
+                <div v-if="memberInfo.memberLevel > 0" :class="['absolute -top-1 -left-1 w-4 h-4 rounded-full border-2 border-[#0F1C2D]', 
+                  memberInfo.memberLevel === 3 ? 'bg-[#d4a853]' : memberInfo.memberLevel === 2 ? 'bg-gray-400' : 'bg-amber-600']"></div>
               </div>
               <div class="text-left hidden lg:block">
                 <p class="text-sm font-semibold text-[#F5F7FA]">{{ username }}</p>
@@ -272,7 +274,7 @@ import { useRoute } from 'vue-router';
 import { useAuthStore } from '../store/authStore';
 import { storeToRefs } from 'pinia';
 import ProfileDropdown from './ProfileDropdown.vue';
-import { getUnreadNotificationCount, getNotifications } from '../services/api';
+import { getUnreadNotificationCount, getNotifications, getMemberInfo } from '../services/api';
 
 const authStore = useAuthStore();
 const route = useRoute();
@@ -288,6 +290,7 @@ const { logout, toggleTheme, fetchCurrentUser } = authStore;
 const unreadNotifCount = ref(0);
 const showNotifPanel = ref(false);
 const notifList = ref<any[]>([]);
+const memberInfo = ref<any>({ memberLevel: 0 });
 let notifPolling: ReturnType<typeof setInterval> | null = null;
 
 const navLinks = [
@@ -328,6 +331,7 @@ onMounted(async () => {
   }
 
   if (isAuthenticated.value) startNotifPolling();
+  if (isAuthenticated.value) loadMemberBadge();
 });
 
 const handleLogout = () => {
@@ -396,6 +400,13 @@ const fetchUnreadCount = async () => {
 const startNotifPolling = () => {
   fetchUnreadCount();
   notifPolling = setInterval(fetchUnreadCount, 30000);
+};
+
+const loadMemberBadge = async () => {
+  try {
+    const res: any = await getMemberInfo().catch(() => null);
+    if (res?.data) memberInfo.value = res.data;
+  } catch (e) { /* */ }
 };
 </script>
 

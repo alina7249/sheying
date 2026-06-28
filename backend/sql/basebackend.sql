@@ -697,6 +697,128 @@ INSERT INTO `event_participant` (`id`, `eventId`, `userId`, `status`, `createTim
 (51022, 50006, 1938516975548272642, 'registered', '2025-06-27 10:00:00', '2025-06-27 10:00:00', 0),
 (51023, 50006, 1938512849213009922, 'registered', '2025-06-27 10:30:00', '2025-06-27 10:30:00', 0);
 
+-- ==================== 会员系统 ====================
+
+/*Table structure for table `membership_plan` */
+
+DROP TABLE IF EXISTS `membership_plan`;
+
+CREATE TABLE `membership_plan` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL COMMENT '月度会员/季度会员/年度会员',
+  `duration` int NOT NULL COMMENT '天数：30/90/365',
+  `price` decimal(10,2) NOT NULL,
+  `originalPrice` decimal(10,2) DEFAULT NULL,
+  `benefits` text COMMENT '权益JSON',
+  `description` varchar(512) DEFAULT NULL,
+  `sort` int DEFAULT '0',
+  `isActive` tinyint DEFAULT '1',
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `membership_plan` */
+
+INSERT INTO `membership_plan` VALUES
+(1,'月度会员',30,18.00,28.00,'["每日上传30张","铜色徽章","作品优先推荐","评论高亮"]','适合短期体验',1,1,NOW()),
+(2,'季度会员',90,48.00,78.00,'["每日上传50张","银色徽章","作品优先推荐","评论高亮","高清下载"]','性价比之选',2,1,NOW()),
+(3,'年度会员',365,168.00,298.00,'["每日上传100张","金色徽章","作品优先推荐+首页曝光","评论高亮+置顶","高清下载","专属客服"]','最划算',3,1,NOW());
+
+/*Table structure for table `order_info` */
+
+DROP TABLE IF EXISTS `order_info`;
+
+CREATE TABLE `order_info` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `orderNo` varchar(64) NOT NULL COMMENT 'M20250628123045',
+  `userId` bigint NOT NULL,
+  `planId` bigint NOT NULL,
+  `planName` varchar(128) DEFAULT NULL,
+  `duration` int DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payType` varchar(32) DEFAULT 'mock',
+  `payTime` datetime DEFAULT NULL,
+  `status` varchar(32) DEFAULT 'unpaid',
+  `transactionId` varchar(128) DEFAULT NULL,
+  `expireTime` datetime DEFAULT NULL,
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_orderNo` (`orderNo`),
+  KEY `idx_userId` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/* user 表加字段 */
+ALTER TABLE `user` ADD COLUMN `memberExpireTime` datetime DEFAULT NULL;
+ALTER TABLE `user` ADD COLUMN `dailyUploadUsed` int DEFAULT '0';
+ALTER TABLE `user` ADD COLUMN `dailyUploadLimit` int DEFAULT '10';
+
+-- ==================== 举报系统 ====================
+
+/*Table structure for table `report` */
+
+DROP TABLE IF EXISTS `report`;
+
+CREATE TABLE `report` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `userId` bigint NOT NULL COMMENT '举报人',
+  `targetId` bigint NOT NULL,
+  `targetType` varchar(64) NOT NULL COMMENT 'post/user/comment',
+  `reason` varchar(64) NOT NULL COMMENT 'spam/inappropriate/stolen/other',
+  `description` text,
+  `status` varchar(64) DEFAULT 'pending',
+  `handledBy` bigint DEFAULT NULL,
+  `handleNote` text,
+  `createTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_targetId` (`targetId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `report` */
+
+INSERT INTO `report` (`userId`,`targetId`,`targetType`,`reason`,`description`,`status`,`createTime`) VALUES
+(1938512849213009922,10015,'post','stolen','这张图片疑似盗用他人作品','pending',NOW()),
+(1938513000694493186,10017,'comment','spam','评论内容为垃圾广告','pending',NOW()),
+(1938516975548272642,10008,'post','inappropriate','作品内容不当','resolved',NOW());
+
+/* post 表加审核字段 */
+ALTER TABLE `post` ADD COLUMN `auditStatus` varchar(32) DEFAULT 'approved';
+ALTER TABLE `post` ADD COLUMN `auditNote` varchar(512) DEFAULT NULL;
+
+-- ==================== 收藏夹系统 ====================
+
+/*Table structure for table `collection` */
+
+DROP TABLE IF EXISTS `collection`;
+
+CREATE TABLE `collection` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `userId` bigint NOT NULL,
+  `title` varchar(256) NOT NULL,
+  `description` text,
+  `coverImage` varchar(1024) DEFAULT NULL,
+  `postCount` int DEFAULT '0',
+  `isPublic` tinyint DEFAULT '1',
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `isDelete` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_userId` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Table structure for table `collection_item` */
+
+DROP TABLE IF EXISTS `collection_item`;
+
+CREATE TABLE `collection_item` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `collectionId` bigint NOT NULL,
+  `postId` bigint NOT NULL,
+  `createTime` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_collection_post` (`collectionId`,`postId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

@@ -303,7 +303,7 @@ export const updateUserProfile = async (data: { userName?: string; userAvatar?: 
 };
 
 export const getMemberInfo = async () => {
-  return api.get('/api/member/info');
+  return api.get('/api/membership/info');
 };
 
 export const upgradeMember = async (level: number) => {
@@ -323,9 +323,75 @@ export const getUserListPage = async (current: number, pageSize: number, userNam
 export const banUser = async (userId: number) => {
   return api.post('/api/user/ban', { userId });
 };
-
 export const unbanUser = async (userId: number) => {
   return api.post('/api/user/unban', { userId });
+};
+
+// ==================== 会员套餐 ====================
+export const getMembershipPlans = async () => {
+  return api.get('/api/membership/plans');
+};
+
+// ==================== 订单相关 ====================
+export const createOrder = async (planId: number) => {
+  return api.post('/api/order/create', { planId });
+};
+
+export const mockPay = async (orderId: number) => {
+  return api.post('/api/order/pay/mock', { orderId });
+};
+
+export const getMyOrders = async (current: number, pageSize: number) => {
+  return api.get('/api/order/my/list', { params: { current, pageSize } });
+};
+
+export default api;
+
+// ==================== 举报系统 ====================
+export const submitReport = async (data: { targetId: number; targetType: string; reason: string; description?: string }) => {
+  return api.post('/api/report/add', data);
+};
+
+export const getReportList = async (current: number, pageSize: number, status?: string) => {
+  return api.get('/api/report/list/page', { params: { current, pageSize, status } });
+};
+
+export const handleReport = async (reportId: number, status: string, handleNote?: string) => {
+  return api.post('/api/report/handle', { reportId, status, handleNote });
+};
+
+export const auditPost = async (postId: number, auditStatus: string, auditNote?: string) => {
+  return api.post('/api/post/audit', { postId, auditStatus, auditNote });
+};
+
+// ==================== 收藏夹相关 ====================
+export const createCollection = async (data: { title: string; description?: string }) => {
+  return api.post('/api/collection/add', data);
+};
+
+export const getCollections = async () => {
+  return api.get('/api/collection/list');
+};
+
+export const getCollectionDetail = async (id: number) => {
+  return api.get('/api/collection/get/vo', { params: { id } });
+};
+
+export const addPostToCollection = async (collectionId: number, postId: number) => {
+  return api.post('/api/collection/add-post', { collectionId, postId });
+};
+
+export const removePostFromCollection = async (collectionId: number, postId: number) => {
+  return api.post('/api/collection/delete-post', { collectionId, postId });
+};
+
+export const deleteCollection = async (id: number) => {
+  return api.post('/api/collection/delete', { id });
+};
+
+// ==================== 修改密码 ====================
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+  return api.post('/api/user/change-password', { oldPassword, newPassword });
 };
 
 export default api;

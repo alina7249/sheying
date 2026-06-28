@@ -9,6 +9,19 @@
           <p class="text-[#B8C6D8]">分享你的摄影作品，与社区一起交流学习</p>
         </div>
 
+        <!-- 上传限额提示 -->
+        <div class="mb-6 bg-[#111827] border border-[rgba(255,255,255,0.08)] rounded-xl p-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-cloud-upload-alt text-[#d4a853]"></i>
+            <span class="text-[#9ca3af] text-sm">今日上传：<span class="text-white font-bold">{{ uploadUsed }}</span> / <span class="text-[#d4a853] font-bold">{{ uploadLimit }}</span></span>
+          </div>
+          <div v-if="uploadUsed >= uploadLimit" class="text-sm text-red-400 flex items-center gap-2">
+            <i class="fa-solid fa-exclamation-circle"></i>
+            <span>今日额度已用完</span>
+            <router-link to="/membership" class="text-[#d4a853] hover:underline">开通会员</router-link>
+          </div>
+        </div>
+
         <div class="bg-gradient-to-br from-[#1E2532]/90 to-[#2D3748]/90 backdrop-blur-xl border border-[#4A5F8B]/20 rounded-3xl p-8 shadow-2xl">
           <form @submit.prevent="handleSubmit">
             <div class="mb-6">
@@ -174,7 +187,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue-sonner';
-import { addPost, uploadFile } from '../services/api';
+import { addPost, uploadFile, getMemberInfo } from '../services/api';
 import { useAuthStore } from '../store/authStore';
 
 const router = useRouter();
@@ -183,6 +196,8 @@ const authStore = useAuthStore();
 const tagInput = ref('');
 const uploading = ref(false);
 const submitting = ref(false);
+const uploadUsed = ref(0);
+const uploadLimit = ref(10);
 
 const suggestedTags = ['风光', '人像', '街拍', '建筑', '夜景', '黑白', '胶片', '星空', '自然', '城市'];
 
@@ -295,11 +310,22 @@ const handleSubmit = async () => {
   }
 };
 
+const loadUploadLimit = async () => {
+  try {
+    const res: any = await getMemberInfo();
+    if (res?.data) {
+      uploadUsed.value = res.data.dailyUploadUsed || 0;
+      uploadLimit.value = res.data.dailyUploadLimit || 10;
+    }
+  } catch (e) { /* */ }
+};
+
 onMounted(() => {
   if (!authStore.isAuthenticated) {
     toast.warning('请先登录');
     router.push({ path: '/login', query: { redirect: '/publish' } });
   }
+  loadUploadLimit();
 });
 </script>
 

@@ -10,12 +10,13 @@
               <th class="text-left p-4 text-[#B8C6D8] text-sm font-medium hidden md:table-cell">作者</th>
               <th class="text-left p-4 text-[#B8C6D8] text-sm font-medium hidden md:table-cell">点赞</th>
               <th class="text-left p-4 text-[#B8C6D8] text-sm font-medium hidden md:table-cell">时间</th>
+              <th class="text-left p-4 text-[#B8C6D8] text-sm font-medium hidden md:table-cell">审核</th>
               <th class="text-right p-4 text-[#B8C6D8] text-sm font-medium">操作</th>
             </tr>
           </thead>
           <tbody>
             <tr v-if="loading" class="border-t border-[#2D3748]">
-              <td colspan="5" class="p-8 text-center text-[#6B7C93]">
+              <td colspan="6" class="p-8 text-center text-[#6B7C93]">
                 <div class="animate-spin w-6 h-6 border-2 border-[#C9A962] border-t-transparent rounded-full mx-auto"></div>
               </td>
             </tr>
@@ -27,7 +28,14 @@
               <td class="p-4 text-[#B8C6D8] text-sm hidden md:table-cell">{{ post.user?.userName || '-' }}</td>
               <td class="p-4 text-[#B8C6D8] text-sm hidden md:table-cell">{{ post.thumbNum || 0 }}</td>
               <td class="p-4 text-[#B8C6D8] text-sm hidden md:table-cell">{{ formatDate(post.createTime) }}</td>
+              <td class="p-4 text-[#B8C6D8] text-sm hidden md:table-cell">
+                <span :class="post.auditStatus === 'approved' ? 'text-green-400' : post.auditStatus === 'rejected' ? 'text-red-400' : 'text-yellow-400'">
+                  {{ post.auditStatus === 'approved' ? '已通过' : post.auditStatus === 'rejected' ? '已拒绝' : '待审核' }}
+                </span>
+              </td>
               <td class="p-4 text-right">
+                <button v-if="post.auditStatus !== 'approved'" @click="handleAudit(post, 'approved')" class="px-3 py-1.5 rounded-lg bg-green-500/20 text-green-400 text-xs hover:bg-green-500/30 transition-colors mr-1">通过</button>
+                <button v-if="post.auditStatus !== 'rejected'" @click="handleAudit(post, 'rejected')" class="px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 text-xs hover:bg-red-500/30 transition-colors mr-1">拒绝</button>
                 <button @click="handleDelete(post)" class="px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 text-xs hover:bg-red-500/30 transition-colors">删除</button>
               </td>
             </tr>
@@ -47,7 +55,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getPostList } from '../../services/api';
+import { getPostList, auditPost } from '../../services/api';
 import { toast } from 'vue-sonner';
 
 const posts = ref<any[]>([]);
@@ -71,6 +79,18 @@ const loadPosts = async () => {
     }
   } catch (e) { /* ignore */ }
   finally { loading.value = false; }
+};
+
+const handleAudit = async (post: any, status: string) => {
+  const note = status === 'rejected' ? prompt('请输入拒绝原因：') : '';
+  if (status === 'rejected' && note === null) return;
+  try {
+    await auditPost(post.id, status, note || undefined);
+    toast.success(status === 'approved' ? '审核通过' : '已拒绝');
+    loadPosts();
+  } catch (e: any) {
+    toast.error(e?.message || '操作失败');
+  }
 };
 
 const handleDelete = async (post: any) => {

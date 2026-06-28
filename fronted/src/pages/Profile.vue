@@ -163,6 +163,12 @@
           </div>
         </div>
 
+        <div v-if="activeTab === 'collections'" class="text-center py-12">
+          <router-link to="/my-collections" class="inline-block px-6 py-3 bg-[#d4a853] text-[#0a0a0a] rounded-xl font-medium hover:shadow-lg hover:shadow-[#d4a853]/20 transition-all">
+            <i class="fa-solid fa-bookmark mr-2"></i>查看我的收藏夹
+          </router-link>
+        </div>
+
         <!-- 关于页 -->
         <div v-if="activeTab === 'about'" class="space-y-6">
           <div class="bg-[#1E2532] rounded-lg p-6 border border-[#4A5F8B]/20">
@@ -371,6 +377,7 @@ const formatDate = (dateStr: string): string => {
 
 const tabs = computed(() => [
   { id: 'works', name: '作品', count: totalPosts.value },
+  { id: 'collections', name: '收藏夹', count: 0 },
   { id: 'about', name: '关于', count: 0 }
 ]);
 

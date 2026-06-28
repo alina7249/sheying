@@ -14,6 +14,7 @@ import com.yupi.yuoj.model.dto.user.UserAddRequest;
 import com.yupi.yuoj.model.dto.user.UserLoginRequest;
 import com.yupi.yuoj.model.dto.user.UserQueryRequest;
 import com.yupi.yuoj.model.dto.user.UserRegisterRequest;
+import com.yupi.yuoj.model.dto.user.ChangePasswordRequest;
 import com.yupi.yuoj.model.dto.user.UserUpdateMyRequest;
 import com.yupi.yuoj.model.dto.user.UserUpdateRequest;
 import com.yupi.yuoj.model.entity.User;
@@ -21,6 +22,7 @@ import com.yupi.yuoj.model.vo.LoginUserVO;
 import com.yupi.yuoj.model.vo.UserVO;
 import com.yupi.yuoj.service.UserService;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -307,6 +310,40 @@ public class UserController {
         user.setId(loginUser.getId());
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        return ResultUtils.success(true);
+    }
+
+    @PostMapping("/ban")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> banUser(@RequestBody Map<String, Long> body, HttpServletRequest request) {
+        Long userId = body.get("userId");
+        User user = userService.getById(userId);
+        if (user == null) throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        user.setUserRole("ban");
+        userService.updateById(user);
+        return ResultUtils.success(true);
+    }
+
+    @PostMapping("/unban")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> unbanUser(@RequestBody Map<String, Long> body, HttpServletRequest request) {
+        Long userId = body.get("userId");
+        User user = userService.getById(userId);
+        if (user == null) throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        user.setUserRole("user");
+        userService.updateById(user);
+        return ResultUtils.success(true);
+    }
+
+    @PostMapping("/change-password")
+    public BaseResponse<Boolean> changePassword(@RequestBody ChangePasswordRequest req, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        String encryptOld = DigestUtils.md5DigestAsHex(("yupi" + req.getOldPassword()).getBytes());
+        if (!encryptOld.equals(loginUser.getUserPassword())) throw new BusinessException(ErrorCode.PARAMS_ERROR, "旧密码错误");
+        String encryptNew = DigestUtils.md5DigestAsHex(("yupi" + req.getNewPassword()).getBytes());
+        loginUser.setUserPassword(encryptNew);
+        userService.updateById(loginUser);
         return ResultUtils.success(true);
     }
 }

@@ -5,7 +5,7 @@ import Profile from '../pages/Profile.vue';
 import EquipmentHub from '../pages/EquipmentHub.vue';
 
 // 需要登录才能访问的路由
-const authRoutes = ['/publish', '/profile-settings', '/messages', '/notifications'];
+const authRoutes = ['/publish', '/profile-settings', '/messages', '/notifications', '/my-collections', '/change-password'];
 
 // 检查是否已登录
 const isAuthenticated = () => {
@@ -62,6 +62,12 @@ const routes = [
   { path: '/admin/orders', name: 'OrderManagement', component: () => import('../pages/admin/OrderManagement.vue') },
   { path: '/admin/analytics', name: 'Analytics', component: () => import('../pages/admin/Analytics.vue') },
   { path: '/admin/settings', name: 'AdminSettings', component: () => import('../pages/admin/Settings.vue') },
+  { path: '/admin/reports', name: 'ReportManagement', component: () => import('../pages/admin/ReportManagement.vue') },
+
+  { path: '/my-collections', name: 'MyCollections', component: () => import('../pages/MyCollections.vue') },
+  { path: '/change-password', name: 'ChangePassword', component: () => import('../pages/ChangePassword.vue') },
+  { path: '/user-agreement', name: 'UserAgreement', component: () => import('../pages/UserAgreement.vue') },
+  { path: '/privacy-policy', name: 'PrivacyPolicy', component: () => import('../pages/PrivacyPolicy.vue') },
 
   // 404 路由
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('../pages/NotFound.vue') },
